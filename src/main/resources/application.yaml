@@ -1,0 +1,31 @@
+server:
+  port: 80
+  shutdown: graceful
+spring:
+  application:
+    name: ctf
+  task:
+    execution:
+      pool:
+        core-size: 10
+        max-size: 20
+        allow-core-thread-timeout: false
+      thread-name-prefix: TNP-
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1/ctf?serverTimezone=Asia/Seoul
+    username: secuAdmin
+    password: 1q2w3e4r!@
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+      encoding: utf-8
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    generate-ddl: true
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    database: mysql
