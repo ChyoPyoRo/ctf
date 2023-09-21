@@ -43,7 +43,7 @@ public class SecurityConfig {
                 )*/
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/register", "/saveUser", "/login" ).permitAll()
+                        .requestMatchers("/", "/register", "/saveUser", "/login" ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
@@ -52,7 +52,7 @@ public class SecurityConfig {
                         .usernameParameter("id")
                         .passwordParameter("password")
                         .loginProcessingUrl("/login-process")
-                        .defaultSuccessUrl("/center", true)
+                        .defaultSuccessUrl("/", true)
                         .failureUrl("/login.html?error=true")
                         .permitAll()
                 )

@@ -21,11 +21,17 @@ public class CenterController extends BaseController{
     public ModelAndView getMain() {
         User user = getUser();
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("main");
+
         if(user == null){
             mv.addObject("user", null);
+            mv.setViewName("main");
         } else {
             mv.addObject("user", user.getUserId());
+            if(user.getType() == User.Type.ADMIN){
+                mv.setViewName("admin/admin_main");
+            } else {
+                mv.setViewName("main");
+            }
         }
         return mv;
     }
