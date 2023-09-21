@@ -24,7 +24,7 @@ public class LoginController {
     private final PasswordEncoder passwordEncoder;
 
 
-    @GetMapping({"/", "/login"})
+    @GetMapping({ "/login"})
     public ModelAndView getLogin(HttpServletRequest request, HttpServletResponse response){
         ModelAndView modelAndView = new ModelAndView("login/login");
         return modelAndView;
@@ -80,15 +80,11 @@ public class LoginController {
     }
 
     public boolean isMissingMandatories(User user) {
-        if(Utility.nullOrEmptyOrSpace(user.getUserId()) ||
+        return Utility.nullOrEmptyOrSpace(user.getUserId()) ||
                 Utility.nullOrEmptyOrSpace(user.getPassword()) ||
-                Utility.nullOrEmptyOrSpace(user.getName())  ||
+                Utility.nullOrEmptyOrSpace(user.getName()) ||
                 Utility.nullOrEmptyOrSpace(String.valueOf(user.getAffiliation())) ||
-                Utility.nullOrEmptyOrSpace(String.valueOf(user.getType()))
-        ){
-            return true;
-        }
-        return false;
+                Utility.nullOrEmptyOrSpace(String.valueOf(user.getType()));
     }
 
 }
