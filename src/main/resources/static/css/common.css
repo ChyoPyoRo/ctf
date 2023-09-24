@@ -12,9 +12,9 @@
     display: flex;
     justify-content : center;
 }
-.layout-content {
+.layout-content-no-footer {
     width: 100%;
-    height: 90vh;
+    height: 93vh;
     display: flex;
     justify-content : center;
 }
@@ -104,4 +104,11 @@
     .content-login {
         width: 1680px;
     }
+}
+
+
+/*** content-login ***/
+.content-login {
+    background-image: url("../images/login/test2.jpg");
+    background-repeat: no-repeat;
 }
