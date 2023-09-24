@@ -50,13 +50,16 @@
 .nav-item{
     margin: 0 8px 0 8px;
 }
+
 .content .navbar .main-link[aria-expanded=true]::after {
     transform: rotate(-180deg);
 }
+
 .navbar-nav .start-item {
     display: flex;
     margin-right: auto;
 }
+
 .navbar-nav .end-item {
     display: flex;
     margin-left: auto;
