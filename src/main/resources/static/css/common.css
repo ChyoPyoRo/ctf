@@ -97,11 +97,11 @@
         width: 1280px;
     }
 }
-@media (min-width: 1660px){
+@media (min-width: 1680px){
     .navbar{
-        width: 1660px;
+        width: 1680px;
     }
     .content-login {
-        width: 1660px;
+        width: 1680px;
     }
 }
