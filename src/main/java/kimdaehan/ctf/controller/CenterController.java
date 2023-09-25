@@ -21,21 +21,15 @@ public class CenterController extends BaseController{
     @GetMapping({"/"})
     public ModelAndView getMain() {
         User user = getUser();
-        ModelAndView mv = new ModelAndView();
+        ModelAndView mv = new ModelAndView("main");
 
 
         if(user == null){
             mv.addObject("user", null);
             mv.addObject("type", null);
-            mv.setViewName("main");
         } else {
             mv.addObject("user", user.getUserId());
             mv.addObject("type", user.getType());
-            if(user.getType() == User.Type.ADMIN){
-                mv.setViewName("admin/admin_main");
-            } else {
-                mv.setViewName("main");
-            }
         }
         return mv;
     }
