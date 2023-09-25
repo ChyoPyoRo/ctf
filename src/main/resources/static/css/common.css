@@ -112,3 +112,29 @@
     background-image: url("../images/login/test2.jpg");
     background-repeat: no-repeat;
 }
+
+
+
+/*** main page ***/
+#background-video {
+    position : fixed;
+    opacity : 0.5;
+    z-index: -1;
+}
+
+.background {
+    max-height: 940px;
+}
+
+.main-title{
+    font-size : 100px;
+    color : white;
+    font-weight: bold;
+    z-index: 1;
+    top : 310px;
+    position : relative;
+    font-family: "Font Awesome 5 Free";
+    text-align : center;
+    height : 100px;
+    flex-direction: column;
+}

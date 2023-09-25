@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+
 @Controller
 public class CenterController extends BaseController{
     @Autowired
@@ -21,6 +22,7 @@ public class CenterController extends BaseController{
     public ModelAndView getMain() {
         User user = getUser();
         ModelAndView mv = new ModelAndView();
+
 
         if(user == null){
             mv.addObject("user", null);

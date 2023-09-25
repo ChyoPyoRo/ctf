@@ -9,11 +9,35 @@
 
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/common.css}" rel="stylesheet">
+
+    <script th:src="@{/js/main/time.js}" defer="defer"></script>
 </head>
 <body>
-<div>
+<div class="layout-nav">
     <nav th:replace="nav :: nav"></nav>
+</div>
+<div>
+    <div class="background layout-content-no-footer" >
+        <div class="main-title">
+            <span>SW융합대학 어쩌고 저쩌고 대회</span>
+            <h1 >
+                현재 남은 시간
+            </h1>
+            <span id="main-time-clock"></span>
+        </div>
+
+            <video width = "1680px" loop autoplay  muted id="background-video">
+                <source src="images\main\main.mp4"type="video/mp4">
+                영상이 재상 안됨
+            </video>
+
+
+    </div>
 </div>
 
 </body>
+
+<script>
+
+</script>
 </html>
