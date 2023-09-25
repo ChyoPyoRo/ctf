@@ -44,12 +44,9 @@ public class LoginController {
     //아직 안만듬
     @PostMapping(value = "/saveUser", consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public Result<User> putUser(@RequestBody User user) {
+    public Result.Code putUser(@RequestBody User user) {
         logger.info("user : {}",user.getUserId());
-        User saveUser = null;
         Result.Code code = Result.Code.ERROR;
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
 
         if(!isMissingMandatories(user)) {
             try{
@@ -58,9 +55,12 @@ public class LoginController {
                 User existId = userService.getUserId(user.getUserId()); // 아이디 있는지 확인
                 logger.info("existId : {}", existId);
 
-
                 if(existId == null) {
-                    userService.upsertUser(user);
+                    String encodedPassword = passwordEncoder.encode(user.getPassword());
+                    user.setPassword(encodedPassword);
+                    user.setType(User.Type.USER);
+
+                    userService.upsertUser(user); //회원가입
                     code = Result.Code.OK;
                     logger.info("Created User : {}", user.getUserId());
                 } else {
@@ -73,18 +73,14 @@ public class LoginController {
                 logger.error("code : {}",code);
             }
         }
-        return Result.<User>builder()
-                .code(code)
-                .data(saveUser)
-                .build();
+        return code;
     }
 
     public boolean isMissingMandatories(User user) {
         return Utility.nullOrEmptyOrSpace(user.getUserId()) ||
                 Utility.nullOrEmptyOrSpace(user.getPassword()) ||
                 Utility.nullOrEmptyOrSpace(user.getName()) ||
-                Utility.nullOrEmptyOrSpace(String.valueOf(user.getAffiliation())) ||
-                Utility.nullOrEmptyOrSpace(String.valueOf(user.getType()));
+                Utility.nullOrEmptyOrSpace(String.valueOf(user.getAffiliation()));
     }
 
 }

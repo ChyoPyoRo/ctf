@@ -1,5 +1,6 @@
 package kimdaehan.ctf.configuration;
 
+import jakarta.servlet.http.HttpServletResponse;
 import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -43,17 +44,17 @@ public class SecurityConfig {
                 )*/
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/register", "/saveUser", "/login" ).permitAll()
+                        .requestMatchers("/", "/register", "/saveUser", "/login", "/login-process").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .usernameParameter("id")
+                        .usernameParameter("userId")
                         .passwordParameter("password")
                         .loginProcessingUrl("/login-process")
                         .defaultSuccessUrl("/", true)
-                        .failureUrl("/login.html?error=true")
+                        .failureUrl("/login?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout

@@ -11,9 +11,9 @@
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/common.css}" rel="stylesheet">
 
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 <body>
 <div class="layout-nav">
@@ -51,7 +51,7 @@
                                 <option value="COMPUTER">컴퓨터소프트웨어공학과</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">회원가입</button>
+                        <button onclick="register();" type="submit" class="btn btn-primary py-3 w-100 mb-4">회원가입</button>
                         <p class="text-center mb-0">Already have an Account? <a href="/login">login</a></p>
                     </div>
                 </div>
