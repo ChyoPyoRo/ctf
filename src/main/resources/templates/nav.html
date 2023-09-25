@@ -9,39 +9,45 @@
     <div class="navbar-nav" style="display: flex; justify-content: space-between; width: 100%;" >
         <div class="start-item">
             <div class="nav-item">
-                <a href="#" class="nav-link main-link" data-bs-toggle="dropdown">
+                <a href="#" class="nav-link main-link">
                     <i class="fa fa-bell me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">Rules</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link main-link" data-bs-toggle="dropdown">
+                <a href="#" class="nav-link main-link">
                     <i class="fa-solid fa-trophy me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">Challenge</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link main-link" data-bs-toggle="dropdown">
+                <a href="#" class="nav-link main-link">
                     <i class="fa-solid fa-chart-simple me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">ScoreBoard</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="#" class="nav-link main-link" data-bs-toggle="dropdown">
+                <a href="#" class="nav-link main-link">
                     <i class="fa-brands fa-discord me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">Discord</span>
+                </a>
+            </div>
+            <div th:if="${type} == ${T(kimdaehan.ctf.entity.User.Type).ADMIN}" class="nav-item">
+                <a href="/admin_main" class="nav-link main-link">
+                    <i class="fa-solid fa-gear me-lg-2"></i>
+                    <span class="d-none d-lg-inline-flex">Management</span>
                 </a>
             </div>
         </div>
         <div class="end-item">
             <div class="nav-item">
-                <a href="/register" class="nav-link main-link" data-bs-toggle="dropdown">
+                <a href="/register" class="nav-link main-link">
                     <i class="fa-solid fa-user-plus me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">Register</span>
                 </a>
             </div>
             <div class="nav-item">
-                <a href="/login" class="nav-link main-link" data-bs-toggle="dropdown">
+                <a href="/login" class="nav-link main-link">
                     <i class="fa-solid fa-right-to-bracket me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">Login</span>
                 </a>

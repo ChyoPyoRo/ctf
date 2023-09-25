@@ -25,18 +25,18 @@ public class LoginController {
 
 
     @GetMapping({ "/login"})
-    public ModelAndView getLogin(HttpServletRequest request, HttpServletResponse response){
-        ModelAndView modelAndView = new ModelAndView("login/login");
-        return modelAndView;
+    public ModelAndView getLogin(HttpServletRequest request){
+
+        ModelAndView mv = new ModelAndView("login/login");
+        mv.addObject("type",null);
+        return mv;
     }
 
     @GetMapping({"/register"})
     public ModelAndView getRegister(HttpServletRequest request, HttpServletResponse response){
-        ModelAndView modelAndView = new ModelAndView("login/register");
-        User user = new User();
-        modelAndView.addObject("user", user);
-
-        return modelAndView;
+        ModelAndView mv = new ModelAndView("login/register");
+        mv.addObject("type",null);
+        return mv;
     }
 
 
