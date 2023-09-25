@@ -53,9 +53,15 @@
                 </a>
             </div>
             <div th:if="${type != null}" class="nav-item">
-                <a href="/register" class="nav-link main-link">
+                <a href="/mypage" class="nav-link main-link">
                     <i class="fa-solid fa-user me-lg-2"></i>
                     <span class="d-none d-lg-inline-flex">Mypage</span>
+                </a>
+            </div>
+            <div th:if="${type != null}" class="nav-item">
+                <a href="/logout" class="nav-link main-link">
+                    <i class="fa-solid fa-right-from-bracket me-lg-2"></i>
+                    <span class="d-none d-lg-inline-flex">Logout</span>
                 </a>
             </div>
         </div>
