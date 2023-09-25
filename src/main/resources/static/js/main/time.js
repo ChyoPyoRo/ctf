@@ -2,7 +2,6 @@ function updateClock() {
     const now = new Date();
     const end = new Date('2023-11-12T00:00:00');
     const last = end - now;
-    console.log(last);
     const millisecondsInOneSecond = 1000;
     const millisecondsInOneMinute = millisecondsInOneSecond * 60;
     const millisecondsInOneHour = millisecondsInOneMinute * 60;
