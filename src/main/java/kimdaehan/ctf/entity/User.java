@@ -87,7 +87,7 @@ public class User implements Serializable, UserDetails {
 
     }
     public enum Affiliation{
-        SECURITY_FIRST, SECURITY, COMPUTER;
+        NB, YB, OB, SCH
 
     }
 
