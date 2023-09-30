@@ -3,6 +3,7 @@ package kimdaehan.ctf.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,11 +17,16 @@ public class AdminController extends BaseController{
 
     public final UserService userService;
 
+    public final ServerSettingService serverSettingService;
+
     @Autowired
-    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1) {
+    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1, ServerSettingService serverSettingService) {
         super(userService, authenticationFacade);
         this.userService = userService1;
+        this.serverSettingService = serverSettingService;
     }
+
+
 
     @GetMapping({"/admin_main"})
     public ModelAndView adminMain(HttpServletRequest request){
@@ -28,9 +34,14 @@ public class AdminController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            mv.setViewName("error");
+            mv.setViewName("/error/404");
             return mv;
         }
+        //서버 시간
+        mv.addObject("startDate",serverSettingService.getServerStartDate());
+        mv.addObject("startTime",serverSettingService.getStartTimeToString());
+        mv.addObject("endDate",serverSettingService.getServerEndDate());
+        mv.addObject("endTime",serverSettingService.getEndTimeToString());
 
         mv.setViewName("/admin/admin_main");
         return mv;
@@ -43,7 +54,7 @@ public class AdminController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            mv.setViewName("error");
+            mv.setViewName("/error/404");
             return mv;
         }
         List<User> users = userService.getAllUser();
@@ -52,4 +63,6 @@ public class AdminController extends BaseController{
         mv.setViewName("/admin/admin_user");
         return mv;
     }
+
+
 }

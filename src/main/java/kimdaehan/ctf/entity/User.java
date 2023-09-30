@@ -32,6 +32,9 @@ public class User implements Serializable, UserDetails {
     @Column(columnDefinition = "VARCHAR(32) NOT NULL" )
     private String name;
 
+    @Column(columnDefinition = "VARBINARY(32) NOT NULL" )
+    private String nickName;
+
     @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP" )
     @Builder.Default
     private LocalDateTime registrationDateTime = LocalDateTime.now();
