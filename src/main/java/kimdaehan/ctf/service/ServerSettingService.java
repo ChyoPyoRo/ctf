@@ -14,10 +14,10 @@ import java.time.format.DateTimeFormatter;
 @Setter
 public class ServerSettingService {
     LocalDate serverStartDate = LocalDate.now();
-    LocalTime serverStartTime = LocalTime.now();
+    LocalTime serverStartTime = LocalTime.now().plusHours(2);
 
     LocalDate serverEndDate = LocalDate.now().plusDays(1);
-    LocalTime serverEndTime = LocalTime.now();
+    LocalTime serverEndTime = LocalTime.now().plusHours(2);
 
     public LocalDateTime getServerStart(){
         return this.serverStartDate.atTime(this.serverStartTime);

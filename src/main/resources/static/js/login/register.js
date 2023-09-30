@@ -5,12 +5,13 @@ function register(){
     const password = document.querySelector("input[id=password]").value;
     const name = document.querySelector("input[id=name]").value;
     const affiliation = document.querySelector("select[id=affiliation]").value;
-
+    const nickName = document.querySelector("select[id=nickName]").value;
     const body = {
         userId: id,
         password: password,
         name: name,
-        affiliation : affiliation
+        affiliation : affiliation,
+        nickName : nickName
     };
 
     const url = "/saveUser";
