@@ -18,7 +18,7 @@
 </head>
 <body>
 <div class="layout-nav">
-    <nav th:replace="nav :: nav"></nav>
+    <nav th:replace="~{/nav :: nav}"></nav>
 </div>
 <div class="layout-content-no-footer">
     <div class="content-login container-fluid position-relative d-flex p-0">
@@ -44,7 +44,7 @@
                             <input type="text" class="form-control" id="name" placeholder="Name">
                         </div>
                         <div class="mb-3">
-                            <span>이름</span>
+                            <span>닉네임</span>
                             <input type="text" class="form-control" id="nickName" placeholder="NickName">
                         </div>
                         <div class="mb-4">
