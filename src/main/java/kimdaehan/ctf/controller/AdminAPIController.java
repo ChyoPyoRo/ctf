@@ -35,12 +35,12 @@ public class AdminAPIController extends BaseController{
             return ResponseEntity.badRequest().body("404 error");
         }
         if(time != null){
-            if (time.getType() == ServerTime.TimeType.START){
+            if (time.getType().equals("START")){
                 if(time.getServerTime() != null && time.getServerDate() != null){
                     serverSettingService.setServerStartDate(time.getServerDate());
                     serverSettingService.setServerStartTime(time.getServerTime());
                 }
-            } else if (time.getType() == ServerTime.TimeType.END) {
+            } else if (time.getType().equals("END")) {
                 if(time.getServerTime() != null && time.getServerDate() != null){
                     serverSettingService.setServerEndDate(time.getServerDate());
                     serverSettingService.setServerEndTime(time.getServerTime());

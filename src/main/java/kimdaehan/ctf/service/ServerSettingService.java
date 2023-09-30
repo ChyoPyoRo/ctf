@@ -30,11 +30,11 @@ public class ServerSettingService {
 
     public String getStartTimeToString(){
         // 소수점 이하 자리를 버린 문자열로 변환
-        return this.serverStartTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        return this.serverStartTime.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 
     public String getEndTimeToString(){
         // 소수점 이하 자리를 버린 문자열로 변환
-        return this.serverEndTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        return this.serverEndTime.format(DateTimeFormatter.ofPattern("HH:mm"));
     }
 }

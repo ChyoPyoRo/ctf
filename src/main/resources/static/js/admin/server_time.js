@@ -2,9 +2,9 @@
 function postServerTime(type){
     if(type === "START"){
         const body = {
-            type : type,
-            serverDate : document.getElementById("start-date"),
-            serverTime : document.getElementById("start-time")
+            "type" : type,
+            "serverDate" : document.getElementById("start-date").value,
+            "serverTime" : document.getElementById("start-time").value
         }
         const url = "/server_setting";
         const options = {
@@ -16,16 +16,13 @@ function postServerTime(type){
             body: JSON.stringify(body)
         };
         fetch(url, options)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            });
+            .then(response => console.log(response));
 
     } else {
         const body = {
-            type : type,
-            serverDate : document.getElementById("end-date"),
-            serverTime : document.getElementById("end-time")
+            "type" : type,
+            "serverDate" : document.getElementById("end-date").value,
+            "serverTime" : document.getElementById("end-time").value
         }
         const url = "/server_setting";
         const options = {
@@ -37,9 +34,6 @@ function postServerTime(type){
             body: JSON.stringify(body)
         };
         fetch(url, options)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            });
+            .then(response => console.log(response));
     }
 }

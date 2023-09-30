@@ -1,19 +1,16 @@
 package kimdaehan.ctf.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Getter
-@Setter
+@Data
 public class ServerTime {
-    private TimeType type;
+    private String type;
     private LocalDate serverDate;
     private LocalTime serverTime;
 
-    public enum TimeType{
-        START, END
-    }
 }
