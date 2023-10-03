@@ -57,12 +57,6 @@ public class Quiz implements Serializable {
     private String flag;
 
     @Column(columnDefinition = "INT NOT NULL")
-    private Integer allUser;
-
-    @Column(columnDefinition = "TINYINT(1) NOT NULL")
-    private Integer delete;
-
-    @Column(columnDefinition = "INT NOT NULL")
     private Integer level;
 
     public enum CategoryType{
