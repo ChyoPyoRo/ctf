@@ -4,7 +4,6 @@ package kimdaehan.ctf.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.*;
 
 
@@ -12,12 +11,13 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Setter
 @ToString
-public class quiz {
+public class Quiz {
     @Id
-    @Column(name="quiz_id", columnDefinition = "INT NOT NULL")
+    @Column(name="quiz_id", columnDefinition = "VARBINARY(64) NOT NULL")
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID quizId;
 
@@ -35,18 +35,18 @@ public class quiz {
     @Enumerated(EnumType.STRING)
     private CategoryType category;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP" )
+    @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT" )
     @Builder.Default
     private LocalDateTime startTime;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime endTime;
 
-    @Column(columnDefinition = "NUMBER NOT NULL")
-    private Number maxScore;
+    @Column(columnDefinition = "INT NOT NULL")
+    private Integer maxScore;
 
-    @Column(columnDefinition = "NUMBER NOT NULL")
-    private Number minScore;
+    @Column(columnDefinition = "INT NOT NULL")
+    private Integer minScore;
 
     @Column(columnDefinition = "VARCHAR(64) NOT NULL")
     private String attachment;
