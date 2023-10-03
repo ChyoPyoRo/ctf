@@ -21,4 +21,8 @@ public class QuizService {
     public List<Quiz> getAllQuiz(){
         return quizRepository.findAll();
     }
+
+    public void upsertQuiz(Quiz quiz){
+        quizRepository.save(quiz);
+    }
 }
