@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
+@NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Setter
@@ -53,12 +54,6 @@ public class Quiz {
 
     @Column(columnDefinition = "VARBINARY(64) NOT NULL")
     private String flag;
-
-    @Column(columnDefinition = "INT NOT NULL")
-    private Integer allUser;
-
-    @Column(columnDefinition = "TINYINT(1) NOT NULL")
-    private Integer delete;
 
     @Column(columnDefinition = "INT NOT NULL")
     private Integer level;
