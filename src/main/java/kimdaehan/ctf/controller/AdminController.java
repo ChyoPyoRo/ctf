@@ -65,4 +65,20 @@ public class AdminController extends BaseController{
     }
 
 
+    @GetMapping({"/admin_quiz"})
+    public ModelAndView adminQuiz(HttpServletRequest request){
+        User user = getUser();
+        ModelAndView mv = new ModelAndView();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            mv.setViewName("/error/404");
+            return mv;
+        }
+        List<User> users = userService.getAllUser();
+
+        mv.addObject("users", users);
+        mv.setViewName("/admin/admin_user");
+        return mv;
+    }
+
 }
