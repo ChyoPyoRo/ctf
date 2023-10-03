@@ -15,6 +15,7 @@ import java.util.UUID;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
 @ToString
@@ -44,11 +45,13 @@ public class Quiz implements Serializable {
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime endTime;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private Integer maxScore;
+    @Column(columnDefinition = "INT NOT NULL Default 1000")
+    @Builder.Default
+    private Integer maxScore = 1000;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private Integer minScore;
+    @Column(columnDefinition = "INT NOT NULL Default 100")
+    @Builder.Default
+    private Integer minScore = 100;
 
     @Column(columnDefinition = "VARCHAR(64) NOT NULL")
     private String attachment;
