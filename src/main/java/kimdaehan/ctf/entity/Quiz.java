@@ -38,7 +38,7 @@ public class Quiz implements Serializable {
     @Enumerated(EnumType.STRING)
     private CategoryType category;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT" )
+    @Column(columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime startTime;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
