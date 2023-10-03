@@ -7,16 +7,18 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Quiz {
+public class Quiz implements Serializable {
     @Id
     @Column(name="quiz_id", columnDefinition = "VARBINARY(64) NOT NULL")
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -37,7 +39,6 @@ public class Quiz {
     private CategoryType category;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT" )
-    @Builder.Default
     private LocalDateTime startTime;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL")

@@ -83,14 +83,14 @@
                         <input th:value="${startDate}" style="width: 20%; margin-right: 5%;" id="start-date" name="start-date" type="date">
                         <p style="text-align: left; width: 20%; display: flex; margin-bottom: 0; align-items: center;">Server-Start-Time</p>
                         <input th:value="${startTime}" style="width: 20%; margin-right: 5%;" id="start-time" name="start-time" type="time">
-                        <button style="width: 10%;" onclick="postServerTime('START')"></button>
+                        <button class="btn btn-outline-primary" style="width: 10%; margin: 0 0 0 0;" onclick="postServerTime('START')" type="button">submit</button>
                     </div>
                     <div style="display: flex; align-items: center;">
                         <p style="text-align: left; width: 20%; display: flex; margin-bottom: 0; align-items: center;">Server-End-Date</p>
                         <input th:value="${endDate}" style="width: 20%; margin-right: 5%;" id="end-date" name="end-date" type="date">
                         <p style="text-align: left; width: 20%; display: flex; margin-bottom: 0; align-items: center;">Server-End-Time</p>
                         <input th:value="${endTime}" style="width: 20%; margin-right: 5%;" id="end-time" name="end-time" type="time">
-                        <button style="width: 10%;" onclick="postServerTime('END')"></button>
+                        <button class="btn btn-outline-primary" style="width: 10%; margin: 0 0 0 0;" onclick="postServerTime('END')" type="button">submit</button>
                     </div>
                 </div>
             </div>
