@@ -43,7 +43,7 @@ public class Quiz implements Serializable {
     private LocalDateTime startTime;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
-    private LocalDateTime endTime;
+    private LocalDateTime registrationTime;
 
     @Column(columnDefinition = "INT NOT NULL Default 1000")
     @Builder.Default
@@ -59,10 +59,15 @@ public class Quiz implements Serializable {
     @Column(columnDefinition = "VARBINARY(64) NOT NULL")
     private String flag;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private Integer level;
+    @Column(columnDefinition = "VARCHAR(8) NOT NULL")
+    @Enumerated(EnumType.STRING)
+    private levelType level;
 
     public enum CategoryType{
         REVERSING, PWN, WEB, FORENSICS, MISC, CRYPTO
+    }
+
+    public enum levelType{
+        LOW, MIDDLE, HIGH
     }
 }
