@@ -105,6 +105,19 @@ public class AdminController extends BaseController{
         logger.error("Quiz Created -> user : {}, quizName : {}", user.getUserId(), quiz.getQuizName());
         return ResponseEntity.ok("success");
     }
+    // 어드민 퀴즈 생성
 
+    @GetMapping({"/admin_quiz/create"})
+    public ModelAndView adminQuizCreate(HttpServletRequest request){
+        User user = getUser();
+        ModelAndView mv = new ModelAndView();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            mv.setViewName("/error/404");
+            return mv;
+        }
+        mv.setViewName("/admin/admin_quiz_create");
+        return mv;
+    }
 
 }
