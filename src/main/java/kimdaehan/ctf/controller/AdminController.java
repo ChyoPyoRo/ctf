@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -88,25 +85,6 @@ public class AdminController extends BaseController{
         return mv;
     }
 
-    @PostMapping(value = {"/admin_quiz"}, consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> postAdminQuiz(HttpServletRequest request, @RequestBody Quiz quiz){
-        User user = getUser();
-        if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            return ResponseEntity.badRequest().body("404 error");
-        }
-        if(quizService.getQuiz(quiz.getQuizId()) != null){
-            logger.error("already exist Quiz -> user : {}, quizName : {}", user.getUserId(), quiz.getQuizName());
-            return ResponseEntity.badRequest().body("already exist data");
-        }
-
-        quizService.upsertQuiz(quiz);
-        logger.error("Quiz Created -> user : {}, quizName : {}", user.getUserId(), quiz.getQuizName());
-        return ResponseEntity.ok("success");
-    }
-    // 어드민 퀴즈 생성
-
     @GetMapping({"/admin_quiz/create"})
     public ModelAndView adminQuizCreate(HttpServletRequest request){
         User user = getUser();
@@ -116,8 +94,34 @@ public class AdminController extends BaseController{
             mv.setViewName("/error/404");
             return mv;
         }
+
         mv.setViewName("/admin/admin_quiz_create");
         return mv;
     }
+    @PostMapping(value = {"/admin_quiz/{action}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> postAdminQuiz(HttpServletRequest request, @RequestBody Quiz quiz, @PathVariable String action){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        if(action.equals("create")){
+            if(quizService.getQuiz(quiz.getQuizId()) != null){
+                logger.error("already exist Quiz -> user : {}, quizName : {}", user.getUserId(), quiz.getQuizName());
+                return ResponseEntity.badRequest().body("already exist data");
+            }
+            quizService.upsertQuiz(quiz);
+        } else if(action.equals("edit")){
+            quizService.upsertQuiz(quiz);
+        } else {
+            return ResponseEntity.badRequest().body("Validate error");
+        }
+        logger.error("Quiz Created -> user : {}, quizName : {}", user.getUserId(), quiz.getQuizName());
+        return ResponseEntity.ok("success");
+    }
+    // 어드민 퀴즈 생성
+
+
 
 }
