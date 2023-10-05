@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav class="navbar bg-secondary navbar-dark">
+  <div class="navbar-nav w-100">
+    <a href="/challenge/main" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>메인페이지</a>
+    <a href="/challenge/reversing" class="nav-item nav-link"><i class="fa fa-th me-2"></i>REVERSING</a>
+    <a href="/challenge/pwn" class="nav-item nav-link"><i class="fa fa-th me-2"></i>PWN</a>
+    <a href="/challenge/web" class="nav-item nav-link"><i class="fa fa-th me-2"></i>WEB</a>
+    <a href="/challenge/forensics" class="nav-item nav-link"><i class="fa fa-th me-2"></i>FORENSICS</a>
+    <a href="/challenge/misc" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>MISC</a>
+    <a href="/challenge/crypto" class="nav-item nav-link"><i class="fa fa-th me-2"></i>CRYPTO</a>
+    <div class="nav-item dropdown">
+      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>로그 관리</a>
+      <div class="dropdown-menu bg-transparent border-0">
+        <a href="/admin_log/access" class="dropdown-item">문제 접속 로그</a>
+        <a href="/admin_log/flag" class="dropdown-item">Flag 인증 로그</a>
+        <a href="/admin_log/download" class="dropdown-item">문제 다운로드 로그</a>
+      </div>
+    </div>
+  </div>
+</nav>
+</html>

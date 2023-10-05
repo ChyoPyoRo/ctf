@@ -2,26 +2,30 @@ package kimdaehan.ctf.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 @Embeddable
 @NoArgsConstructor
 public class SolvedId implements Serializable {
-    @Column(name = "solved_quiz_id", columnDefinition = "INT NOT NULL")
-    private Integer solvedQuizId;
+    @Column(name = "solved_quiz_id", columnDefinition = "VARBINARY(64) NOT NULL")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID solvedQuizId;
     //문제 푼 사람 ID
     @Column(name="solved_user_id", columnDefinition = "VARCHAR(64) NOT NULL")
     private String solvedUserId;
 
-    public SolvedId(Integer solvedQuizId, String solvedUserId) {
+    public SolvedId(UUID solvedQuizId, String solvedUserId) {
         this.solvedQuizId = solvedQuizId;
         this.solvedUserId = solvedUserId;
     }
 
-    public Integer getSolvedQuizId(){
+    public UUID getSolvedQuizId(){
         return solvedQuizId;
     }
 
