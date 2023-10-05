@@ -12,5 +12,4 @@ public class ServerTime {
     private String type;
     private LocalDate serverDate;
     private LocalTime serverTime;
-
 }

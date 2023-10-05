@@ -23,7 +23,8 @@ public class Quiz implements Serializable {
     @Id
     @Column(name="quiz_id", columnDefinition = "VARBINARY(64) NOT NULL")
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID quizId;
+    @Builder.Default
+    private UUID quizId =UUID.randomUUID();
 
     @Column(name="quiz_name", columnDefinition = "VARCHAR(64) NOT NULL")
     private String quizName;
@@ -43,7 +44,8 @@ public class Quiz implements Serializable {
     private LocalDateTime startTime;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL CURRENT_TIMESTAMP")
-    private LocalDateTime registrationTime;
+    @Builder.Default
+    private LocalDateTime registrationTime = LocalDateTime.now();
 
     @Column(columnDefinition = "INT NOT NULL Default 1000")
     @Builder.Default
