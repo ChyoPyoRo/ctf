@@ -19,6 +19,9 @@ public class ServerSettingService {
     LocalDate serverEndDate = LocalDate.now().plusDays(1);
     LocalTime serverEndTime = LocalTime.now().plusHours(2);
 
+    private ServerSettingService(){
+
+    }
     public LocalDateTime getServerStart(){
         return this.serverStartDate.atTime(this.serverStartTime);
     }

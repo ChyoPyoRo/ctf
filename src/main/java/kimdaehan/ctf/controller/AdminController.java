@@ -2,6 +2,7 @@ package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
+import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.QuizService;
@@ -12,8 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.swing.filechooser.FileSystemView;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -98,29 +103,30 @@ public class AdminController extends BaseController{
         mv.setViewName("/admin/admin_quiz_create");
         return mv;
     }
-    @PostMapping(value = {"/admin_quiz/{action}"}, consumes = MediaType.APPLICATION_JSON_VALUE)
+    // 어드민 퀴즈 생성
+    @PostMapping(value = {"/admin_quiz/create"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @ResponseBody
-    public ResponseEntity<String> postAdminQuiz(HttpServletRequest request, @RequestBody Quiz quiz, @PathVariable String action){
+    public ResponseEntity<String> postAdminQuiz(HttpServletRequest request, @ModelAttribute QuizDto quizDto) throws IOException {
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
             return ResponseEntity.badRequest().body("404 error");
         }
-        if(action.equals("create")){
-            if(quizService.getQuiz(quiz.getQuizId()) != null){
-                logger.error("already exist Quiz -> user : {}, quizName : {}", user.getUserId(), quiz.getQuizName());
-                return ResponseEntity.badRequest().body("already exist data");
-            }
-            quizService.upsertQuiz(quiz);
-        } else if(action.equals("edit")){
-            quizService.upsertQuiz(quiz);
-        } else {
-            return ResponseEntity.badRequest().body("Validate error");
+        Quiz quiz = quizDto.dtoToQuiz();
+        quiz.setQuizWriter(user.getUserId());
+        // 파일 저장 및 경로 저장
+        if(quizDto.getFile() != null){
+            String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
+            String basePath = rootPath + "/" + "data";
+            String filePath = basePath + "/" + quizDto.getFile().getOriginalFilename();
+            File dest = new File(filePath);
+            quizDto.getFile().transferTo(dest);
+            quiz.setAttachment(filePath);
         }
-        logger.error("Quiz Created -> user : {}, quizName : {}", user.getUserId(), quiz.getQuizName());
+        
         return ResponseEntity.ok("success");
     }
-    // 어드민 퀴즈 생성
+
 
 
 

@@ -13,7 +13,10 @@ spring:
         max-size: 20
         allow-core-thread-timeout: false
       thread-name-prefix: TNP-
-
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
   datasource:
     url: jdbc:mysql://127.0.0.1/ctf?serverTimezone=Asia/Seoul
     username: secuAdmin

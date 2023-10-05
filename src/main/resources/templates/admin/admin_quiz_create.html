@@ -54,12 +54,12 @@
             <div class="bg-secondary rounded p-4" style="width: 90%; height: 87%; margin-top: 3%;">
                 <h6 class="mb-4">Quiz Create Page</h6>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="QuizName"
+                    <input type="email" class="form-control" id="quizName"
                            placeholder="name@example.com">
                     <label for="QuizName">Quiz Name</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <select class="form-select" id="floatingSelect"
+                    <select class="form-select" id="category"
                             aria-label="Floating label select example">
                         <option value="REVERSING">REVERSING</option>
                         <option value="PWN">PWN</option>
@@ -67,7 +67,7 @@
                         <option value="FORENSICS">FORENSICS</option>
                         <option value="MISC">MISC</option>
                     </select>
-                    <label for="floatingSelect">Category</label>
+                    <label for="category">Category</label>
                 </div>
                 <div class="form-floating mb-3">
                     <select class="form-select" id="level"
@@ -80,16 +80,16 @@
                 </div>
                 <div class="form-floating mb-3">
                                 <textarea class="form-control" placeholder="Leave a comment here"
-                                          id="floatingTextarea" style="height: 150px;"></textarea>
-                    <label for="floatingTextarea">Description</label>
+                                          id="description" style="height: 150px;"></textarea>
+                    <label for="description">Description</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="flag"
-                           placeholder="name@example.com">
+                    <input type="text" class="form-control" id="flag"
+                           placeholder="SCH{}">
                     <label for="flag">Flag</label>
                 </div>
                 <div class="mb-3">
-                    <input class="form-control bg-dark" type="file" id="formFile">
+                    <input class="form-control bg-dark" type="file" id="file">
                 </div>
                 <div class="mb-4">
                     <label style="margin-bottom: 3px;" for="startDate">Start Date and Time</label>
@@ -99,7 +99,7 @@
                     </div>
                 </div>
                 <div>
-                    <button style="width: 100%;" class="btn btn-primary">Submit</button>
+                    <button onclick="postQuiz()" style="width: 100%;" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </div>
@@ -121,6 +121,7 @@
 
     <!-- Template Javascript -->
     <script th:src="@{/js/admin/main.js}"></script>
+    <script th:src="@{/js/admin/admin_quiz.js}"></script>
 </body>
 
 </html>
