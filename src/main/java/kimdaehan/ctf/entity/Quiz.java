@@ -43,7 +43,7 @@ public class Quiz implements Serializable {
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
     private LocalDateTime startTime;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL CURRENT_TIMESTAMP")
+    @Column(columnDefinition = "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP")
     @Builder.Default
     private LocalDateTime registrationTime = LocalDateTime.now();
 

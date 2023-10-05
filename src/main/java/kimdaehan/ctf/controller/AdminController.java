@@ -114,8 +114,6 @@ public class AdminController extends BaseController{
         }
         Quiz quiz = quizDto.dtoToQuiz();
         quiz.setQuizWriter(user.getUserId());
-        System.out.println("quiz.getRegistrationTime() = " + quiz.getRegistrationTime());
-        System.out.println("quiz.getQuizId() = " + quiz.getQuizId());
         // 파일 저장 및 경로 저장
         if(quizDto.getFile() != null){
             String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
@@ -125,7 +123,7 @@ public class AdminController extends BaseController{
             quizDto.getFile().transferTo(dest);
             quiz.setAttachment(filePath);
         }
-        
+        quizService.upsertQuiz(quiz);
         return ResponseEntity.ok("success");
     }
 
