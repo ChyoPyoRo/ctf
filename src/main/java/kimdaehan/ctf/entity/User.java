@@ -39,6 +39,9 @@ public class User implements Serializable, UserDetails {
     @Builder.Default
     private LocalDateTime registrationDateTime = LocalDateTime.now();
 
+    @Column(columnDefinition = "TIMESTAMP" )
+    private LocalDateTime currentSolvedDateTime;
+
     @EqualsAndHashCode.Include
     @Column(columnDefinition = "VARCHAR(8) NOT NULL", length = 8)
     @Enumerated(EnumType.STRING)

@@ -48,7 +48,7 @@ public class LoginController {
         logger.info("user : {}",user.getUserId());
         Result.Code code = Result.Code.ERROR;
 
-        if(!isMissingMandatories(user)) {
+        if(!isMissingItem(user)) {
             try{
                 logger.info("try saveUser id : {}",user.getUserId());
 
@@ -76,7 +76,7 @@ public class LoginController {
         return code;
     }
 
-    public boolean isMissingMandatories(User user) {
+    public boolean isMissingItem(User user) {
         return Utility.nullOrEmptyOrSpace(user.getUserId()) ||
                 Utility.nullOrEmptyOrSpace(user.getPassword()) ||
                 Utility.nullOrEmptyOrSpace(user.getName()) ||

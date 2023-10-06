@@ -1,11 +1,16 @@
-function postQuiz() {
+function postQuiz(quizId) {
 
     const url = window.location.pathname;
     const file = document.getElementById("file").files[0];
 
     const formData = new FormData();
 
-    formData.append('quizId', null);
+    if(quizId !== null){
+        formData.append('quizId', quizId);
+    }
+    if(file !== undefined){
+        formData.append('file', file);
+    }
     formData.append('quizName', document.getElementById("quizName").value);
     formData.append('category', document.getElementById("category").value);
     formData.append('level', document.getElementById("level").value);
@@ -13,8 +18,6 @@ function postQuiz() {
     formData.append('flag', document.getElementById("flag").value);
     formData.append('startDate', document.getElementById("startDate").value);
     formData.append('startTime', document.getElementById("startTime").value);
-    formData.append('file', file);
-
     const options = {
         method: "POST",
         cache: 'no-cache',

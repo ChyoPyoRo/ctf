@@ -35,4 +35,7 @@ public class QuizDto {
                 .flag(this.flag)
                 .build();
     }
+    public LocalDateTime getLocalDateTime(){
+        return this.startDate.atTime(this.startTime);
+    }
 }

@@ -54,13 +54,11 @@
             <div class="bg-secondary rounded p-4" style="width: 90%; height: 87%; margin-top: 3%;">
                 <h6 class="mb-4">Quiz Create Page</h6>
                 <div class="form-floating mb-3">
-                    <input type="email" class="form-control" id="quizName"
-                           placeholder="name@example.com">
+                    <input type="text" class="form-control" id="quizName">
                     <label for="QuizName">Quiz Name</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <select class="form-select" id="category"
-                            aria-label="Floating label select example">
+                    <select class="form-select" id="category">
                         <option value="REVERSING">REVERSING</option>
                         <option value="PWN">PWN</option>
                         <option value="WEB">WEB</option>
@@ -70,8 +68,7 @@
                     <label for="category">Category</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <select class="form-select" id="level"
-                            aria-label="Floating label select example">
+                    <select class="form-select" id="level">
                         <option value="LOW">LOW</option>
                         <option value="MIDDLE">MIDDLE</option>
                         <option value="HIGH">HIGH</option>
@@ -79,13 +76,11 @@
                     <label for="level">Level</label>
                 </div>
                 <div class="form-floating mb-3">
-                                <textarea class="form-control" placeholder="Leave a comment here"
-                                          id="description" style="height: 150px;"></textarea>
+                    <textarea class="form-control" id="description" style="height: 150px;"></textarea>
                     <label for="description">Description</label>
                 </div>
                 <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="flag"
-                           placeholder="SCH{}">
+                    <input type="text" class="form-control" id="flag" placeholder="SCH{}">
                     <label for="flag">Flag</label>
                 </div>
                 <div class="mb-3">
@@ -99,7 +94,7 @@
                     </div>
                 </div>
                 <div>
-                    <button onclick="postQuiz()" style="width: 100%;" class="btn btn-primary">Submit</button>
+                    <button onclick="postQuiz(null)" style="width: 100%;" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </div>
@@ -107,6 +102,7 @@
 
 
     </div>
+</div>
 
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

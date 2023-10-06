@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>SecurityFirst CTF Admin Page</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="" name="keywords">
+  <meta content="" name="description">
+
+  <!-- Favicon -->
+  <link href="img/favicon.ico" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+        rel="stylesheet">
+
+  <!-- Icon Font Stylesheet -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link th:href="@{/css/owl.carousel.min.css}" rel="stylesheet">
+  <link th:href="@{/css/tempusdominus-bootstrap-4.min.css}" rel="stylesheet"/>
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+
+  <!-- Template Stylesheet -->
+  <link th:href="@{/css/admin/style.css}" rel="stylesheet">
+</head>
+<style>
+  /* 시계 모양 스타일 */
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    background-color: white;
+    color: red;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    background-color: white;
+    color: red;
+  }
+</style>
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+  <!-- Sidebar Start -->
+  <div class="sidebar pe-4 pb-3">
+    <nav th:replace="/admin/layout/admin_side :: nav"></nav>
+  </div>
+  <div class="content">
+    <nav th:replace="/admin/layout/admin_nav :: nav"></nav>
+    <div class="col-sm-12 col-xl-6" style="display: flex; justify-content: center; width: 100%; height: 100%">
+      <div class="bg-secondary rounded p-4" style="width: 90%; height: 87%; margin-top: 3%;">
+        <h6 class="mb-4">Quiz Create Page</h6>
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="quizName" th:value="${quiz.quizName}">
+          <label for="QuizName">Quiz Name</label>
+        </div>
+        <div class="form-floating mb-3">
+          <select class="form-select" id="category">
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).REVERSING}" value="REVERSING">REVERSING</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).PWN}" value="PWN">PWN</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).WEB}" value="WEB">WEB</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).FORENSICS}" value="FORENSICS">FORENSICS</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).MISC}" value="MISC">MISC</option>
+          </select>
+          <label for="category">Category</label>
+        </div>
+        <div class="form-floating mb-3">
+          <select class="form-select" id="level">
+            <option th:if="${quiz.level} == ${T(kimdaehan.ctf.entity.Quiz.levelType).LOW}" value="LOW">LOW</option>
+            <option th:if="${quiz.level} == ${T(kimdaehan.ctf.entity.Quiz.levelType).MIDDLE}" value="MIDDLE">MIDDLE</option>
+            <option th:if="${quiz.level} == ${T(kimdaehan.ctf.entity.Quiz.levelType).HIGH}" value="HIGH">HIGH</option>
+          </select>
+          <label for="level">Level</label>
+        </div>
+        <div class="form-floating mb-3">
+          <textarea class="form-control" id="description" style="height: 150px;">[[${quiz.description}]]</textarea>
+          <label for="description">Description</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input th:value="${quiz.flag}" type="text" class="form-control" id="flag" placeholder="SCH{}">
+          <label for="flag">Flag</label>
+        </div>
+        <div class="mb-3">
+          <input class="form-control bg-dark" type="file" id="file">
+        </div>
+        <div class="mb-4">
+          <label style="margin-bottom: 3px;" for="startDate">Start Date and Time</label>
+          <div style="display: flex;">
+            <input th:value="${date}" style="width: 45%; margin-right: 10%;" class="form-control" type="date" id="startDate">
+            <input th:value="${time}" style="width: 45%;" class="form-control" type="time" id="startTime">
+          </div>
+        </div>
+        <div>
+          <button onclick="postQuiz(uuid)" style="width: 100%;" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+    <!-- 유저 관리 End -->
+
+
+  </div>
+</div>
+  <script>
+    const uuid = "[[${quiz.quizId}]]";
+  </script>
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script th:src="@{/js/chart.min.js}"></script>
+  <script th:src="@{/js/easing.min.js}"></script>
+  <script th:src="@{/js/waypoints.min.js}"></script>
+  <script th:src="@{/js/owl.carousel.min.js}"></script>
+  <script th:src="@{/js/moment.min.js}"></script>
+  <script th:src="@{/js/moment-timezone.min.js}"></script>
+  <script th:src="@{/js/tempusdominus-bootstrap-4.min.js}"></script>
+
+  <!-- Template Javascript -->
+  <script th:src="@{/js/admin/main.js}"></script>
+  <script th:src="@{/js/admin/admin_quiz.js}"></script>
+</body>
+
+</html>

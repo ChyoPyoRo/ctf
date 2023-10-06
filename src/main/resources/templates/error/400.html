@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>400</title>
+
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/css/common.css}" rel="stylesheet">
+
+  <script th:src="@{/js/main/time.js}" defer="defer"></script>
+</head>
+
+<body>
+<div class="container-fluid position-relative d-flex p-0">
+
+  <!-- Content Start -->
+  <div class="content" style="width: 100%">
+    <!-- 404 Start -->
+    <div class="container-fluid pt-4 px-4" style="width: 80%;">
+      <div class="row bg-secondary rounded align-items-center justify-content-center mx-0" style="height: 93vh;">
+        <div class="col-md-6 text-center p-4">
+          <i class="bi bi-exclamation-triangle display-1 text-primary"></i>
+          <h1 class="display-1 fw-bold">400</h1>
+          <h1 class="mb-4">Validation failed</h1>
+          <p class="mb-4">Return 400 Bad Request on request validation error</p>
+          <a class="btn btn-primary rounded-pill py-3 px-5" href="/">Go Home</a>
+        </div>
+      </div>
+    </div>
+    <!-- 404 End -->
+  </div>
+
+</div>
+</body>
+
+</html>

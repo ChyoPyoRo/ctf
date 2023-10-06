@@ -24,7 +24,7 @@ public class Quiz implements Serializable {
     @Column(name="quiz_id", columnDefinition = "VARBINARY(64) NOT NULL")
     @GeneratedValue(strategy = GenerationType.UUID)
     @Builder.Default
-    private UUID quizId =UUID.randomUUID();
+    private UUID quizId = UUID.randomUUID();
 
     @Column(name="quiz_name", columnDefinition = "VARCHAR(64) NOT NULL")
     private String quizName;
@@ -32,7 +32,7 @@ public class Quiz implements Serializable {
     @Column(name="quiz_writer", columnDefinition = "VARCHAR(64) NOT NULL")
     private String quizWriter;
 
-    @Column(name="description", columnDefinition = "VARCHAR(256) NOT NULL")
+    @Column(name="description", columnDefinition = "VARCHAR(256)")
     private String description;
 
     @EqualsAndHashCode.Include
@@ -55,7 +55,7 @@ public class Quiz implements Serializable {
     @Builder.Default
     private Integer minScore = 100;
 
-    @Column(columnDefinition = "VARCHAR(64) NOT NULL")
+    @Column(columnDefinition = "VARCHAR(64)")
     private String attachment;
 
     @Column(columnDefinition = "VARBINARY(64) NOT NULL")
