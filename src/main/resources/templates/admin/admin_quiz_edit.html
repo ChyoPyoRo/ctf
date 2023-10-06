@@ -69,9 +69,9 @@
         </div>
         <div class="form-floating mb-3">
           <select class="form-select" id="level">
-            <option th:if="${quiz.level} == ${T(kimdaehan.ctf.entity.Quiz.levelType).LOW}" value="LOW">LOW</option>
-            <option th:if="${quiz.level} == ${T(kimdaehan.ctf.entity.Quiz.levelType).MIDDLE}" value="MIDDLE">MIDDLE</option>
-            <option th:if="${quiz.level} == ${T(kimdaehan.ctf.entity.Quiz.levelType).HIGH}" value="HIGH">HIGH</option>
+            <option th:if="${quiz.level == 0}" value="LOW">LOW</option>
+            <option th:if="${quiz.level == 1}" value="MIDDLE">MIDDLE</option>
+            <option th:if="${quiz.level == 2}" value="HIGH">HIGH</option>
           </select>
           <label for="level">Level</label>
         </div>

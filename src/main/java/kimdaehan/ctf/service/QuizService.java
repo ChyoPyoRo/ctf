@@ -20,7 +20,7 @@ public class QuizService {
         return quizRepository.findByQuizId(quizId).orElse(null);
     }
     public List<Quiz> getAllQuiz(){
-        return quizRepository.findAll();
+        return quizRepository.findAllByOrderByLevelAscRegistrationTimeAsc();
     }
 
     public void upsertQuiz(Quiz quiz){
@@ -32,7 +32,7 @@ public class QuizService {
         quiz.setCategory(Quiz.CategoryType.valueOf(quizDto.getCategory()));
         quiz.setFlag(quizDto.getFlag());
         quiz.setDescription(quizDto.getDescription());
-        quiz.setLevel(Quiz.levelType.valueOf(quizDto.getLevel()));
+        quiz.setLevel(Integer.valueOf(quizDto.getLevel()));
         quiz.setStartTime(quizDto.getLocalDateTime());
         quiz.setQuizName(quizDto.getQuizName());
         quizRepository.save(quiz);

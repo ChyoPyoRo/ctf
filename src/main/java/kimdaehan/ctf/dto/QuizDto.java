@@ -30,7 +30,7 @@ public class QuizDto {
                 .quizName(this.quizName)
                 .description(this.description)
                 .category(Quiz.CategoryType.valueOf(this.category))
-                .level(Quiz.levelType.valueOf(this.level))
+                .level(Integer.valueOf(this.level))
                 .startTime(this.startDate.atTime(this.startTime))
                 .flag(this.flag)
                 .build();

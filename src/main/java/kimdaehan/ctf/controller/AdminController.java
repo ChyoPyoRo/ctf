@@ -217,7 +217,7 @@ public class AdminController extends BaseController{
         return Utility.nullOrEmptyOrSpace(quizDto.getQuizName()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getCategory()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getFlag()) ||
-                Utility.nullOrEmptyOrSpace(quizDto.getLevel()) ||
+                Utility.nullOrEmptyOrSpace(quizDto.getLevel().toString()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getStartDate().toString()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getStartTime().toString());
     }
