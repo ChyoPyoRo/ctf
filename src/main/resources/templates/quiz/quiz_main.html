@@ -38,38 +38,55 @@
   <nav th:replace="nav :: nav"></nav>
 </div>
 <div class="content container-fluid position-relative d-flex p-0">
-<div class="sidebar">
+    <div class="sidebar">
   <nav th:replace="/quiz/layout/quiz_side :: nav"></nav>
-</div>
-  <div style="display: flex; justify-content: right; width: 100%; height: 100%">
-    <div class ="challenge bg-secondary rounded px-4 py-0" >
+    </div>
+    <div style="display: flex; justify-content: right; width: 100%; height: 100%">
+    <div class ="challenge  rounded px-4 py-0" >
 <!--      style="width: 90%; height: 80%; margin-top: 6%;"-->
-      <h6 class="mb-4 chbox">Quiz Create Page</h6>
-      <div class="form-floating mb-3 chbox">
-        <input type="email" class="form-control" id="floatingInput"
-               placeholder="name@example.com">
-        <label for="floatingInput">Quiz Name</label>
-      </div>
-      <div class="form-floating mb-3 chbox">
-        <select class="form-select" id="floatingSelect"
-                aria-label="Floating label select example">
-          <option value="REVERSING">REVERSING</option>
-          <option value="PWN">PWN</option>
-          <option value="WEB">WEB</option>
-          <option value="FORENSICS">FORENSICS</option>
-          <option value="MISC">MISC</option>
-        </select>
-        <label for="floatingSelect">Category Select</label>
-      </div>
+        <ul>
+            <li class="list-item">Item 1</li>
+            <li class="list-item">Item 2</li>
+            <li class="list-item">Item 3</li>
+            <li class="list-item">Item 4</li>
+            <li class="list-item">Item 5</li>
+        </ul>
+        <!-- Dimmed background -->
+        <div id="dimmed-bg" style="display: none; position: fixed;" ></div>
 
-      <div class="form-floating">
+        <!-- Popup window -->
+        <div id="popup" style="display:none;
+    position:fixed;" >
+            <h6 class="mb-4 chbox">Quiz Create Page</h6>
+            <div class="form-floating mb-3 chbox">
+                <input type="email" class="form-control" id="floatingInput"
+                       placeholder="name@example.com">
+                <label for="floatingInput">Quiz Name</label>
+            </div>
+            <div class="form-floating mb-3 chbox">
+                <select class="form-select" id="floatingSelect"
+                        aria-label="Floating label select example">
+                    <option value="REVERSING">REVERSING</option>
+                    <option value="PWN">PWN</option>
+                    <option value="WEB">WEB</option>
+                    <option value="FORENSICS">FORENSICS</option>
+                    <option value="MISC">MISC</option>
+                </select>
+                <label for="floatingSelect">Category Select</label>
+            </div>
+
+            <div class="form-floating">
                                 <textarea class="form-control" placeholder="Leave a comment here"
                                           id="floatingTextarea" style="height: 150px;"></textarea>
-        <label for="floatingTextarea">Description</label>
-      </div>
+                <label for="floatingTextarea">Description</label>
+            </div>
+            <button onclick='closePopup()'>Close</button>
+        </div>
+
     </div>
   </div>
   </div>
+
   <!-- Content End -->
 
 
@@ -83,7 +100,7 @@
 <script th:src="@{/js/moment.min.js}"></script>
 <script th:src="@{/js/moment-timezone.min.js}"></script>
 <script th:src="@{/js/tempusdominus-bootstrap-4.min.js}"></script>
-
+<script th:src="@{/js/quiz/quiz_list.js}"></script>
 <!-- Template Javascript -->
 <script th:src="@{/js/admin/main.js}"></script>
 </body>
