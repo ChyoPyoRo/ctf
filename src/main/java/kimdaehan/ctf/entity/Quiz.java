@@ -61,9 +61,8 @@ public class Quiz implements Serializable {
     @Column(columnDefinition = "VARBINARY(64) NOT NULL")
     private String flag;
 
-    @Column(columnDefinition = "VARCHAR(8) NOT NULL")
-    @Enumerated(EnumType.STRING)
-    private levelType level;
+    @Column(columnDefinition = "INT NOT NULL")
+    private Integer level;
 
     public enum CategoryType{
         REVERSING, PWN, WEB, FORENSICS, MISC, CRYPTO

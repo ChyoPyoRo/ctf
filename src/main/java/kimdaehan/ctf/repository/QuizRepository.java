@@ -6,6 +6,7 @@ import kimdaehan.ctf.entity.Quiz;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,4 +14,8 @@ import java.util.UUID;
 public interface QuizRepository extends JpaRepository<Quiz, String> {
     @Transactional(readOnly= true)
     Optional<Quiz> findByQuizId(UUID quizId);
+
+    @Transactional(readOnly= true)
+    List<Quiz> findAllByOrderByLevelAscRegistrationTimeAsc();
+
 }
