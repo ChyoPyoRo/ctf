@@ -23,6 +23,9 @@ public class QuizService {
         return quizRepository.findAllByOrderByLevelAscRegistrationTimeAsc();
     }
 
+    public List<Quiz> getAllQuizByCategory(Quiz.CategoryType categoryType){
+        return quizRepository.findAllByCategoryOrderByLevelAscRegistrationTimeAsc(categoryType);
+    }
     public void upsertQuiz(Quiz quiz){
         quizRepository.save(quiz);
     }

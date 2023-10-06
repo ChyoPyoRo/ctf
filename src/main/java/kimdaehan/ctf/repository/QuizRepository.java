@@ -18,4 +18,7 @@ public interface QuizRepository extends JpaRepository<Quiz, String> {
     @Transactional(readOnly= true)
     List<Quiz> findAllByOrderByLevelAscRegistrationTimeAsc();
 
+    @Transactional(readOnly= true)
+    List<Quiz> findAllByCategoryOrderByLevelAscRegistrationTimeAsc(Quiz.CategoryType categoryType);
+
 }
