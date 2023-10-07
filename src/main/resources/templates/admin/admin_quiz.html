@@ -61,24 +61,14 @@
               <th scope="col">Delete</th>
             </tr>
             </thead>
-            <tbody>
-
-            <tr th:each="quiz : ${quizzes}">
-              <td><a th:text="${quiz.quizName}" th:href="@{/admin_quiz/edit(uuid=${quiz.quizId})}"></a></td>
-              <td th:text="${quiz.quizWriter}"></td>
-              <td th:text="${quiz.category}"></td>
-              <td th:if="${quiz.level == 0}">Low</td>
-              <td th:if="${quiz.level == 1}">Middle</td>
-              <td th:if="${quiz.level == 2}">High</td>
-              <td th:text="${quiz.registrationTime}"></td>
-              <td th:text="${quiz.startTime}"></td>
-              <td><a class="btn btn-sm btn-primary" th:href="@{/admin_quiz/delete(uuid=${quiz.quizId})}">Delete</a></td>
-            </tr>
-
+            <tbody id="quiz-content">
             </tbody>
           </table>
         </div>
         <button class="btn">create</button>
+        <div id="paging">
+
+        </div>
       </div>
 
     </div>
@@ -99,6 +89,10 @@
 
   <!-- Template Javascript -->
   <script th:src="@{/js/admin/main.js}"></script>
+<script th:src="@{/js/admin/admin_quiz.js}"></script>
+<script>
+  renderPagination(1);
+</script>
 </body>
 
 </html>

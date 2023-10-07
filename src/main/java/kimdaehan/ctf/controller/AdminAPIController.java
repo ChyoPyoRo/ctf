@@ -3,29 +3,33 @@ package kimdaehan.ctf.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.ServerTime;
+import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 public class AdminAPIController extends BaseController{
 
     public final ServerSettingService serverSettingService;
-
+    public final QuizService quizService;
     @Autowired
-    public AdminAPIController(UserService userService, AuthenticationFacade authenticationFacade, ServerSettingService serverSettingService) {
+    public AdminAPIController(UserService userService, AuthenticationFacade authenticationFacade, ServerSettingService serverSettingService, QuizService quizService) {
         super(userService, authenticationFacade);
         this.serverSettingService = serverSettingService;
+        this.quizService = quizService;
     }
+
+
+
 
     @PostMapping({"/server_setting"})
     public ResponseEntity<String> adminMain(HttpServletRequest request, @RequestBody ServerTime time){
@@ -54,4 +58,29 @@ public class AdminAPIController extends BaseController{
         }
         return ResponseEntity.ok("success");
     }
+
+    @GetMapping({"/admin_quiz_list/{category}"})
+    public ResponseEntity<?> getAdminQuiz(HttpServletRequest request, @PathVariable String category) {
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        List<Quiz> quizzes;
+
+        switch (category) {
+            case "ALL" -> quizzes = quizService.getAllQuiz();
+            case "REVERSING" -> quizzes = quizService.getAllQuizByCategory(Quiz.CategoryType.REVERSING);
+            case "WEB" -> quizzes = quizService.getAllQuizByCategory(Quiz.CategoryType.WEB);
+            case "PWN" -> quizzes = quizService.getAllQuizByCategory(Quiz.CategoryType.PWN);
+            case "FORENSICS" -> quizzes = quizService.getAllQuizByCategory(Quiz.CategoryType.FORENSICS);
+            case "MISC" -> quizzes = quizService.getAllQuizByCategory(Quiz.CategoryType.MISC);
+            default -> {
+                return ResponseEntity.badRequest().body("Validation error");
+            }
+        }
+        return ResponseEntity.ok(quizzes);
+    }
+
+
 }
