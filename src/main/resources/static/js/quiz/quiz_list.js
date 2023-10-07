@@ -16,3 +16,6 @@ function closePopup() {
     document.getElementById('dimmed-bg').style.display = 'none';
     document.getElementById('popup').style.display = 'none';
 }
+
+// Close the popup when clicking outside of it
+document.getElementById('dimmed-bg').addEventListener('click', closePopup);
