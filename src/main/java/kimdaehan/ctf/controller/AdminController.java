@@ -6,6 +6,8 @@ import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.entity.log.AccessLog;
+import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
@@ -31,14 +33,19 @@ public class AdminController extends BaseController{
     public final UserService userService;
     public final QuizService quizService;
     public final ServerSettingService serverSettingService;
+    public final LogService logService;
 
     @Autowired
-    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1, QuizService quizService, ServerSettingService serverSettingService) {
+    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1, QuizService quizService, ServerSettingService serverSettingService, LogService logService) {
         super(userService, authenticationFacade);
         this.userService = userService1;
         this.quizService = quizService;
         this.serverSettingService = serverSettingService;
+        this.logService = logService;
     }
+
+
+
 
 
     @GetMapping({"/admin_main"})
@@ -245,7 +252,30 @@ public class AdminController extends BaseController{
         }
         return ResponseEntity.ok("success");
     }
+    //어드민 로그
 
+    @GetMapping({"/admin_log/{logType}"})
+    public ModelAndView adminLog(HttpServletRequest request, @PathVariable String logType){
+        User user = getUser();
+        ModelAndView mv = new ModelAndView();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            mv.setViewName("/error/404");
+            return mv;
+        }
+        if(logType.equals("ACCESS")){
+            mv.setViewName("/admin/log/admin_access_log");
+        } else if(logType.equals("FLAG")){
+            mv.setViewName("/admin/log/admin_flag_log");
+        } else if(logType.equals("DOWNLOAD")){
+            mv.setViewName("/admin/log/admin_download_log");
+        } else {
+            mv.setViewName("/error/404");
+        }
+        //active
+        mv.addObject("type","LOG");
+        return mv;
+    }
 
     public boolean isMissingItem(QuizDto quizDto) {
         return Utility.nullOrEmptyOrSpace(quizDto.getQuizName()) ||

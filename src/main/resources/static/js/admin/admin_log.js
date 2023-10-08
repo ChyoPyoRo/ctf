@@ -15,45 +15,8 @@ const getAjax = function(url) {
     });
 }
 
-function postQuiz(quizId) {
 
-    const url = window.location.pathname;
-    const file = document.getElementById("file").files[0];
-
-    const formData = new FormData();
-
-    if(quizId !== null){
-        formData.append('quizId', quizId);
-    }
-    if(file !== undefined){
-        formData.append('file', file);
-    }
-    formData.append('quizName', document.getElementById("quizName").value);
-    formData.append('category', document.getElementById("category").value);
-    formData.append('level', document.getElementById("level").value);
-    formData.append('description', document.getElementById("description").value);
-    formData.append('flag', document.getElementById("flag").value);
-    formData.append('startDate', document.getElementById("startDate").value);
-    formData.append('startTime', document.getElementById("startTime").value);
-    const options = {
-        method: "POST",
-        cache: 'no-cache',
-        body: formData,
-    };
-
-    fetch(url, options)
-        .then(response => {return response; })
-        .then(data => {
-            if(data.ok === true){
-                alert("문제 생성(수정)에 성공 했습니다.");
-                window.location.href = "/admin_quiz";
-            } else {
-                alert("문제 생성(수정)에 실패 했습니다.\n비어 있는 항목이 있는지 확인해 주세요.");
-            }
-        });
-}
-
-async function getQuizList(category){
+async function getLogList(category){
     const url = "/admin_quiz_list/"+category;
     try {
         return await getAjax(url);
@@ -142,8 +105,8 @@ const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
     buttons.append(next);
     console.log(page, maxPage)
     // 이전, 다음 페이지 버튼이 필요한지 체크
-   if ((now+1)  === 1 ) buttons.removeChild(prev);
-   if ((now+1) === totalMaxPage) buttons.removeChild(next);
+    if ((now+1)  === 1 ) buttons.removeChild(prev);
+    if ((now+1) === totalMaxPage) buttons.removeChild(next);
 };
 
 
