@@ -32,13 +32,13 @@ public class LogService {
     }
     //로그 검색
     public List<FlagLog> getAllFlagLog(){
-        return flagLogRepository.findAll();
+        return flagLogRepository.findAllByOrderByRecordKeyDateTimeDesc();
     }
 
     public List<AccessLog> getAllAccessLog(){
-        return accessLogRepository.findAll();
+        return accessLogRepository.findAllByOrderByRecordKeyDateTimeDesc();
     }
     public List<DownloadLog> getAllDownloadLog(){
-        return downloadLogRepository.findAll();
+        return downloadLogRepository.findAllByOrderByRecordKeyDateTimeDesc();
     }
 }
