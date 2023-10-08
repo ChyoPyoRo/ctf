@@ -1,5 +1,8 @@
 package kimdaehan.ctf.service;
 
+import kimdaehan.ctf.entity.Quiz;
+import kimdaehan.ctf.entity.RecordKey;
+import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.entity.log.AccessLog;
 import kimdaehan.ctf.entity.log.DownloadLog;
 import kimdaehan.ctf.entity.log.FlagLog;
@@ -9,7 +12,9 @@ import kimdaehan.ctf.repository.FlagLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +35,18 @@ public class LogService {
     public void upsertDownload(DownloadLog downloadLog){
         downloadLogRepository.save(downloadLog);
     }
+
+    // 로그 빌더
+    public AccessLog buildAccessLogByQuizAndUserAndIP(Quiz quiz, User user, String userIp){
+        return AccessLog.builder()
+                .quizId(quiz)
+                .userIp(userIp)
+                .recordKey(new RecordKey(user, LocalDateTime.now()))
+                .build();
+    }
+
+
+
     //로그 검색
     public List<FlagLog> getAllFlagLog(){
         return flagLogRepository.findAllByOrderByRecordKeyDateTimeDesc();

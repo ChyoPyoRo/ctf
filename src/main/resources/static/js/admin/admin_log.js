@@ -161,11 +161,11 @@ const makeAccessTable = (data) => {
     const td1 = document.createElement("td");
     td1.innerText = data.recordKey.dateTime
     const td2 = document.createElement("td");
-    td2.innerText = data.recordKey.userId;
+    td2.innerText = data.recordKey.userId.userId;
     const td3 = document.createElement("td");
     td3.innerText = data.userIp;
     const td4 = document.createElement("td");
-    td4.innerText = data.quizName;
+    td4.innerText = data.quizId.quizName;
 
 
     table.appendChild(td1);
@@ -180,11 +180,11 @@ const makeDownloadTable = (data) => {
     const td1 = document.createElement("td");
     td1.innerText = data.recordKey.dateTime
     const td2 = document.createElement("td");
-    td2.innerText = data.recordKey.userId;
+    td2.innerText = data.recordKey.userId.userId;
     const td3 = document.createElement("td");
     td3.innerText = data.userIp;
     const td4 = document.createElement("td");
-    td4.innerText = data.quizName;
+    td4.innerText = data.quizId.quizName;
 
 
     table.appendChild(td1);
@@ -199,11 +199,11 @@ const makeFlagTable = (data) => {
     const td1 = document.createElement("td");
     td1.innerText = data.recordKey.dateTime
     const td2 = document.createElement("td");
-    td2.innerText = data.recordKey.userId;
+    td2.innerText = data.recordKey.userId.userId;
     const td3 = document.createElement("td");
     td3.innerText = data.userIp;
     const td4 = document.createElement("td");
-    td4.innerText = data.quizName;
+    td4.innerText = data.quizId.quizName;
     const td5 = document.createElement("td");
     td5.innerText = data.flag;
     const td6 = document.createElement("td");

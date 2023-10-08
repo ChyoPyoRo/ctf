@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>Register</title>
+
+  <!-- Icon Font Stylesheet -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/css/common.css}" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script th:src="@{/js/login/register.js}"></script>
+</head>
+<body>
+<div class="layout-nav">
+  <nav th:replace="~{/nav :: nav}"></nav>
+</div>
+<div class="layout-content-no-footer">
+  <div class="content-login container-fluid position-relative d-flex p-0">
+    <div class="container-fluid">
+      <div class="row h-100 align-items-center justify-content-center" style="max-height: 867px;">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+          <div class="bg-secondary rounded p-4 p-sm-5 my-4 mx-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div style="text-align: center; width: 100%;">
+                <h2 class="text-primary">내 정보</h2>
+              </div>
+            </div>
+            <div class="mb-1">
+              <span>아이디</span>
+              <input type="text" class="form-control" id="id" placeholder="ID">
+            </div>
+            <div class="mb-2">
+              <span>비밀번호</span>
+              <input type="password" class="form-control" id="password" placeholder="Password">
+            </div>
+            <div class="mb-3">
+              <span>이름</span>
+              <input type="text" class="form-control" id="name" placeholder="Name">
+            </div>
+            <div class="mb-3">
+              <span>닉네임</span>
+              <input type="text" class="form-control" id="nickName" placeholder="NickName">
+            </div>
+            <div class="mb-4">
+              <span>소속</span>
+              <select class="form-control" id="affiliation" style="background: #000;">
+                <option value="NONE" selected disabled hidden>==선택하세요==</option>
+                <option value="YB">SecurityFirst NB</option>
+                <option value="YB">SecurityFirst YB</option>
+                <option value="OB">SecurityFirst OB</option>
+                <option value="SCH">순천향대 학생</option>
+              </select>
+            </div>
+            <button onclick="register();" type="submit" class="btn btn-primary py-3 w-100 mb-4">회원가입</button>
+            <p class="text-center mb-0">Already have an Account? <a href="/login">login</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Sign In End -->
+  </div>
+</div>
+</body>
+</html>

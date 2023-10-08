@@ -1,8 +1,7 @@
 package kimdaehan.ctf.entity.log;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.RecordKey;
 import lombok.*;
 
@@ -21,6 +20,7 @@ public class DownloadLog {
     @Column(columnDefinition = "VARCHAR(32) NOT NULL")
     private String userIp;
 
-    @Column(columnDefinition = "VARCHAR(64) NOT NULL")
-    private String quizName;
+    @ManyToOne
+    @JoinColumn(name="quiz_id", referencedColumnName = "quiz_id")
+    private Quiz quizId;
 }
