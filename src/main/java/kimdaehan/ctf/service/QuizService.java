@@ -19,13 +19,16 @@ public class QuizService {
     public Quiz getQuiz(UUID quizId){
         return quizRepository.findByQuizId(quizId).orElse(null);
     }
+    //모든 Quiz 가져오기
     public List<Quiz> getAllQuiz(){
         return quizRepository.findAllByOrderByLevelAscRegistrationTimeAsc();
     }
 
+    //카테고리별로 Quiz 가져오기
     public List<Quiz> getAllQuizByCategory(Quiz.CategoryType categoryType){
         return quizRepository.findAllByCategoryOrderByLevelAscRegistrationTimeAsc(categoryType);
     }
+    //Quiz 저장
     public void upsertQuiz(Quiz quiz){
         quizRepository.save(quiz);
     }

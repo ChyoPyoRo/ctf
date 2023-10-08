@@ -55,6 +55,9 @@ public class AdminController extends BaseController{
         mv.addObject("endDate",serverSettingService.getServerEndDate());
         mv.addObject("endTime",serverSettingService.getEndTimeToString());
 
+        //active
+        mv.addObject("type","MAIN");
+
         mv.setViewName("/admin/admin_main");
         return mv;
     }
@@ -72,6 +75,8 @@ public class AdminController extends BaseController{
         List<User> users = userService.getAllUser();
 
         mv.addObject("users", users);
+        //active
+        mv.addObject("type","USER");
         mv.setViewName("/admin/admin_user");
         return mv;
     }
@@ -88,7 +93,11 @@ public class AdminController extends BaseController{
         }
         List<Quiz> quizzes = quizService.getAllQuiz();
 
+
         mv.addObject("quizzes", quizzes);
+        //active
+        mv.addObject("type","QUIZ");
+
         mv.setViewName("/admin/admin_quiz");
         return mv;
     }
@@ -102,6 +111,8 @@ public class AdminController extends BaseController{
             mv.setViewName("/error/404");
             return mv;
         }
+        //active
+        mv.addObject("type","QUIZ");
         if (crud.equals("create")){
             logger.info("User Access /admin/quiz/create -> user : {}", user.getUserId());
             mv.setViewName("/admin/admin_quiz_create");
@@ -131,6 +142,8 @@ public class AdminController extends BaseController{
             logger.error("User Access /admin/quiz/??? -> user : {}", user.getUserId());
             mv.setViewName("/error/404");
         }
+
+
         return mv;
     }
     // 어드민 퀴즈 생성
