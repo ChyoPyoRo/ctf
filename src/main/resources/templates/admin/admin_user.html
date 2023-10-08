@@ -14,7 +14,8 @@
   <!-- Google Web Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap"
+        rel="stylesheet">
 
   <!-- Icon Font Stylesheet -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -22,7 +23,7 @@
 
   <!-- Libraries Stylesheet -->
   <link th:href="@{/css/owl.carousel.min.css}" rel="stylesheet">
-  <link th:href="@{/css/tempusdominus-bootstrap-4.min.css}" rel="stylesheet" />
+  <link th:href="@{/css/tempusdominus-bootstrap-4.min.css}" rel="stylesheet"/>
 
   <!-- Customized Bootstrap Stylesheet -->
   <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
@@ -30,7 +31,13 @@
   <!-- Template Stylesheet -->
   <link th:href="@{/css/admin/style.css}" rel="stylesheet">
 </head>
-
+<style>
+  @media (max-width: 888px) {
+    .container-fluid {
+      height: 968px;
+    }
+  }
+</style>
 <body>
 <div class="container-fluid position-relative d-flex p-0">
   <!-- Sidebar Start -->
@@ -42,9 +49,20 @@
   <div class="content">
     <!-- Navbar Start -->
     <nav th:replace="~{admin/layout/admin_nav :: nav}"></nav>
-    <!-- 유저 관리 -->
-    <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary text-center rounded p-4">
+    <!-- 문제 관리 -->
+    <div class="container-fluid pt-4 px-4" style="height: 90.5%; position: relative;">
+      <div class="bg-secondary text-center rounded p-4" style="height: 100%;">
+        <div style="position: absolute; right: 50px; width: 42%; top:40px; display: flex")>
+          <select class="form-select" id="categorySelect" style="width: 30%; margin-right: 3%;" >
+            <option id="0" value="ALL">ALL</option>
+            <option id="1" value="YB">YB</option>
+            <option id="2" value="NB">NB</option>
+            <option id="3" value="OB">OB</option>
+            <option id="4" value="SCH">SCH</option>
+          </select>
+          <input class="form-control border-0" type="search" style="width:44%; margin-right: 3%;" placeholder="userId를 입력해주세요.">
+          <button class="btn btn-outline-light" style="width: 83px;">Search</button>
+        </div>
         <div class="d-flex align-items-center justify-content-between mb-4">
           <h6 class="mb-0">유저 관리</h6>
         </div>
@@ -52,86 +70,26 @@
           <table class="table text-start align-middle table-bordered table-hover mb-0">
             <thead>
             <tr class="text-white">
-              <th scope="col">Registration Time</th>
               <th scope="col">ID</th>
               <th scope="col">Name</th>
               <th scope="col">NickName</th>
               <th scope="col">Score</th>
               <th scope="col">Type</th>
-              <th scope="col">Detail</th>
+              <th scope="col">RegistrationTime</th>
+              <th scope="col">Delete</th>
             </tr>
             </thead>
-            <tbody>
-            <tr>
-              <td><input class="form-check-input" type="checkbox"></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>Jhon Doe</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
-            <tr>
-              <td><input class="form-check-input" type="checkbox"></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>Jhon Doe</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
-            <tr>
-              <td><input class="form-check-input" type="checkbox"></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>Jhon Doe</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
-            <tr>
-              <td><input class="form-check-input" type="checkbox"></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>Jhon Doe</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
-            <tr>
-              <td><input class="form-check-input" type="checkbox"></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>Jhon Doe</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
+            <tbody id="quiz-content">
             </tbody>
           </table>
         </div>
-      </div>
-    </div>
-    <!-- 유저 관리 End -->
-
-
-    <!-- Footer Start -->
-    <div class="container-fluid pt-4 px-4">
-      <div class="bg-secondary rounded-top p-4">
-        <div class="row">
-          <div class="col-12 col-sm-6 text-center text-sm-start">
-            &copy; <a href="/admin_main">SecurityFirst CTF</a>
-          </div>
+        <div style="position: absolute; bottom: 3%;left: 0;width: 100%;text-align: center;">
+          <div id="paging" style="text-align: center;"></div>
         </div>
       </div>
     </div>
-    <!-- Footer End -->
   </div>
-  <!-- Content End -->
-
-
-  <!-- Back to Top -->
-  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+  <!-- 유저 관리 End -->
 </div>
 
 <!-- JavaScript Libraries -->
@@ -147,6 +105,11 @@
 
 <!-- Template Javascript -->
 <script th:src="@{/js/admin/main.js}"></script>
+
+<script>
+  renderPagination(1, "ALL");
+
+</script>
 </body>
 
 </html>
