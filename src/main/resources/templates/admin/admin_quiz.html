@@ -42,13 +42,13 @@
 <div class="container-fluid position-relative d-flex p-0">
     <!-- Sidebar Start -->
     <div class="sidebar pe-4 pb-3">
-        <nav th:replace="/admin/layout/admin_side :: nav"></nav>
+        <nav th:replace="~{/admin/layout/admin_side :: nav}"></nav>
     </div>
     <!-- Sidebar End -->
     <!-- Content Start -->
     <div class="content">
         <!-- Navbar Start -->
-        <nav th:replace="/admin/layout/admin_nav :: nav"></nav>
+        <nav th:replace="~{admin/layout/admin_nav :: nav}"></nav>
         <!-- 문제 관리 -->
         <div class="container-fluid pt-4 px-4" style="height: 90.5%; position: relative;">
             <div class="bg-secondary text-center rounded p-4" style="height: 100%;">

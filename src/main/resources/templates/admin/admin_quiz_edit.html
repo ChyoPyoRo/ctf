@@ -46,10 +46,10 @@
 <div class="container-fluid position-relative d-flex p-0">
   <!-- Sidebar Start -->
   <div class="sidebar pe-4 pb-3">
-    <nav th:replace="/admin/layout/admin_side :: nav"></nav>
+    <nav th:replace="~{/admin/layout/admin_side :: nav}"></nav>
   </div>
   <div class="content">
-    <nav th:replace="/admin/layout/admin_nav :: nav"></nav>
+    <nav th:replace="~{admin/layout/admin_nav :: nav}"></nav>
     <div class="col-sm-12 col-xl-6" style="display: flex; justify-content: center; width: 100%; height: 100%">
       <div class="bg-secondary rounded p-4" style="width: 90%; height: 87%; margin-top: 3%;">
         <h6 class="mb-4">Challenge Create Page</h6>
