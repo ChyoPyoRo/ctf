@@ -33,6 +33,10 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+    //Quiz 삭제
+    public void deleteQuizById(UUID quizId){
+        quizRepository.deleteByQuizId(quizId);
+    }
 
     public void upsertQuizWithDto(Quiz quiz, QuizDto quizDto){
         quiz.setCategory(Quiz.CategoryType.valueOf(quizDto.getCategory()));

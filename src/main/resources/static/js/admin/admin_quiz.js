@@ -177,13 +177,26 @@ const makeTable = (data) => {
     td6.innerText = data.startTime;
 
     const td7=document.createElement('td');
-    const aTag2= document.createElement('a');
     const button = document.createElement("button");
     button.classList.add("btn-danger","btn");
-    aTag2.href="/admin_quiz/delete?uuid="+data.quizId;
-    aTag2.style.color="white";
-    aTag2.innerText = "delete";
-    button.appendChild(aTag2);
+    button.onclick= () =>{
+        const options = {
+            method: "GET",
+        };
+        fetch("/admin_quiz/delete/"+data.quizId, options)
+            .then(response => {return response; })
+            .then(data => {
+                if(data.ok === true){
+                    alert("문제 삭제에 성공 했습니다.");
+                    window.location.reload();
+                } else {
+                    alert("문제 삭제에 실패 했습니다.");
+                }
+            });
+    }
+
+    button.style.color="white";
+    button.innerText = "delete";
     td7.appendChild(button);
 
     table.appendChild(td1);

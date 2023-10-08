@@ -1,6 +1,7 @@
 package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.websocket.server.PathParam;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
@@ -225,6 +226,26 @@ public class AdminController extends BaseController{
         quizService.upsertQuizWithDto(quiz, quizDto);
         return ResponseEntity.ok("success");
     }
+
+    // 어드민 퀴즈 삭제
+    @GetMapping(value = {"/admin_quiz/delete/{uuid}"})
+    @ResponseBody
+    public ResponseEntity<String> deleteAdminQuiz(HttpServletRequest request, @PathVariable String uuid ){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        Quiz quiz = quizService.getQuiz(UUID.fromString(uuid));
+        if(quiz == null){
+            return ResponseEntity.badRequest().body("Validation error");
+        } else {
+            logger.info("delete Quiz -> user : {}, quizName {}", user.getUserId(), quiz.getQuizName());
+            quizService.deleteQuizById(UUID.fromString(uuid));
+        }
+        return ResponseEntity.ok("success");
+    }
+
 
     public boolean isMissingItem(QuizDto quizDto) {
         return Utility.nullOrEmptyOrSpace(quizDto.getQuizName()) ||
