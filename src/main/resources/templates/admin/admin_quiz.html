@@ -52,6 +52,14 @@
         <!-- 문제 관리 -->
         <div class="container-fluid pt-4 px-4" style="height: 90.5%; position: relative;">
             <div class="bg-secondary text-center rounded p-4" style="height: 100%;">
+                <select class="form-select" id="categorySelect" style="position: absolute; right: 50px; width: 15%; top:40px;" onchange="renderPagination(1,(this.options[this.selectedIndex].text))">
+                  <option id="0" value="ALL">ALL</option>
+                  <option id="1" value="REVERSING">REVERSING</option>
+                  <option id="2" value="PWN">PWN</option>
+                  <option id="3" value="WEB">WEB</option>
+                  <option id="4" value="FORENSICS">FORENSICS</option>
+                  <option id="5" value="MISC">MISC</option>
+                </select>
                 <div class="d-flex align-items-center justify-content-between mb-4">
                     <h6 class="mb-0">문제 관리</h6>
                 </div>
@@ -97,6 +105,7 @@
 <script th:src="@{/js/admin/admin_quiz.js}"></script>
 <script>
     renderPagination(1, "ALL");
+
 </script>
 </body>
 
