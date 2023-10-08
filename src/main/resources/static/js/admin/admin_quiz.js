@@ -42,7 +42,15 @@ function postQuiz(quizId) {
     };
 
     fetch(url, options)
-        .then(response => console.log(response));
+        .then(response => {return response; })
+        .then(data => {
+            if(data.ok === true){
+                alert("문제 생성(수정)에 성공 했습니다.");
+                window.location.href = "/admin_quiz";
+            } else {
+                alert("문제 생성(수정)에 실패 했습니다.\n비어 있는 항목이 있는지 확인해 주세요.");
+            }
+        });
 }
 
 async function getQuizList(category){
@@ -56,32 +64,32 @@ async function getQuizList(category){
 
 
 
-async function renderPagination(currentPage) {
+async function renderPagination(currentPage, type) {
     const contents = document.querySelector("#quiz-content");
-    const data = await getQuizList("ALL");
+    const data = await getQuizList(type);
     let totalCount = data.length;
-    let maxPage = Math.ceil(totalCount / 8);
+    let maxPage = Math.ceil(totalCount / 10);
 
     let maxGroup = Math.ceil(maxPage / 5);
     let currentGroup = Math.ceil(currentPage / 5)
     let currentData;
-    if((currentPage-1) * 8  >= totalCount){
-        currentData = data.slice((currentPage-1) * 8, totalCount);
+    if((currentPage-1) * 10  >= totalCount){
+        currentData = data.slice((currentPage-1) * 10, totalCount);
     }else {
-        currentData = data.slice((currentPage-1) * 8, (currentPage) * 8);
+        currentData = data.slice((currentPage-1) * 10, (currentPage) * 10);
     }
     if( currentGroup === maxGroup ){
-        renderButton((currentGroup * 5)-4,maxPage, currentPage -((currentGroup * 5)-4));
+        await renderButton((currentGroup * 5)-4,maxPage, currentPage -((currentGroup * 5)-4),type, maxPage);
         renderTable(currentData);
     } else {
-        renderButton((currentGroup * 5)-4, currentGroup * 5, currentPage -((currentGroup * 5)-4))
+        await renderButton((currentGroup * 5)-4, currentGroup * 5, currentPage -((currentGroup * 5)-4),type, maxPage)
         renderTable(currentData);
     }
 
 }
 
 
-const renderButton = (page, maxPage, now) => {
+const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
     const buttons = document.querySelector("#paging");
     // 버튼 리스트 초기화
     while (buttons.hasChildNodes()) {
@@ -89,55 +97,61 @@ const renderButton = (page, maxPage, now) => {
     }
     // 화면에 최대 5개의 페이지 버튼 생성
     for (let id = page; id <= maxPage; id++) {
-        buttons.appendChild(makeButton(id));
+        buttons.appendChild(makeButton(id,type));
     }
     // 첫 버튼 활성화(class="active")
     buttons.children[now].classList.add("active");
 
     const prev = document.createElement("button");
-    prev.classList.add("button", "prev");
-    prev.innerHTML = '<ion-icon name="chevron-back-outline"></ion-icon>';
-    //prev.addEventListener("click", goPrevPage);
+    prev.classList.add("btn", "btn-secondary");
+    prev.innerHTML = '<i class="fa-solid fa-caret-left"></i>';
+    prev.onclick = () => renderPagination(now,type);
 
     const next = document.createElement("button");
-    next.classList.add("button", "next");
-    next.innerHTML = '<ion-icon name="chevron-forward-outline"></ion-icon>';
-    //next.addEventListener("click", goNextPage);
-
+    next.classList.add("btn", "btn-secondary");
+    next.innerHTML = '<i class="fa-solid fa-caret-right"></i>';
+    next.onclick = () => renderPagination(now+2,type);
 
     buttons.prepend(prev);
     buttons.append(next);
-
+    console.log(page, maxPage)
     // 이전, 다음 페이지 버튼이 필요한지 체크
-   if (page - maxPage < 1) buttons.removeChild(prev);
-   if (page + 1 > maxPage) buttons.removeChild(next);
+   if ((now+1)  === 1 ) buttons.removeChild(prev);
+   if ((now+1) === totalMaxPage) buttons.removeChild(next);
 };
 
 
 const renderTable = (dataSet) => {
-    const contents = document.querySelector("#quiz-content");
+    const tables = document.querySelector("#quiz-content");
+    // 버튼 리스트 초기화
+    while (tables.hasChildNodes()) {
+        tables.removeChild(tables.lastChild);
+    }
+
     for(let i=0; i<dataSet.length; i++){
-        contents.appendChild(makeTable(dataSet[i]));
+        tables.appendChild(makeTable(dataSet[i]));
     }
 }
 
-const makeButton = (id) => {
+const makeButton = (id,type) => {
     const buttons = document.querySelector("#paging");
     const button = document.createElement("button");
-    button.classList.add("button");
+    button.classList.add("btn","btn-secondary");
     button.dataset.num = id;
     button.innerText = id;
+    button.onclick = () => renderPagination(id,type);
     button.addEventListener("click", (e) => {
         Array.prototype.forEach.call(buttons.children, (button) => {
             if (button.dataset.num) button.classList.remove("active");
         });
         e.target.classList.add("active");
-        //renderContent(parseInt(e.target.dataset.num));
     });
     return button;
 };
 
 const makeTable = (data) => {
+
+
     const table = document.createElement("tr");
     const td1 = document.createElement("td");
     const aTag= document.createElement('a');
@@ -165,7 +179,9 @@ const makeTable = (data) => {
     const td7=document.createElement('td');
     const aTag2= document.createElement('a');
     const button = document.createElement("button");
+    button.classList.add("btn-danger","btn");
     aTag2.href="/admin_quiz/delete?uuid="+data.quizId;
+    aTag2.style.color="white";
     aTag2.innerText = "delete";
     button.appendChild(aTag2);
     td7.appendChild(button);

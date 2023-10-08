@@ -5,11 +5,21 @@
     <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>AdminPage</h3>
   </a>
   <div class="navbar-nav w-100">
-    <a href="/admin_main" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>메인페이지</a>
-    <a href="/admin_user" class="nav-item nav-link"><i class="fa fa-th me-2"></i>유저 관리</a>
-    <a href="/admin_quiz" class="nav-item nav-link"><i class="fa fa-keyboard me-2"></i>문제 관리</a>
+    <a th:if="${type} == 'MAIN'" href="/admin_main" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>메인페이지</a>
+    <a th:if="${type} != 'MAIN'" href="/admin_main" class="nav-item nav-link"><i class="fa fa-tachometer-alt me-2"></i>메인페이지</a>
+    <a th:if="${type} == 'USER'" href="/admin_user" class="nav-item nav-link active"><i class="fa fa-th me-2"></i>유저 관리</a>
+    <a th:if="${type} != 'USER'" href="/admin_user" class="nav-item nav-link"><i class="fa fa-th me-2"></i>유저 관리</a>
     <div class="nav-item dropdown">
-      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>로그 관리</a>
+      <a th:if="${type} == 'QUIZ'" href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="fa fa-keyboard me-2"></i>문제 관리</a>
+      <a th:if="${type} != 'QUIZ'" href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-keyboard me-2"></i>문제 관리</a>
+      <div class="dropdown-menu bg-transparent border-0">
+        <a href="/admin_quiz/create" class="dropdown-item">문제 생성</a>
+        <a href="/admin_quiz" class="dropdown-item">문제 목록</a>
+      </div>
+    </div>
+    <div class="nav-item dropdown">
+      <a th:if="${type} == 'LOG'" href="#" class="nav-link dropdown-toggle active" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>로그 관리</a>
+      <a th:if="${type} != 'LOG'" href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>로그 관리</a>
       <div class="dropdown-menu bg-transparent border-0">
         <a href="/admin_log/access" class="dropdown-item">문제 접속 로그</a>
         <a href="/admin_log/flag" class="dropdown-item">Flag 인증 로그</a>
