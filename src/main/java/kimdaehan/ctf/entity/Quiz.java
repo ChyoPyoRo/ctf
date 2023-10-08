@@ -55,6 +55,10 @@ public class Quiz implements Serializable {
     @Builder.Default
     private Integer minScore = 100;
 
+    @Column(columnDefinition = "INT NOT NULL Default 1000")
+    @Builder.Default
+    private Integer score = 1000;
+
     @Column(columnDefinition = "VARCHAR(64)")
     private String attachment;
 

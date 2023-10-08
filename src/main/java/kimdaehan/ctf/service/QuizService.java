@@ -15,7 +15,6 @@ import java.util.UUID;
 public class QuizService {
     private final QuizRepository quizRepository;
 
-
     public Quiz getQuiz(UUID quizId){
         return quizRepository.findByQuizId(quizId).orElse(null);
     }
@@ -46,5 +45,9 @@ public class QuizService {
         quiz.setStartTime(quizDto.getLocalDateTime());
         quiz.setQuizName(quizDto.getQuizName());
         quizRepository.save(quiz);
+    }
+
+    public void saveQuizScore(Quiz quiz, User user){
+
     }
 }
