@@ -88,6 +88,28 @@ public class AdminController extends BaseController{
         mv.setViewName("/admin/admin_user");
         return mv;
     }
+    @GetMapping({"/admin_user/detail/{userId}"})
+    public ModelAndView adminUserDetail(HttpServletRequest request, @PathVariable String userId){
+        User user = getUser();
+        ModelAndView mv = new ModelAndView();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            mv.setViewName("/error/404");
+            return mv;
+        }
+        // 검색 유저
+        User member = userService.getUserId(userId);
+        if(member == null){
+            logger.error("No User Data -> user : {}", user.getUserId());
+            mv.setViewName("/error/400");
+            return mv;
+        }
+        mv.addObject("user", member);
+        //active
+        mv.addObject("type","USER");
+        mv.setViewName("/admin/admin_user_detail");
+        return mv;
+    }
 
     // 어드민 문제 관리
     @GetMapping({"/admin_quiz"})

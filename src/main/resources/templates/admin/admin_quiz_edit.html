@@ -59,19 +59,27 @@
         </div>
         <div class="form-floating mb-3">
           <select class="form-select" id="category">
-            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).REVERSING}" value="REVERSING">REVERSING</option>
-            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).PWN}" value="PWN">PWN</option>
-            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).WEB}" value="WEB">WEB</option>
-            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).FORENSICS}" value="FORENSICS">FORENSICS</option>
-            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).MISC}" value="MISC">MISC</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).REVERSING}" value="REVERSING" selected>REVERSING</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).PWN}" value="PWN" selected>PWN</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).WEB}" value="WEB" selected>WEB</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).FORENSICS}" value="FORENSICS" selected>FORENSICS</option>
+            <option th:if="${quiz.category} == ${T(kimdaehan.ctf.entity.Quiz.CategoryType).MISC}" value="MISC" selected>MISC</option>
+            <option th:if="${quiz.category} != ${T(kimdaehan.ctf.entity.Quiz.CategoryType).REVERSING}" value="REVERSING">REVERSING</option>
+            <option th:if="${quiz.category} != ${T(kimdaehan.ctf.entity.Quiz.CategoryType).PWN}" value="PWN">PWN</option>
+            <option th:if="${quiz.category} != ${T(kimdaehan.ctf.entity.Quiz.CategoryType).WEB}" value="WEB">WEB</option>
+            <option th:if="${quiz.category} != ${T(kimdaehan.ctf.entity.Quiz.CategoryType).FORENSICS}" value="FORENSICS">FORENSICS</option>
+            <option th:if="${quiz.category} != ${T(kimdaehan.ctf.entity.Quiz.CategoryType).MISC}" value="MISC">MISC</option>
           </select>
           <label for="category">Category</label>
         </div>
         <div class="form-floating mb-3">
           <select class="form-select" id="level">
-            <option th:if="${quiz.level == 0}" value="0">LOW</option>
-            <option th:if="${quiz.level == 1}" value="1">MIDDLE</option>
-            <option th:if="${quiz.level == 2}" value="2">HIGH</option>
+            <option th:if="${quiz.level == 0}" value="0" selected>LOW</option>
+            <option th:if="${quiz.level == 1}" value="1" selected>MIDDLE</option>
+            <option th:if="${quiz.level == 2}" value="2" selected>HIGH</option>
+            <option th:if="${quiz.level != 0}" value="0">LOW</option>
+            <option th:if="${quiz.level != 1}" value="1">MIDDLE</option>
+            <option th:if="${quiz.level != 2}" value="2">HIGH</option>
           </select>
           <label for="level">Level</label>
         </div>
