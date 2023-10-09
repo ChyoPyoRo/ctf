@@ -34,4 +34,12 @@ public class CenterController extends BaseController{
         return mv;
     }
 
+    @GetMapping({"/myPage"})
+    public ModelAndView getMyPage() {
+        User user = getUser();
+        ModelAndView mv = new ModelAndView("/login/edit");
+        mv.addObject("user", user);
+        return mv;
+    }
+
 }

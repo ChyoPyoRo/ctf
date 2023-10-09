@@ -29,8 +29,9 @@ public class Quiz implements Serializable {
     @Column(name="quiz_name", columnDefinition = "VARCHAR(64) NOT NULL")
     private String quizName;
 
-    @Column(name="quiz_writer", columnDefinition = "VARCHAR(64) NOT NULL")
-    private String quizWriter;
+    @ManyToOne
+    @JoinColumn(name="user_id", referencedColumnName = "user_id")
+    private User quizWriter;
 
     @Column(name="description", columnDefinition = "VARCHAR(256)")
     private String description;
@@ -54,6 +55,10 @@ public class Quiz implements Serializable {
     @Column(columnDefinition = "INT NOT NULL Default 100")
     @Builder.Default
     private Integer minScore = 100;
+
+    @Column(columnDefinition = "INT NOT NULL Default 1000")
+    @Builder.Default
+    private Integer score = 1000;
 
     @Column(columnDefinition = "VARCHAR(64)")
     private String attachment;

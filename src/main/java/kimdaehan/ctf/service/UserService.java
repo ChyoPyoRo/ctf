@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +18,6 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-
     @Override
     @NonNull
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException{
@@ -37,6 +36,21 @@ public class UserService implements UserDetailsService {
     }
    public List<User> getAllUser(){
         return userRepository.findAll();
+   }
+
+   public void changeUser(User existUser, User changeUser){
+       existUser.setUserId(changeUser.getUserId());
+       //유저 PW 변경
+       existUser.setPassword(changeUser.getPassword());
+       //유저 이름 변경
+       existUser.setName(changeUser.getName());
+       //유저 닉네임 변경
+       existUser.setNickName(changeUser.getNickName());
+       //유저 소속 변경
+       existUser.setAffiliation(changeUser.getAffiliation());
+       //유저 권한 변경
+       existUser.setType(changeUser.getType());
+       userRepository.save(existUser);
    }
 
 }

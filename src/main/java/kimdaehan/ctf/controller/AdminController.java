@@ -1,10 +1,14 @@
 package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.websocket.server.PathParam;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.QuizDto;
+import kimdaehan.ctf.dto.ServerTime;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.entity.log.AccessLog;
+import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
@@ -13,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,17 +32,27 @@ import java.util.UUID;
 @Controller
 public class AdminController extends BaseController{
 
-    public final UserService userService;
-    public final QuizService quizService;
-    public final ServerSettingService serverSettingService;
-
+    private final UserService userService;
+    private final QuizService quizService;
+    private final ServerSettingService serverSettingService;
+    private final LogService logService;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1, QuizService quizService, ServerSettingService serverSettingService) {
+    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1, QuizService quizService, ServerSettingService serverSettingService, LogService logService, PasswordEncoder passwordEncoder) {
         super(userService, authenticationFacade);
         this.userService = userService1;
         this.quizService = quizService;
         this.serverSettingService = serverSettingService;
+        this.logService = logService;
+        this.passwordEncoder = passwordEncoder;
     }
+
+
+
+
+
+
+
 
 
     @GetMapping({"/admin_main"})
@@ -80,6 +95,53 @@ public class AdminController extends BaseController{
         mv.setViewName("/admin/admin_user");
         return mv;
     }
+    @GetMapping({"/admin_user/detail/{userId}"})
+    public ModelAndView adminUserDetail(HttpServletRequest request, @PathVariable String userId){
+        User user = getUser();
+        ModelAndView mv = new ModelAndView();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            mv.setViewName("/error/404");
+            return mv;
+        }
+        // 검색 유저
+        User member = userService.getUserId(userId);
+        if(member == null){
+            logger.error("No User Data -> user : {}", user.getUserId());
+            mv.setViewName("/error/400");
+            return mv;
+        }
+        mv.addObject("user", member);
+        //active
+        mv.addObject("type","USER");
+        mv.setViewName("/admin/admin_user_detail");
+        return mv;
+    }
+    @PostMapping({"/admin_user/detail/{userId}"})
+    @ResponseBody
+    public ResponseEntity<String> adminUserDetailPost(HttpServletRequest request, @PathVariable String userId, @RequestBody User member){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        // 검색 유저
+        User existMember = userService.getUserId(userId);
+        if(existMember == null){
+            logger.error("No User Data -> user : {}", user.getUserId());
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        if(isMissingUserItem(member)) {
+            logger.error("No User Data -> user : {}", user.getUserId());
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        //유저 정보 변경
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        userService.changeUser(existMember, member);
+
+        return ResponseEntity.ok("success");
+    }
+
 
     // 어드민 문제 관리
     @GetMapping({"/admin_quiz"})
@@ -170,7 +232,7 @@ public class AdminController extends BaseController{
             return ResponseEntity.badRequest().body("Validation failed");
         }
         Quiz quiz = quizDto.dtoToQuiz();
-        quiz.setQuizWriter(user.getUserId());
+        quiz.setQuizWriter(user);
         // 파일 저장 및 경로 저장
         if(quizDto.getFile() != null){
             String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
@@ -226,6 +288,49 @@ public class AdminController extends BaseController{
         return ResponseEntity.ok("success");
     }
 
+    // 어드민 퀴즈 삭제
+    @GetMapping(value = {"/admin_quiz/delete/{uuid}"})
+    @ResponseBody
+    public ResponseEntity<String> deleteAdminQuiz(HttpServletRequest request, @PathVariable String uuid ){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        Quiz quiz = quizService.getQuiz(UUID.fromString(uuid));
+        if(quiz == null){
+            return ResponseEntity.badRequest().body("Validation error");
+        } else {
+            logger.info("delete Quiz -> user : {}, quizName {}", user.getUserId(), quiz.getQuizName());
+            quizService.deleteQuizById(UUID.fromString(uuid));
+        }
+        return ResponseEntity.ok("success");
+    }
+    //어드민 로그
+
+    @GetMapping({"/admin_log/{logType}"})
+    public ModelAndView adminLog(HttpServletRequest request, @PathVariable String logType){
+        User user = getUser();
+        ModelAndView mv = new ModelAndView();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            mv.setViewName("/error/404");
+            return mv;
+        }
+        if(logType.equals("ACCESS")){
+            mv.setViewName("/admin/log/admin_access_log");
+        } else if(logType.equals("FLAG")){
+            mv.setViewName("/admin/log/admin_flag_log");
+        } else if(logType.equals("DOWNLOAD")){
+            mv.setViewName("/admin/log/admin_download_log");
+        } else {
+            mv.setViewName("/error/404");
+        }
+        //active
+        mv.addObject("type","LOG");
+        return mv;
+    }
+
     public boolean isMissingItem(QuizDto quizDto) {
         return Utility.nullOrEmptyOrSpace(quizDto.getQuizName()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getCategory()) ||
@@ -233,6 +338,13 @@ public class AdminController extends BaseController{
                 Utility.nullOrEmptyOrSpace(quizDto.getLevel().toString()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getStartDate().toString()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getStartTime().toString());
+    }
+    public boolean isMissingUserItem(User user) {
+        return Utility.nullOrEmptyOrSpace(user.getUserId()) ||
+                Utility.nullOrEmptyOrSpace(user.getPassword()) ||
+                Utility.nullOrEmptyOrSpace(user.getName()) ||
+                Utility.nullOrEmptyOrSpace(String.valueOf(user.getAffiliation()))||
+                Utility.nullOrEmptyOrSpace(String.valueOf(user.getType()));
     }
 
 }

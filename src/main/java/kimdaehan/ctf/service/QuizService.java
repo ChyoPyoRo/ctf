@@ -15,7 +15,6 @@ import java.util.UUID;
 public class QuizService {
     private final QuizRepository quizRepository;
 
-
     public Quiz getQuiz(UUID quizId){
         return quizRepository.findByQuizId(quizId).orElse(null);
     }
@@ -33,6 +32,10 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+    //Quiz 삭제
+    public void deleteQuizById(UUID quizId){
+        quizRepository.deleteByQuizId(quizId);
+    }
 
     public void upsertQuizWithDto(Quiz quiz, QuizDto quizDto){
         quiz.setCategory(Quiz.CategoryType.valueOf(quizDto.getCategory()));
@@ -42,5 +45,9 @@ public class QuizService {
         quiz.setStartTime(quizDto.getLocalDateTime());
         quiz.setQuizName(quizDto.getQuizName());
         quizRepository.save(quiz);
+    }
+
+    public void saveQuizScore(Quiz quiz, User user){
+
     }
 }

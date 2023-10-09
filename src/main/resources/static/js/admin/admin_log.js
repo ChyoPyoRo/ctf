@@ -15,46 +15,9 @@ const getAjax = function(url) {
     });
 }
 
-function postQuiz(quizId) {
 
-    const url = window.location.pathname;
-    const file = document.getElementById("file").files[0];
-
-    const formData = new FormData();
-
-    if(quizId !== null){
-        formData.append('quizId', quizId);
-    }
-    if(file !== undefined){
-        formData.append('file', file);
-    }
-    formData.append('quizName', document.getElementById("quizName").value);
-    formData.append('category', document.getElementById("category").value);
-    formData.append('level', document.getElementById("level").value);
-    formData.append('description', document.getElementById("description").value);
-    formData.append('flag', document.getElementById("flag").value);
-    formData.append('startDate', document.getElementById("startDate").value);
-    formData.append('startTime', document.getElementById("startTime").value);
-    const options = {
-        method: "POST",
-        cache: 'no-cache',
-        body: formData,
-    };
-
-    fetch(url, options)
-        .then(response => {return response; })
-        .then(data => {
-            if(data.ok === true){
-                alert("문제 생성(수정)에 성공 했습니다.");
-                window.location.href = "/admin_quiz";
-            } else {
-                alert("문제 생성(수정)에 실패 했습니다.\n비어 있는 항목이 있는지 확인해 주세요.");
-            }
-        });
-}
-
-async function getQuizList(category){
-    const url = "/admin_quiz_list/"+category;
+async function getLogList(category){
+    const url = "/admin_log_list/"+category;
     try {
         return await getAjax(url);
     } catch(e) {
@@ -65,10 +28,10 @@ async function getQuizList(category){
 
 
 async function renderPagination(currentPage, type) {
-    const contents = document.querySelector("#quiz-content");
-    const data = await getQuizList(type);
+    const contents = document.querySelector("#log-content");
+    const data = await getLogList(type);
     let totalCount = data.length;
-    console.log(data);
+
     let maxPage = Math.ceil(totalCount / 10);
 
     let maxGroup = Math.ceil(maxPage / 5);
@@ -80,21 +43,21 @@ async function renderPagination(currentPage, type) {
         currentData = data.slice((currentPage-1) * 10, (currentPage) * 10);
     }
     if(totalCount === 0){
-        noDataRender();
+        noDataRender(type);
     } else{
         if( currentGroup === maxGroup ){
             await renderButton((currentGroup * 5)-4,maxPage, currentPage -((currentGroup * 5)-4),type, maxPage);
-            renderTable(currentData);
+            renderTable(currentData, type);
         } else {
             await renderButton((currentGroup * 5)-4, currentGroup * 5, currentPage -((currentGroup * 5)-4),type, maxPage)
-            renderTable(currentData);
+            renderTable(currentData,type);
         }
     }
 
 
 }
-const noDataRender = () =>{
-    const tables = document.querySelector("#quiz-content");
+const noDataRender = (type) =>{
+    const tables = document.querySelector("#log-content");
     while (tables.hasChildNodes()) {
         tables.removeChild(tables.lastChild);
     }
@@ -108,7 +71,14 @@ const noDataRender = () =>{
     const table = document.createElement("tr");
     const td = document.createElement("td");
     td.innerText="No Input Data"
-    td.colSpan=7;
+    if(type === "ACCESS"){
+        td.colSpan=4;
+    } else if(type==="DOWNLOAD"){
+        td.colSpan=4;
+    } else{
+        td.colSpan=6;
+    }
+
     td.style.height="48.818182px";
     td.style.textAlign="center";
     table.appendChild(td);
@@ -142,21 +112,31 @@ const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
     buttons.append(next);
     console.log(page, maxPage)
     // 이전, 다음 페이지 버튼이 필요한지 체크
-   if ((now+1)  === 1 ) buttons.removeChild(prev);
-   if ((now+1) === totalMaxPage) buttons.removeChild(next);
+    if ((now+1)  === 1 ) buttons.removeChild(prev);
+    if ((now+1) === totalMaxPage) buttons.removeChild(next);
 };
 
 
-const renderTable = (dataSet) => {
-    const tables = document.querySelector("#quiz-content");
+const renderTable = (dataSet, type) => {
+    const tables = document.querySelector("#log-content");
     // 버튼 리스트 초기화
     while (tables.hasChildNodes()) {
         tables.removeChild(tables.lastChild);
     }
-
-    for(let i=0; i<dataSet.length; i++){
-        tables.appendChild(makeTable(dataSet[i]));
+    if(type === "ACCESS"){
+        for(let i=0; i<dataSet.length; i++){
+            tables.appendChild(makeAccessTable(dataSet[i]));
+        }
+    } else if(type ==="DOWNLOAD"){
+        for(let i=0; i<dataSet.length; i++){
+            tables.appendChild(makeDownloadTable(dataSet[i]));
+        }
+    } else {
+        for(let i=0; i<dataSet.length; i++){
+            tables.appendChild(makeFlagTable(dataSet[i]));
+        }
     }
+
 }
 
 const makeButton = (id,type) => {
@@ -175,63 +155,70 @@ const makeButton = (id,type) => {
     return button;
 };
 
-const makeTable = (data) => {
-
+const makeAccessTable = (data) => {
 
     const table = document.createElement("tr");
     const td1 = document.createElement("td");
-    const aTag= document.createElement('a');
-    aTag.href="/admin_quiz/edit?uuid="+data.quizId;
-    aTag.innerText = data.quizName;
-    td1.appendChild(aTag);
-
+    td1.innerText = data.recordKey.dateTime
     const td2 = document.createElement("td");
-    td2.innerText = data.quizWriter.nickName;
+    td2.innerText = data.recordKey.userId.userId;
     const td3 = document.createElement("td");
-    td3.innerText = data.category;
+    td3.innerText = data.userIp;
     const td4 = document.createElement("td");
-    if(data.level === 0){
-        td4.innerText = "LOW";
-    } else if(data.level === 1){
-        td4.innerText = "MIDDLE";
-    } else {
-        td4.innerText = "HIGH";
-    }
+    td4.innerText = data.quizId.quizName;
+
+
+    table.appendChild(td1);
+    table.appendChild(td2);
+    table.appendChild(td3);
+    table.appendChild(td4);
+    return table;
+};
+const makeDownloadTable = (data) => {
+
+    const table = document.createElement("tr");
+    const td1 = document.createElement("td");
+    td1.innerText = data.recordKey.dateTime
+    const td2 = document.createElement("td");
+    td2.innerText = data.recordKey.userId.userId;
+    const td3 = document.createElement("td");
+    td3.innerText = data.userIp;
+    const td4 = document.createElement("td");
+    td4.innerText = data.quizId.quizName;
+
+
+    table.appendChild(td1);
+    table.appendChild(td2);
+    table.appendChild(td3);
+    table.appendChild(td4);
+    return table;
+};
+const makeFlagTable = (data) => {
+
+    const table = document.createElement("tr");
+    const td1 = document.createElement("td");
+    td1.innerText = data.recordKey.dateTime
+    const td2 = document.createElement("td");
+    td2.innerText = data.recordKey.userId.userId;
+    const td3 = document.createElement("td");
+    td3.innerText = data.userIp;
+    const td4 = document.createElement("td");
+    td4.innerText = data.quizId.quizName;
     const td5 = document.createElement("td");
-    td5.innerText = data.registrationTime;
+    td5.innerText = data.flag;
     const td6 = document.createElement("td");
-    td6.innerText = data.startTime;
-
-    const td7=document.createElement('td');
-    const button = document.createElement("button");
-    button.classList.add("btn-danger","btn");
-    button.onclick= () =>{
-        const options = {
-            method: "GET",
-        };
-        fetch("/admin_quiz/delete/"+data.quizId, options)
-            .then(response => {return response; })
-            .then(data => {
-                if(data.ok === true){
-                    alert("문제 삭제에 성공 했습니다.");
-                    window.location.reload();
-                } else {
-                    alert("문제 삭제에 실패 했습니다.");
-                }
-            });
+    td6.innerText = data.successOrNot;
+    if(data.successOrNot === "SUCCESS"){
+        td6.style.color = "green";
+    } else {
+        td6.style.color = "red";
     }
-
-    button.style.color="white";
-    button.innerText = "delete";
-    td7.appendChild(button);
-
     table.appendChild(td1);
     table.appendChild(td2);
     table.appendChild(td3);
     table.appendChild(td4);
     table.appendChild(td5);
     table.appendChild(td6);
-    table.appendChild(td7);
 
     return table;
 };
