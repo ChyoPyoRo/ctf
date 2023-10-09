@@ -30,7 +30,7 @@ public class Quiz implements Serializable {
     private String quizName;
 
     @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName = "user_id")
+    @JoinColumn(referencedColumnName = "user_id", name = "user_id")
     private User quizWriter;
 
     @Column(name="description", columnDefinition = "VARCHAR(256)")
@@ -68,6 +68,9 @@ public class Quiz implements Serializable {
 
     @Column(columnDefinition = "INT NOT NULL")
     private Integer level;
+
+
+
 
     public enum CategoryType{
         REVERSING, PWN, WEB, FORENSICS, MISC, CRYPTO

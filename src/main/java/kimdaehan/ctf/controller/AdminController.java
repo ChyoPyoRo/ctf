@@ -3,6 +3,7 @@ package kimdaehan.ctf.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.server.PathParam;
 import kimdaehan.ctf.auth.AuthenticationFacade;
+import kimdaehan.ctf.configuration.JsonIgnore;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.dto.ServerTime;
 import kimdaehan.ctf.entity.Quiz;
@@ -144,6 +145,7 @@ public class AdminController extends BaseController{
 
 
     // 어드민 문제 관리
+    
     @GetMapping({"/admin_quiz"})
     public ModelAndView adminQuiz(HttpServletRequest request){
         User user = getUser();
@@ -157,6 +159,7 @@ public class AdminController extends BaseController{
 
 
         mv.addObject("quizzes", quizzes);
+
         //active
         mv.addObject("type","QUIZ");
 
@@ -302,7 +305,7 @@ public class AdminController extends BaseController{
             return ResponseEntity.badRequest().body("Validation error");
         } else {
             logger.info("delete Quiz -> user : {}, quizName {}", user.getUserId(), quiz.getQuizName());
-            quizService.deleteQuizById(UUID.fromString(uuid));
+            quizService.deleteQuiz(quiz);
         }
         return ResponseEntity.ok("success");
     }

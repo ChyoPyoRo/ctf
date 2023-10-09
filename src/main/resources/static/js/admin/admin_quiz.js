@@ -67,8 +67,8 @@ async function getQuizList(category){
 async function renderPagination(currentPage, type) {
     const contents = document.querySelector("#quiz-content");
     const data = await getQuizList(type);
-    let totalCount = data.length;
     console.log(data);
+    let totalCount = data.length;
     let maxPage = Math.ceil(totalCount / 10);
 
     let maxGroup = Math.ceil(maxPage / 5);

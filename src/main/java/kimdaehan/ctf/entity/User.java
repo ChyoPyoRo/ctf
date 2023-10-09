@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -50,8 +51,6 @@ public class User implements Serializable, UserDetails {
     @Column(columnDefinition = "VARCHAR(16) NOT NULL", length = 16)
     @Enumerated(EnumType.STRING)
     private Affiliation affiliation;
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
