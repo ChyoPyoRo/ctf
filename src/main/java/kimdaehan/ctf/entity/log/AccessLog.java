@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.RecordKey;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

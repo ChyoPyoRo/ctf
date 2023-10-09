@@ -2,7 +2,7 @@ package kimdaehan.ctf.service;
 
 import jakarta.annotation.Nullable;
 import kimdaehan.ctf.entity.User;
-import kimdaehan.ctf.repository.UserRepository;
+import kimdaehan.ctf.repository.*;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +19,11 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
+    private final QuizRepository quizRepository;
+    private final AccessLogRepository accessLogRepository;
+    private final DownloadLogRepository downloadLogRepository;
+    private final FlagLogRepository flagLogRepository;
+
     @Override
     @NonNull
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException{
@@ -39,7 +45,6 @@ public class UserService implements UserDetailsService {
    }
 
    public void changeUser(User existUser, User changeUser){
-       existUser.setUserId(changeUser.getUserId());
        //유저 PW 변경
        existUser.setPassword(changeUser.getPassword());
        //유저 이름 변경
@@ -52,5 +57,19 @@ public class UserService implements UserDetailsService {
        existUser.setType(changeUser.getType());
        userRepository.save(existUser);
    }
+
+
+   @Transactional
+   public void deleteUser(User user){
+        //유저가 만든 문제 삭제
+        quizRepository.deleteByQuizWriter(user);
+        //유저의 로그 기록 삭제
+        accessLogRepository.deleteByRecordKeyUserId(user);
+        flagLogRepository.deleteByRecordKeyUserId(user);
+        downloadLogRepository.deleteByRecordKeyUserId(user);
+        //유저 삭제
+        userRepository.delete(user);
+   }
+
 
 }

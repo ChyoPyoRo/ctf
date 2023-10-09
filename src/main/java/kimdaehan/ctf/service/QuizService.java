@@ -3,9 +3,13 @@ package kimdaehan.ctf.service;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.repository.AccessLogRepository;
+import kimdaehan.ctf.repository.DownloadLogRepository;
+import kimdaehan.ctf.repository.FlagLogRepository;
 import kimdaehan.ctf.repository.QuizRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +18,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class QuizService {
     private final QuizRepository quizRepository;
+
+    private final AccessLogRepository accessLogRepository;
+    private final DownloadLogRepository downloadLogRepository;
+    private final FlagLogRepository flagLogRepository;
 
     public Quiz getQuiz(UUID quizId){
         return quizRepository.findByQuizId(quizId).orElse(null);
@@ -33,9 +41,17 @@ public class QuizService {
     }
 
     //Quiz 삭제
-    public void deleteQuizById(UUID quizId){
-        quizRepository.deleteByQuizId(quizId);
+    @Transactional
+    public void deleteQuiz(Quiz quiz){
+        // 퀴즈와 관련된 로그 삭제
+        accessLogRepository.deleteByQuizId(quiz);
+        downloadLogRepository.deleteByQuizId(quiz);
+        flagLogRepository.deleteByQuizId(quiz);
+
+        // 퀴즈 삭제
+        quizRepository.delete(quiz);
     }
+
 
     public void upsertQuizWithDto(Quiz quiz, QuizDto quizDto){
         quiz.setCategory(Quiz.CategoryType.valueOf(quizDto.getCategory()));
