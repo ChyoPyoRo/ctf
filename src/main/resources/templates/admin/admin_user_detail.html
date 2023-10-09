@@ -82,8 +82,17 @@
           </select>
           <label for="affiliation">Affiliation</label>
         </div>
+        <div class="form-floating mb-3">
+          <select class="form-select" id="type">
+            <option th:if="${user.type} == ${T(kimdaehan.ctf.entity.User.Type).USER}" value="USER" selected>USER</option>
+            <option th:if="${user.type} == ${T(kimdaehan.ctf.entity.User.Type).ADMIN}" value="ADMIN" selected>ADMIN</option>
+            <option th:if="${user.type} != ${T(kimdaehan.ctf.entity.User.Type).USER}" value="USER" >USER</option>
+            <option th:if="${user.type} != ${T(kimdaehan.ctf.entity.User.Type).ADMIN}" value="ADMIN" >ADMIN</option>
+          </select>
+          <label for="type">Type</label>
+        </div>
         <div>
-          <button style="width: 100%;" class="btn btn-primary">Submit</button>
+          <button onclick="edit()" style="width: 100%;" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </div>
@@ -108,7 +117,7 @@
 
 <!-- Template Javascript -->
 <script th:src="@{/js/admin/main.js}"></script>
-<script th:src="@{/js/admin/admin_quiz.js}"></script>
+<script th:src="@{/js/admin/admin_user.js}"></script>
 </body>
 
 </html>

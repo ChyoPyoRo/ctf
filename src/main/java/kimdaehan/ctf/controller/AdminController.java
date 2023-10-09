@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.websocket.server.PathParam;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.QuizDto;
+import kimdaehan.ctf.dto.ServerTime;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.entity.log.AccessLog;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,19 +32,24 @@ import java.util.UUID;
 @Controller
 public class AdminController extends BaseController{
 
-    public final UserService userService;
-    public final QuizService quizService;
-    public final ServerSettingService serverSettingService;
-    public final LogService logService;
-
+    private final UserService userService;
+    private final QuizService quizService;
+    private final ServerSettingService serverSettingService;
+    private final LogService logService;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1, QuizService quizService, ServerSettingService serverSettingService, LogService logService) {
+    public AdminController(UserService userService, AuthenticationFacade authenticationFacade, UserService userService1, QuizService quizService, ServerSettingService serverSettingService, LogService logService, PasswordEncoder passwordEncoder) {
         super(userService, authenticationFacade);
         this.userService = userService1;
         this.quizService = quizService;
         this.serverSettingService = serverSettingService;
         this.logService = logService;
+        this.passwordEncoder = passwordEncoder;
     }
+
+
+
+
 
 
 
@@ -110,6 +117,31 @@ public class AdminController extends BaseController{
         mv.setViewName("/admin/admin_user_detail");
         return mv;
     }
+    @PostMapping({"/admin_user/detail/{userId}"})
+    @ResponseBody
+    public ResponseEntity<String> adminUserDetailPost(HttpServletRequest request, @PathVariable String userId, @RequestBody User member){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        // 검색 유저
+        User existMember = userService.getUserId(userId);
+        if(existMember == null){
+            logger.error("No User Data -> user : {}", user.getUserId());
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        if(isMissingUserItem(member)) {
+            logger.error("No User Data -> user : {}", user.getUserId());
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        //유저 정보 변경
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        userService.changeUser(existMember, member);
+
+        return ResponseEntity.ok("success");
+    }
+
 
     // 어드민 문제 관리
     @GetMapping({"/admin_quiz"})
@@ -306,6 +338,13 @@ public class AdminController extends BaseController{
                 Utility.nullOrEmptyOrSpace(quizDto.getLevel().toString()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getStartDate().toString()) ||
                 Utility.nullOrEmptyOrSpace(quizDto.getStartTime().toString());
+    }
+    public boolean isMissingUserItem(User user) {
+        return Utility.nullOrEmptyOrSpace(user.getUserId()) ||
+                Utility.nullOrEmptyOrSpace(user.getPassword()) ||
+                Utility.nullOrEmptyOrSpace(user.getName()) ||
+                Utility.nullOrEmptyOrSpace(String.valueOf(user.getAffiliation()))||
+                Utility.nullOrEmptyOrSpace(String.valueOf(user.getType()));
     }
 
 }
