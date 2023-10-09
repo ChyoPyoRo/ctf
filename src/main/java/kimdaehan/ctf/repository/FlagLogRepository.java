@@ -18,8 +18,21 @@ public interface FlagLogRepository extends JpaRepository<FlagLog, RecordKey> {
     @Transactional(readOnly= true)
     Optional<FlagLog> findByRecordKey(RecordKey recordKey);
 
+    // 찾기
     @Transactional(readOnly= true)
     List<FlagLog> findAllByOrderByRecordKeyDateTimeDesc();
+    @Transactional(readOnly= true)
+    List<FlagLog> findAllByRecordKeyUserIdOrderByRecordKeyDateTimeDesc(User recordKey_userId);
+
+    @Transactional(readOnly= true)
+    List<FlagLog> findAllByUserIpOrderByRecordKeyDateTimeDesc(String userIp);
+
+    @Transactional(readOnly= true)
+    List<FlagLog> findAllByQuizIdOrderByRecordKeyDateTimeDesc(Quiz quiz);
+    @Transactional(readOnly= true)
+    List<FlagLog> findAllBySuccessFailOrderByRecordKeyDateTimeDesc(FlagLog.SuccessOrNot successOrNot);
+
+
     @Transactional
     void deleteByQuizId(Quiz quiz);
 

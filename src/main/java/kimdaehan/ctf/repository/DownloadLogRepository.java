@@ -17,8 +17,19 @@ public interface DownloadLogRepository extends JpaRepository<DownloadLog, Record
     @Transactional(readOnly= true)
     Optional<DownloadLog> findByRecordKey(RecordKey recordKey);
 
+    // 찾기
     @Transactional(readOnly= true)
     List<DownloadLog> findAllByOrderByRecordKeyDateTimeDesc();
+    @Transactional(readOnly= true)
+    List<DownloadLog> findAllByRecordKeyUserIdOrderByRecordKeyDateTimeDesc(User recordKey_userId);
+
+    @Transactional(readOnly= true)
+    List<DownloadLog> findAllByUserIpOrderByRecordKeyDateTimeDesc(String userIp);
+
+    @Transactional(readOnly= true)
+    List<DownloadLog> findAllByQuizIdOrderByRecordKeyDateTimeDesc(Quiz quiz);
+
+
     @Transactional
     void deleteByQuizId(Quiz quiz);
     @Transactional

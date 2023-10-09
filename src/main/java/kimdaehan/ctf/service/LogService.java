@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,5 +58,35 @@ public class LogService {
     }
     public List<DownloadLog> getAllDownloadLog(){
         return downloadLogRepository.findAllByOrderByRecordKeyDateTimeDesc();
+    }
+
+    public List<?> getLogByUserAndType(User user, String type){
+        return switch (type) {
+            case "ACCESS" -> accessLogRepository.findAllByRecordKeyUserIdOrderByRecordKeyDateTimeDesc(user);
+            case "FLAG" -> flagLogRepository.findAllByRecordKeyUserIdOrderByRecordKeyDateTimeDesc(user);
+            case "DOWNLOAD" -> downloadLogRepository.findAllByRecordKeyUserIdOrderByRecordKeyDateTimeDesc(user);
+            default -> new ArrayList<>();
+        };
+    }
+
+    public List<?> getLogByUserIpAndType(String userIp, String type){
+        return switch (type) {
+            case "ACCESS" -> accessLogRepository.findAllByUserIpOrderByRecordKeyDateTimeDesc(userIp);
+            case "FLAG" -> flagLogRepository.findAllByUserIpOrderByRecordKeyDateTimeDesc(userIp);
+            case "DOWNLOAD" -> downloadLogRepository.findAllByUserIpOrderByRecordKeyDateTimeDesc(userIp);
+            default -> new ArrayList<>();
+        };
+    }
+
+    public List<?> getLogByQuizAndType(Quiz quiz, String type){
+        return switch (type) {
+            case "ACCESS" -> accessLogRepository.findAllByQuizIdOrderByRecordKeyDateTimeDesc(quiz);
+            case "FLAG" -> flagLogRepository.findAllByQuizIdOrderByRecordKeyDateTimeDesc(quiz);
+            case "DOWNLOAD" -> downloadLogRepository.findAllByQuizIdOrderByRecordKeyDateTimeDesc(quiz);
+            default -> new ArrayList<>();
+        };
+    }
+    public List<FlagLog> getFlagLogBySuccessOrNot(FlagLog.SuccessOrNot successOrNot){
+        return flagLogRepository.findAllBySuccessFailOrderByRecordKeyDateTimeDesc(successOrNot);
     }
 }

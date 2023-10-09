@@ -28,7 +28,7 @@ public class FlagLog {
     private String flag;
 
     @Column(columnDefinition = "VARBINARY(64) NOT NULL")
-    private SuccessOrNot successOrNot;
+    private SuccessOrNot successFail;
 
 
     public enum SuccessOrNot{
