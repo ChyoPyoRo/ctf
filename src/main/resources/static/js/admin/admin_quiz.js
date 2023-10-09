@@ -68,7 +68,7 @@ async function renderPagination(currentPage, type) {
     const contents = document.querySelector("#quiz-content");
     const data = await getQuizList(type);
     let totalCount = data.length;
-
+    console.log(data);
     let maxPage = Math.ceil(totalCount / 10);
 
     let maxGroup = Math.ceil(maxPage / 5);
@@ -186,7 +186,7 @@ const makeTable = (data) => {
     td1.appendChild(aTag);
 
     const td2 = document.createElement("td");
-    td2.innerText = data.quizWriter;
+    td2.innerText = data.quizWriter.nickName;
     const td3 = document.createElement("td");
     td3.innerText = data.category;
     const td4 = document.createElement("td");

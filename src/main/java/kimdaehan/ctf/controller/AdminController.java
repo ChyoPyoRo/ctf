@@ -178,7 +178,7 @@ public class AdminController extends BaseController{
             return ResponseEntity.badRequest().body("Validation failed");
         }
         Quiz quiz = quizDto.dtoToQuiz();
-        quiz.setQuizWriter(user.getUserId());
+        quiz.setQuizWriter(user);
         // 파일 저장 및 경로 저장
         if(quizDto.getFile() != null){
             String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
