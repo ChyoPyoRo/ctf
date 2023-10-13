@@ -18,8 +18,19 @@ public interface AccessLogRepository extends JpaRepository<AccessLog, RecordKey>
     @Transactional(readOnly= true)
     Optional<AccessLog> findByRecordKey(RecordKey recordKey);
 
+    // 찾기기능
     @Transactional(readOnly= true)
     List<AccessLog> findAllByOrderByRecordKeyDateTimeDesc();
+
+    @Transactional(readOnly= true)
+    List<AccessLog> findAllByRecordKeyUserIdOrderByRecordKeyDateTimeDesc(User recordKey_userId);
+
+    @Transactional(readOnly= true)
+    List<AccessLog> findAllByUserIpOrderByRecordKeyDateTimeDesc(String userIp);
+
+    @Transactional(readOnly= true)
+    List<AccessLog> findAllByQuizIdOrderByRecordKeyDateTimeDesc(Quiz quiz);
+
 
     @Transactional
     void deleteByQuizId(Quiz quiz);

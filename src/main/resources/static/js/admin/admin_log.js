@@ -207,7 +207,7 @@ const makeFlagTable = (data) => {
     const td5 = document.createElement("td");
     td5.innerText = data.flag;
     const td6 = document.createElement("td");
-    td6.innerText = data.successOrNot;
+    td6.innerText = data.successFail;
     if(data.successOrNot === "SUCCESS"){
         td6.style.color = "green";
     } else {

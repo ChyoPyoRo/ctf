@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 public class AdminAPIController extends BaseController{
@@ -92,6 +93,10 @@ public class AdminAPIController extends BaseController{
         return ResponseEntity.ok(quizzes);
     }
 
+
+
+
+    //로그 관련
     @GetMapping({"/admin_log_list/{logType}"})
     public ResponseEntity<?> adminLog(HttpServletRequest request, @PathVariable String logType){
         User user = getUser();
@@ -117,4 +122,32 @@ public class AdminAPIController extends BaseController{
         return ResponseEntity.ok(logData);
     }
 
+
+
+    @GetMapping({"/admin_log_list/ACCESS"})
+    public ResponseEntity<?> adminLog(HttpServletRequest request, @RequestParam(value = "userId" , required = false) String userId, @RequestParam(value = "userIp" , required = false) String userIp, @RequestParam(value = "challenge" , required = false) String challenge){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        if(userId == null && userIp == null && challenge == null){
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        List<?> logData;
+        String type = "ACCESS";
+        if(userId != null){
+            User existUser = userService.getUserId(userId);
+            if(existUser == null){
+                return ResponseEntity.ok(null);
+            }
+            logData = logService.getLogByUserAndType(existUser, type);
+        } else if(userIp != null){
+            logData = logService.getLogByUserIpAndType(userIp, type);
+        } else {
+            Quiz quiz = quizService.getQuiz(UUID.fromString(challenge));
+            logData = logService.getLogByQuizAndType(quiz, type);
+        }
+        return ResponseEntity.ok(logData);
+    }
 }
