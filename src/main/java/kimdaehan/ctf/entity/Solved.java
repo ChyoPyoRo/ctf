@@ -16,7 +16,7 @@ public class Solved implements Serializable {
     @EmbeddedId
     private SolvedId solvedId;
 
-    @MapsId("solvedUserId")
+    @MapsId("solvedQuizId")
     @ManyToOne
-    private User user;
+    private Quiz quiz;
 }
