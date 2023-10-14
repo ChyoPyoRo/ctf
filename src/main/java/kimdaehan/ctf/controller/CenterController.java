@@ -1,22 +1,33 @@
 package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import kimdaehan.ctf.auth.AuthenticationFacade;
+import kimdaehan.ctf.dto.Result;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.UserService;
+import kimdaehan.ctf.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 
 @Controller
 public class CenterController extends BaseController{
+    private final PasswordEncoder passwordEncoder;
+
     @Autowired
-    public CenterController(UserService userService, AuthenticationFacade authenticationFacade) {
+    public CenterController(UserService userService, AuthenticationFacade authenticationFacade, PasswordEncoder passwordEncoder) {
         super(userService, authenticationFacade);
+        this.passwordEncoder = passwordEncoder;
     }
+
+
 
     @GetMapping({"/"})
     public ModelAndView getMain() {
@@ -37,9 +48,50 @@ public class CenterController extends BaseController{
     @GetMapping({"/myPage"})
     public ModelAndView getMyPage() {
         User user = getUser();
-        ModelAndView mv = new ModelAndView("/login/edit");
-        mv.addObject("user", user);
+        ModelAndView mv = new ModelAndView("/info");
+        mv.addObject("user", user.getUserId());
+        mv.addObject("type", user.getType());
+        mv.addObject("userInfo", user);
         return mv;
     }
 
+
+    @PostMapping(value = "/editUser", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public Result.Code editUser(@RequestBody User editUser, HttpServletRequest request) {
+        User user = getUser();
+        logger.info("try User edit -> user : {}, IP : {}",user.getUserId(),request.getRemoteAddr());
+        Result.Code code = Result.Code.ERROR;
+        if(!editUser.getUserId().equals(user.getUserId())){
+            return code;
+        }
+        if(!isMissingItem(user)){
+            try{
+                userSet(editUser, user);
+                userService.upsertUser(user); //유저 정보 변경
+                code = Result.Code.OK;
+                logger.info("Created User : {}", user.getUserId());
+            } catch (Exception exception){
+                logger.error(exception.getLocalizedMessage(), exception);
+                code = Result.Code.ERROR;
+                logger.error("code : {}",code);
+            }
+        }
+        return code;
+    }
+
+    private void userSet(User editUser, User user) {
+        String encodedPassword = passwordEncoder.encode(editUser.getPassword());
+        user.setPassword(encodedPassword);
+        user.setAffiliation(editUser.getAffiliation());
+        user.setName(editUser.getName());
+        user.setNickName(editUser.getNickName());
+    }
+
+    public boolean isMissingItem(User user) {
+        return Utility.nullOrEmptyOrSpace(user.getUserId()) ||
+                Utility.nullOrEmptyOrSpace(user.getPassword()) ||
+                Utility.nullOrEmptyOrSpace(user.getName()) ||
+                Utility.nullOrEmptyOrSpace(String.valueOf(user.getAffiliation()));
+    }
 }

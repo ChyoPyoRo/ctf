@@ -76,6 +76,8 @@ public class LoginController {
         return code;
     }
 
+
+
     public boolean isMissingItem(User user) {
         return Utility.nullOrEmptyOrSpace(user.getUserId()) ||
                 Utility.nullOrEmptyOrSpace(user.getPassword()) ||
