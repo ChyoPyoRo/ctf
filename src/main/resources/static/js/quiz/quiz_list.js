@@ -1,30 +1,59 @@
+async function showPopup(id) {
+    try {
+        // Get the clicked element
+        const url = "/quiz/" + id
+        const quiz = await getQuizData(url)
+
+        // Create new div elements for quizName and quizWriter
+        let nameDiv = document.createElement('div');
+        let writerDiv = document.createElement('div');
+        let levelDiv = document.createElement('div');
+        let descriptionDiv = document.createElement('div');
+        let flagDiv = document.createElement("input");
 
 
+        // Fill the divs with data from 'quiz'
+        nameDiv.innerText = quiz.quizName;
+        writerDiv.innerText = quiz.quizWriter.name;
 
-function showPopup(id) {
-    var index = parseInt(id.substring(3));  // Remove 'row'
-    var quiz = quizzes[index];
+        // Get the popup element and clear its current content
+        let popupElement = document.getElementById('popup');
+        popupElement.innerHTML = '';
 
-    // Fill the popup with data from 'quiz'
-    document.getElementById('popup').querySelector('h5').innerText = quiz.quizName;
-    document.getElementById('popup').querySelector('.chbox div').innerText = quiz.quizWriter;
+        // Append new div elements to the popup
+        popupElement.appendChild(nameDiv);
+        popupElement.appendChild(writerDiv);
 
-    // Show the dimmed background and popup
-    document.getElementById('dimmed-bg').style.display = 'block';
-    document.getElementById('popup').style.display = 'block';
+        // Show the dimmed background and popup
+        document.getElementById('dimmed-bg').style.display = 'block';
+
+        // Show the dimmed background and popup
+        document.getElementById('dimmed-bg').style.display = 'block';
+        document.getElementById('popup').style.display = 'block';
+    }
+    catch(error) {
+        alert(error);
+    };
+
 }
+
 document.getElementById('dimmed-bg').addEventListener('click', function() {
     this.style.display = 'none';
     document.getElementById('popup').style.display = 'none';
 });
-<div id="popup"
-     style="display:none;width:auto;height:auto;top:50%;left:50%;transform:translate(-50%, -50%);background-color:white;position:fixed;">
-    <h5 th:text="${quiz.quizName}">Challenge Name</h5>
-    <div className="form-floating mb-3 chbox">
-        <div th:text="${quiz.quizWriter}"></div>
-    </div>
-    <div className="form-floating mb-3 chbox">
-        <td th:if="${quiz.level == 0}">Low</td>
-        <td th:if="${quiz.level == 1}">Middle</td>
-        <td th:if="${quiz.level == 2}">High</td>
-    </div>
+
+function getQuizData(url) {
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            url: url,  // Replace with your API endpoint URL
+            type: "GET",
+            dataType: "json",
+            success: function(response) {
+                resolve(response);
+            },
+            error: function(error) {
+                reject(error);
+            }
+        });
+    });
+}

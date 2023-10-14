@@ -2,96 +2,150 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <title>SecurityFirst CTF Admin Page</title>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <meta content="" name="keywords">
-  <meta content="" name="description">
+    <meta charset="utf-8">
+    <title>SecurityFirst CTF Admin Page</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
-  <!-- Favicon -->
-  <link href="img/favicon.ico" rel="icon">
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
 
-  <!-- Google Web Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Roboto:wght@500;700&display=swap" rel="stylesheet">
 
-  <!-- Icon Font Stylesheet -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Libraries Stylesheet -->
-  <link th:href="@{/css/owl.carousel.min.css}" rel="stylesheet">
-  <link th:href="@{/css/tempusdominus-bootstrap-4.min.css}" rel="stylesheet" />
+    <!-- Libraries Stylesheet -->
+    <link th:href="@{/css/owl.carousel.min.css}" rel="stylesheet">
+    <link th:href="@{/css/tempusdominus-bootstrap-4.min.css}" rel="stylesheet" />
 
-  <!-- Customized Bootstrap Stylesheet -->
-  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
 
-  <!-- Basic Stylesheet -->
-  <link th:href="@{/css/common.css}" rel="stylesheet">
-  <link th:href="@{/css/quiz/style.css}" rel="stylesheet">
+    <!-- Basic Stylesheet -->
+    <link th:href="@{/css/common.css}" rel="stylesheet">
+    <link th:href="@{/css/quiz/style.css}" rel="stylesheet">
 </head>
 
 <body>
 <!-- Navbar -->
 <div class="layout-nav">
-  <nav th:replace="nav :: nav"></nav>
+    <nav th:replace="nav :: nav"></nav>
 </div>
 <div class="content container-fluid position-relative d-flex p-0">
-    <div class="sidebar">
-  <nav th:replace="/quiz/layout/quiz_side :: nav"></nav>
-    </div>
+
     <div style="display: flex; justify-content: center; width: 100%; height: 100%">
-    <div class ="challenge  rounded px-4 py-0" >
-<!--      style="width: 90%; height: 80%; margin-top: 6%;"-->
-        <div class="content-in-challenge">
-            <h6 th:text="${challenge}" style="font-size: 1.5em;">Category</h6>
-            <ul th:each="quiz : ${quizzes}">
-                <li class="list-item">Challenge: <a th:text="${quiz.quizName}" th:href="@{/admin_quiz/edit(uuid=${quiz.quizId})}"></a></li>
-                <li class="list-item">Writer: <span th:text="${quiz.quizWriter}"></span></li>
-                <li class="list-item">Category: <span th:text="${quiz.category}"></span></li>
-                <li class="list-item" th:if="${quiz.level == 0}">Level: Low</li>
-                <li class="list-item" th:if="${quiz.level == 1}">Level: Middle</li>
-                <li class="list-item" th:if="${quiz.level == 2}">Level: High</li>
-        <!-- Dimmed background -->
-        <div id="dimmed-bg" style="display: none; position: fixed;  width:100%; height:100%; top:0; left:0; background-color:black; opacity:0.7;" ></div>
+        <div class ="challenge  rounded px-4 py-0" >
+            <!--      style="width: 90%; height: 80%; margin-top: 6%;"-->
+            <div class="content-in-challenge">
+            <!-- REVERSING -->
+                <h6 style="font-size: 1.5em;" class="category-title" >REVERSING</h6>
+                <div class="category-container">
+                    <div class="one-quiz-block" th:each="quiz:${REVERSING}" th:data-quiz-id="${quiz.quizId}"
+                         onClick="showPopup(this.getAttribute('data-quiz-id'))">
+                    <div class="title" th:text="${quiz.quizName}"></div>
+                        <div class="level" th:if="${quiz.level == 0}">Low</div>
+                        <div class="level" th:if="${quiz.level == 1}">Middle</div>
+                        <div class="level" th:if="${quiz.level == 2}">High</div>
+                        <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                    </div>
+                </div>
+                <!-- PWN -->
+                <h6 style="font-size: 1.5em;" class="category-title" >PWN</h6>
+                <div class="category-container">
+                    <div class="one-quiz-block" th:each="quiz:${PWN}" th:data-quiz-id="${quiz.quizId}"
+                         onClick="showPopup(this.getAttribute('data-quiz-id'))">
+                        <div class="title" th:text="${quiz.quizName}"></div>
+                        <div class="level" th:if="${quiz.level == 0}">Low</div>
+                        <div class="level" th:if="${quiz.level == 1}">Middle</div>
+                        <div class="level" th:if="${quiz.level == 2}">High</div>
+                        <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                    </div>
+                </div>
+                <!-- WEB -->
+                <h6 style="font-size: 1.5em;" class="category-title" >WEB</h6>
+                <div class="category-container">
+                    <div class="one-quiz-block" th:each="quiz:${WEB}" th:data-quiz-id="${quiz.quizId}"
+                         onClick="showPopup(this.getAttribute('data-quiz-id'))">
+                        <div class="title" th:text="${quiz.quizName}"></div>
+                        <div class="level" th:if="${quiz.level == 0}">Low</div>
+                        <div class="level" th:if="${quiz.level == 1}">Middle</div>
+                        <div class="level" th:if="${quiz.level == 2}">High</div>
+                        <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                    </div>
+                </div>
+                <!-- FORENSICS -->
+                <h6 style="font-size: 1.5em;" class="category-title" >FORENSICS</h6>
+                <div class="category-container">
+                    <div class="one-quiz-block" th:each="quiz:${FORENSICS}" th:data-quiz-id="${quiz.quizId}"
+                         onClick="showPopup(this.getAttribute('data-quiz-id'))">
+                        <div class="title" th:text="${quiz.quizName}"></div>
+                        <div class="level" th:if="${quiz.level == 0}">Low</div>
+                        <div class="level" th:if="${quiz.level == 1}">Middle</div>
+                        <div class="level" th:if="${quiz.level == 2}">High</div>
+                        <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                    </div>
+                </div>
+                <!-- MISC -->
+                <h6 style="font-size: 1.5em;" class="category-title" >MISC</h6>
+                <div class="category-container">
+                    <div class="one-quiz-block" th:each="quiz:${MISC}" th:data-quiz-id="${quiz.quizId}"
+                         onClick="showPopup(this.getAttribute('data-quiz-id'))">
+                        <div class="title" th:text="${quiz.quizName}"></div>
+                        <div class="level" th:if="${quiz.level == 0}">Low</div>
+                        <div class="level" th:if="${quiz.level == 1}">Middle</div>
+                        <div class="level" th:if="${quiz.level == 2}">High</div>
+                        <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                    </div>
+                </div>
+                <!-- CRYPTO -->
+                <h6 style="font-size: 1.5em;" class="category-title" >CRYPTO</h6>
+                <div class="category-container">
+                    <div class="one-quiz-block" th:each="quiz:${CRYPTO}" th:data-quiz-id="${quiz.quizId}"
+                         onClick="showPopup(this.getAttribute('data-quiz-id'))">
+                        <div class="title" th:text="${quiz.quizName}"></div>
+                        <div class="level" th:if="${quiz.level == 0}">Low</div>
+                        <div class="level" th:if="${quiz.level == 1}">Middle</div>
+                        <div class="level" th:if="${quiz.level == 2}">High</div>
+                        <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                    </div>
+                </div>
+                <!-- Dimmed background -->
+                <div id="dimmed-bg" style="display: none; position: fixed;  width:100%; height:100%; top:0; left:0; background-color:black; opacity:0.7;" ></div>
 
-        <!-- Popup window -->
-        <div id="popup" style="display:none;width:auto;height:auto;top:50%;left:50%;transform:translate(-50%, -50%);background-color:white;position:fixed;" >
-            <h6 class="mb-4 chbox">Quiz Create Page</h6>
-            <div class="form-floating mb-3 chbox">
-                <input type="email" class="form-control" id="floatingInput"
-                       placeholder="name@example.com">
-                <label for="floatingInput">Quiz Name</label>
-            </div>
-            <div class="form-floating mb-3 chbox">
-                <select class="form-select" id="floatingSelect"
-                        aria-label="Floating label select example">
-                    <option value="REVERSING">REVERSING</option>
-                    <option value="PWN">PWN</option>
-                    <option value="WEB">WEB</option>
-                    <option value="FORENSICS">FORENSICS</option>
-                    <option value="MISC">MISC</option>
-                </select>
-                <label for="floatingSelect">Category Select</label>
-            </div>
+                <!-- Popup window -->
+                <div id="popup" style="display:none;width:auto;height:auto;top:50%;left:50%;transform:translate(-50%, -50%);background-color:white;position:fixed;" >
+                    <!--            <h5 th:text="${quizzes.listIterator()}">Challenge Name</h5>-->
+                    <!--            <div class="form-floating mb-3 chbox">-->
+                    <!--                <div th:text="${quiz.quizWriter}"></div>-->
+                    <!--            </div>-->
+                    <!--            <div class="form-floating mb-3 chbox" >-->
+                    <!--                <td th:if="${quiz.level == 0}">Low</td>-->
+                    <!--                <td th:if="${quiz.level == 1}">Middle</td>-->
+                    <!--                <td th:if="${quiz.level == 2}">High</td>-->
+                    <!--            </div>-->
 
-            <div class="form-floating">
-                                <textarea class="form-control" placeholder="Leave a comment here"
-                                          id="floatingTextarea" style="height: 150px;"></textarea>
-                <label for="floatingTextarea">Description</label>
+                    <!--            <div class="form-floating">-->
+                    <!--                                <textarea class="form-control" placeholder="Leave a comment here"-->
+                    <!--                                          id="floatingTextarea" style="height: 150px;"></textarea>-->
+                    <!--                <label for="floatingTextarea">Description</label>-->
+                    <!--            </div>-->
+                </div>
+
             </div>
         </div>
-
     </div>
-  </div>
-  </div>
 
-  <!-- Content End -->
+    <!-- Content End -->
 
 
-  <!-- Back to Top -->
-<!--  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>-->
+    <!-- Back to Top -->
+    <!--  <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>-->
 </div>
 
 <!-- JavaScript Libraries -->

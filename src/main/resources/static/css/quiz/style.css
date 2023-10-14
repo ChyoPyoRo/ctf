@@ -13,7 +13,6 @@
 .content{
     max-width: 1680px;
     position : fixed;
-    min-height: 700px;
     background: var(--dark);
     transition: 0.5s;
 }
@@ -25,16 +24,30 @@
     background: var(--dark);
 }
 .challenge{
+    overflow-y: auto;  /* Enable vertical scrollbar */
     width : 1100px;
     position : fixed;
     max-width: 1430px;
-    min-height: 700px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.category-title {
+    width : 1100px;
+}
 
+.category-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+.one-quiz-block {
+    flex-basis: calc(33.333% - 10px);
+    width : 33%;
+    height: 75px;/* Assuming a gap of 10px */
+    margin: 5px; /* Half of the gap */
+    border: 1px solid red;
+}
 
 @media (max-width: 1100px) {
     .sidebar {
@@ -52,6 +65,9 @@
     .challenge{
         width : 100%;
     }
+    .category-title {
+        width : 100%;
+    }
     .chbox{
         width : 100%;
     }
@@ -66,4 +82,10 @@
 
 .content-in-challenge{
     display: flex; flex-direction: column
+}
+
+
+.writer{
+
+    text-overflow : ellipsis;
 }

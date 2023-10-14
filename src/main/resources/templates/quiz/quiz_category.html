@@ -38,14 +38,12 @@
   <nav th:replace="nav :: nav"></nav>
 </div>
 <div class="content container-fluid position-relative d-flex p-0">
-    <div class="sidebar">
-  <nav th:replace="/quiz/layout/quiz_side :: nav"></nav>
-    </div>
+
     <div style="display: flex; justify-content: center; width: 100%; height: 100%">
     <div class ="challenge  rounded px-4 py-0" >
 <!--      style="width: 90%; height: 80%; margin-top: 6%;"-->
         <div class="content-in-challenge">
-            <h6 th:text="${challenge}" style="font-size: 1.5em;">Category</h6>
+            <h6" style="font-size: 1.5em;">REVERSING</h6>
             <table>
                 <thead>
                 <tr class="text-white">
@@ -73,21 +71,21 @@
 
         <!-- Popup window -->
         <div id="popup" style="display:none;width:auto;height:auto;top:50%;left:50%;transform:translate(-50%, -50%);background-color:white;position:fixed;" >
-            <h5 th:text="${quizzes.listIterator()}">Challenge Name</h5>
-            <div class="form-floating mb-3 chbox">
-                <div th:text="${quiz.quizWriter}"></div>
-            </div>
-            <div class="form-floating mb-3 chbox" >
-                <td th:if="${quiz.level == 0}">Low</td>
-                <td th:if="${quiz.level == 1}">Middle</td>
-                <td th:if="${quiz.level == 2}">High</td>
-            </div>
+<!--            <h5 th:text="${quizzes.listIterator()}">Challenge Name</h5>-->
+<!--            <div class="form-floating mb-3 chbox">-->
+<!--                <div th:text="${quiz.quizWriter}"></div>-->
+<!--            </div>-->
+<!--            <div class="form-floating mb-3 chbox" >-->
+<!--                <td th:if="${quiz.level == 0}">Low</td>-->
+<!--                <td th:if="${quiz.level == 1}">Middle</td>-->
+<!--                <td th:if="${quiz.level == 2}">High</td>-->
+<!--            </div>-->
 
-            <div class="form-floating">
-                                <textarea class="form-control" placeholder="Leave a comment here"
-                                          id="floatingTextarea" style="height: 150px;"></textarea>
-                <label for="floatingTextarea">Description</label>
-            </div>
+<!--            <div class="form-floating">-->
+<!--                                <textarea class="form-control" placeholder="Leave a comment here"-->
+<!--                                          id="floatingTextarea" style="height: 150px;"></textarea>-->
+<!--                <label for="floatingTextarea">Description</label>-->
+<!--            </div>-->
         </div>
 
     </div>
