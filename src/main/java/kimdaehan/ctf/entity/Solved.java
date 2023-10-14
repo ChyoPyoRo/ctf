@@ -18,5 +18,5 @@ public class Solved implements Serializable {
 
     @MapsId("solvedQuizId")
     @ManyToOne
-    private Quiz quiz;
+    private Quiz solved;
 }
