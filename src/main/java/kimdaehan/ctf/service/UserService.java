@@ -1,6 +1,6 @@
 package kimdaehan.ctf.service;
 
-import jakarta.annotation.Nullable;
+import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.repository.*;
 import lombok.NonNull;
@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +19,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final QuizRepository quizRepository;
+    private final SolvedRepository solvedRepository;
     private final AccessLogRepository accessLogRepository;
     private final DownloadLogRepository downloadLogRepository;
     private final FlagLogRepository flagLogRepository;
@@ -72,4 +72,7 @@ public class UserService implements UserDetailsService {
    }
 
 
+   public List<UserPageDTO> getUserList(){
+        return solvedRepository.findScoreUsers();
+   }
 }

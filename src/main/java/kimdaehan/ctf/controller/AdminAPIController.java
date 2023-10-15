@@ -3,11 +3,9 @@ package kimdaehan.ctf.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.ServerTime;
+import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
-import kimdaehan.ctf.entity.log.AccessLog;
-import kimdaehan.ctf.entity.log.DownloadLog;
-import kimdaehan.ctf.entity.log.FlagLog;
 import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
@@ -15,11 +13,8 @@ import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -149,5 +144,11 @@ public class AdminAPIController extends BaseController{
             logData = logService.getLogByQuizAndType(quiz, type);
         }
         return ResponseEntity.ok(logData);
+    }
+
+    @GetMapping({"/admin_user_list"})
+    public ResponseEntity<?> adminUserList(){
+        List<UserPageDTO> userPageDTOList = userService.getUserList();
+        return ResponseEntity.ok(userPageDTOList);
     }
 }
