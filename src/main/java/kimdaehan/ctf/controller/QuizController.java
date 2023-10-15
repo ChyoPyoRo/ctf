@@ -61,4 +61,13 @@ public class QuizController extends BaseController{
         quizDetail.setFlag("나쁜짓 하지 마세요");
         return ResponseEntity.ok(quizDetail);
     }
+
+
+    @GetMapping({"/test/{quizId}"})
+    public ResponseEntity<Quiz> test(@PathVariable String quizId){
+        UUID uuid = UUID.fromString(quizId);
+        Quiz quizDetail = quizService.getQuiz(uuid);
+        quizDetail.setFlag("나쁜짓 하지 마세요");
+        return ResponseEntity.ok(quizDetail);
+    }
 }
