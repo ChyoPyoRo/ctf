@@ -27,7 +27,6 @@ async function showPopup(id) {
                 type: "POST",
                 data: {
                     // flag와 quizId
-                    quizId : id,
                     flag: flagDiv.value
                 },
                 success: function(response) {

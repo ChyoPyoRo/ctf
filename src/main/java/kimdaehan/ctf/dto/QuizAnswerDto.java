@@ -10,6 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuizAnswerDto {
-    private User user;
-    private String quizId;
+    private String flag;
 }

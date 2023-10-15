@@ -69,13 +69,13 @@ public class QuizController extends BaseController{
 
     @PostMapping({"/challenge/{challengeId}"})
     @ResponseBody
-    public ResponseEntity<String> solveQuiz(@PathVariable String challengeId, @PathVariable String answer) {
+    public ResponseEntity<String> solveQuiz(@PathVariable String challengeId, QuizAnswerDto answer) {
         //user정보, quiz 정보 가져오기
         User user = getUser();
         UUID quizId = UUID.fromString(challengeId);
         Quiz quiz = quizService.getQuiz(quizId);
         //flag값 비교
-        if (quiz.getFlag().equals(answer)) {
+        if (quiz.getFlag().equals(answer.getFlag())) {
             //flag 값이 일치하면
             Solved solved = Solved.builder()
                     .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
