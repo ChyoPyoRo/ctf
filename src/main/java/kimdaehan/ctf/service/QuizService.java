@@ -1,5 +1,6 @@
 package kimdaehan.ctf.service;
 
+import kimdaehan.ctf.dto.QuizAnswerDto;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.Solved;
@@ -68,6 +69,9 @@ public class QuizService {
         solvedRepository.save(solved);
     }
 
+    public void createSolved(QuizAnswerDto solvedData){
+
+    }
     public List<Solved> getSolvedListByUserId(String userId){
         return solvedRepository.findAllBySolvedIdSolvedUserId(userId);
     }
