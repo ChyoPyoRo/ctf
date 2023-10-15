@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -146,21 +147,49 @@ public class AdminAPIController extends BaseController{
         return ResponseEntity.ok(logData);
     }
 
-    @GetMapping({"/admin_user_list/{userId}"})
-    public ResponseEntity<?> adminUserList(HttpServletRequest request, @PathVariable("userId") String userId){
+    @GetMapping({"/admin_user_list/{affiliation}/{userId}"})
+    public ResponseEntity<?> adminUserList(HttpServletRequest request, @PathVariable("affiliation") String affiliation, @PathVariable("userId") String userId){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
             return ResponseEntity.badRequest().body("404 error");
         }
-        if(userId.equals("ALL")){
-            List<UserPageDTO> userPageDTOList = userService.getUserList();
-            return ResponseEntity.ok(userPageDTOList);
+        List<UserPageDTO> userPageDTOArrayList = new ArrayList<>();;
+        if(affiliation.equals("ALL")){
+            if(userId.equals("ALL")){
+                userPageDTOArrayList = userService.getUserList();
+            } else {
+                UserPageDTO userPageDTO = userService.getUserByUserId(userId);
+                userPageDTOArrayList.add(userPageDTO);
+            }
         } else {
-            UserPageDTO userPageDTO = userService.getUserListByUserId(userId);
-            return ResponseEntity.ok(userPageDTO);
+            if(userId.equals("ALL")){
+                userPageDTOArrayList = userService.getUserListByAffiliation(affiliation);
+            } else {
+                UserPageDTO userPageDTO = userService.getUserByAffiliationAndUserId(affiliation,userId);
+                userPageDTOArrayList.add(userPageDTO);
+            }
         }
+        return ResponseEntity.ok(userPageDTOArrayList);
     }
 
-
+    @GetMapping({"/admin_user_ban/{userId}"})
+    public ResponseEntity<?> adminUserBan(HttpServletRequest request, @PathVariable("userId") String userId){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        User member = userService.getUserId(userId);
+        if(member == null){
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        if(member.getIsBan() == User.IsBan.DISABLE){
+            member.setIsBan(User.IsBan.ENABLE);
+        } else {
+            member.setIsBan(User.IsBan.DISABLE);
+        }
+        userService.upsertUser(member);
+        return ResponseEntity.ok("success");
+    }
 }

@@ -70,8 +70,25 @@ const getAjax = function(url) {
     });
 }
 
-async function getUserList(id){
-    const url = "/admin_user_list/"+id;
+const getAjaxText = function(url) {
+    return new Promise((resolve, reject) => { // 1.
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "text"
+            ,
+            success: (res) => {
+                resolve(res);  // 2.
+            },
+            error: (e) => {
+                reject(e);  // 3.
+            }
+        });
+    });
+}
+
+async function getUserList(type, id){
+    let url = "/admin_user_list/"+type+'/'+id;
     try {
         return await getAjax(url);
     } catch(e) {
@@ -79,15 +96,26 @@ async function getUserList(id){
     }
 }
 
+async function userBan(id){
+    let url = "/admin_user_ban/"+id;
+    try {
+        const data = await getAjaxText(url);
+        console.log(data);
+        window.location.reload();
+    } catch(e) {
+        console.log(e);
+        alert("Ban Error");
+    }
+}
 
+async function renderPagination(currentPage, type,id) {
+    const data = await getUserList(type,id);
 
-async function renderPagination(currentPage, type) {
-    const contents = document.querySelector("#user-content");
-    const data = await getUserList(type);
-    console.log(data);
     let totalCount = data.length;
+    if(data[0] === null){
+        totalCount = 0;
+    }
     let maxPage = Math.ceil(totalCount / 10);
-
     let maxGroup = Math.ceil(maxPage / 5);
     let currentGroup = Math.ceil(currentPage / 5)
     let currentData;
@@ -100,10 +128,10 @@ async function renderPagination(currentPage, type) {
         noDataRender();
     } else{
         if( currentGroup === maxGroup ){
-            await renderButton((currentGroup * 5)-4,maxPage, currentPage -((currentGroup * 5)-4),type, maxPage);
+            await renderButton((currentGroup * 5)-4,maxPage, currentPage -((currentGroup * 5)-4),type, maxPage,id);
             renderTable(currentData);
         } else {
-            await renderButton((currentGroup * 5)-4, currentGroup * 5, currentPage -((currentGroup * 5)-4),type, maxPage)
+            await renderButton((currentGroup * 5)-4, currentGroup * 5, currentPage -((currentGroup * 5)-4),type, maxPage,id)
             renderTable(currentData);
         }
     }
@@ -132,7 +160,7 @@ const noDataRender = () =>{
     tables.appendChild(table);
 }
 
-const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
+const renderButton = async (page, maxPage, now,type, totalMaxPage,userId) => {
     const buttons = document.querySelector("#paging");
     // 버튼 리스트 초기화
     while (buttons.hasChildNodes()) {
@@ -140,7 +168,7 @@ const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
     }
     // 화면에 최대 5개의 페이지 버튼 생성
     for (let id = page; id <= maxPage; id++) {
-        buttons.appendChild(makeButton(id,type));
+        buttons.appendChild(makeButton(id,type,userId));
     }
     // 첫 버튼 활성화(class="active")
     buttons.children[now].classList.add("active");
@@ -148,12 +176,12 @@ const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
     const prev = document.createElement("button");
     prev.classList.add("btn", "btn-secondary");
     prev.innerHTML = '<i class="fa-solid fa-caret-left"></i>';
-    prev.onclick = () => renderPagination(now,type);
+    prev.onclick = () => renderPagination(now,type,userId);
 
     const next = document.createElement("button");
     next.classList.add("btn", "btn-secondary");
     next.innerHTML = '<i class="fa-solid fa-caret-right"></i>';
-    next.onclick = () => renderPagination(now+2,type);
+    next.onclick = () => renderPagination(now+2,type,userId);
 
     buttons.prepend(prev);
     buttons.append(next);
@@ -176,13 +204,13 @@ const renderTable = (dataSet) => {
     }
 }
 
-const makeButton = (id,type) => {
+const makeButton = (id,type,userId) => {
     const buttons = document.querySelector("#paging");
     const button = document.createElement("button");
     button.classList.add("btn","btn-secondary");
     button.dataset.num = id;
     button.innerText = id;
-    button.onclick = () => renderPagination(id,type);
+    button.onclick = () => renderPagination(id,type,userId);
     button.addEventListener("click", (e) => {
         Array.prototype.forEach.call(buttons.children, (button) => {
             if (button.dataset.num) button.classList.remove("active");
@@ -215,9 +243,17 @@ const makeTable = (data) => {
 
     const td7=document.createElement('td');
     const button = document.createElement("button");
-    button.classList.add("btn-danger","btn");
     button.style.color="white";
-    button.innerText = "delete";
+    button.onclick = () => userBan(data.user_id);
+    if(data.is_ban === "DISABLE"){
+        button.classList.add("btn-danger","btn");
+        button.innerText = "Disable";
+
+    } else {
+        button.classList.add("btn-success","btn");
+        button.innerText = "Enable";
+    }
+
     td7.appendChild(button);
 
     table.appendChild(td1);
