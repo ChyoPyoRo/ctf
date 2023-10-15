@@ -24,7 +24,6 @@
     background: var(--dark);
 }
 .challenge{
-    overflow-y: auto;  /* Enable vertical scrollbar */
     width : 1100px;
     position : fixed;
     max-width: 1430px;
@@ -81,7 +80,9 @@
 }
 
 .content-in-challenge{
-    display: flex; flex-direction: column
+    display: flex;
+    flex-direction: column;
+    height : 100%;
 }
 
 
