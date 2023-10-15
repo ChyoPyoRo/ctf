@@ -2,11 +2,9 @@ package kimdaehan.ctf.service;
 
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
+import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.User;
-import kimdaehan.ctf.repository.AccessLogRepository;
-import kimdaehan.ctf.repository.DownloadLogRepository;
-import kimdaehan.ctf.repository.FlagLogRepository;
-import kimdaehan.ctf.repository.QuizRepository;
+import kimdaehan.ctf.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +16,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class QuizService {
     private final QuizRepository quizRepository;
-
+    private final SolvedRepository solvedRepository;
     private final AccessLogRepository accessLogRepository;
     private final DownloadLogRepository downloadLogRepository;
     private final FlagLogRepository flagLogRepository;
@@ -66,4 +64,10 @@ public class QuizService {
     public void saveQuizScore(Quiz quiz, User user){
 
     }
+
+    public List<Solved> getSolvedListByUserId(String userId){
+        return solvedRepository.findAllBySolvedIdSolvedUserId(userId);
+    }
+
+
 }

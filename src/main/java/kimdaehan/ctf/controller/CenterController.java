@@ -3,7 +3,10 @@ package kimdaehan.ctf.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.Result;
+import kimdaehan.ctf.entity.Quiz;
+import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.UserService;
 import kimdaehan.ctf.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,16 +19,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 
 @Controller
 public class CenterController extends BaseController{
     private final PasswordEncoder passwordEncoder;
+    private final QuizService quizService;
 
     @Autowired
-    public CenterController(UserService userService, AuthenticationFacade authenticationFacade, PasswordEncoder passwordEncoder) {
+    public CenterController(UserService userService, AuthenticationFacade authenticationFacade, PasswordEncoder passwordEncoder, QuizService quizService) {
         super(userService, authenticationFacade);
         this.passwordEncoder = passwordEncoder;
+        this.quizService = quizService;
     }
+
+
 
 
 
@@ -49,9 +58,11 @@ public class CenterController extends BaseController{
     public ModelAndView getMyPage() {
         User user = getUser();
         ModelAndView mv = new ModelAndView("/info");
+        List<Solved> solvedList = quizService.getSolvedListByUserId(user.getUserId());
         mv.addObject("user", user.getUserId());
         mv.addObject("type", user.getType());
         mv.addObject("userInfo", user);
+        mv.addObject("solvedList", solvedList);
         return mv;
     }
 
