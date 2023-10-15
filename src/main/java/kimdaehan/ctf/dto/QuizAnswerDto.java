@@ -1,6 +1,7 @@
 package kimdaehan.ctf.dto;
 
 
+import kimdaehan.ctf.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuizAnswerDto {
-    private String flag;
+    private User user;
+    private String quizId;
 }
