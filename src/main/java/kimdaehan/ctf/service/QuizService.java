@@ -65,8 +65,13 @@ public class QuizService {
     public void saveQuizScore(Quiz quiz, User user){
 
     }
+    public void upsertSolvedQuiz(Solved solved){
+        solvedRepository.save(solved);
+    }
 
-    public void createSolved(QuizAnswerDto)
+    public void createSolved(QuizAnswerDto solvedData){
+
+    }
     public List<Solved> getSolvedListByUserId(String userId){
         return solvedRepository.findAllBySolvedIdSolvedUserId(userId);
     }

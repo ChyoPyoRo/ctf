@@ -6,6 +6,8 @@ import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.QuizAnswerDto;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
+import kimdaehan.ctf.entity.Solved;
+import kimdaehan.ctf.entity.SolvedId;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
@@ -67,19 +69,35 @@ public class QuizController extends BaseController{
 
     @PostMapping({"/challenge/{challengeId}"})
     @ResponseBody
-    public ResponseEntity<String> solveQuiz(@PathVariable String challengeId, @PathVariable String answer){
+    public ResponseEntity<String> solveQuiz(@PathVariable String challengeId, @PathVariable String answer) {
         //user정보, quiz 정보 가져오기
         User user = getUser();
         UUID quizId = UUID.fromString(challengeId);
         Quiz quiz = quizService.getQuiz(quizId);
         //flag값 비교
-        if(quiz.getFlag().equals(answer)){
+        if (quiz.getFlag().equals(answer)) {
             //flag 값이 일치하면
-
-        }else{
+            Solved solved = Solved.builder()
+                    .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
+                    .build();
+            solved.setSolved(quiz);
+            quizService.upsertSolvedQuiz(solved);
+            return ResponseEntity.ok("Correct");
+        } else {
             //일치하지 않으면
             return ResponseEntity.ok("Wrong");
         }
-        return ResponseEntity.ok("Correct");
+    }
+
+    @GetMapping({"/test/{quizId}"})
+    public ResponseEntity<?> test(@PathVariable String quizId){
+        User user = getUser();
+        Quiz quiz = quizService.getQuiz(UUID.fromString(quizId));
+        Solved solved = Solved.builder()
+                .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
+                .build();
+        solved.setSolved(quiz);
+        quizService.upsertSolvedQuiz(solved);
+        return ResponseEntity.ok("good");
     }
 }
