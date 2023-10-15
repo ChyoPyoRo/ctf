@@ -74,12 +74,12 @@
               <th scope="col">Name</th>
               <th scope="col">NickName</th>
               <th scope="col">Score</th>
-              <th scope="col">Type</th>
+              <th scope="col">Affiliation</th>
               <th scope="col">RegistrationTime</th>
-              <th scope="col">Delete</th>
+              <th scope="col">IsBan</th>
             </tr>
             </thead>
-            <tbody id="quiz-content">
+            <tbody id="user-content">
             </tbody>
           </table>
         </div>
@@ -105,7 +105,7 @@
 
 <!-- Template Javascript -->
 <script th:src="@{/js/admin/main.js}"></script>
-
+<script th:src="@{/js/admin/admin_user.js}"></script>
 <script>
   renderPagination(1, "ALL");
 

@@ -146,9 +146,21 @@ public class AdminAPIController extends BaseController{
         return ResponseEntity.ok(logData);
     }
 
-    @GetMapping({"/admin_user_list"})
-    public ResponseEntity<?> adminUserList(){
-        List<UserPageDTO> userPageDTOList = userService.getUserList();
-        return ResponseEntity.ok(userPageDTOList);
+    @GetMapping({"/admin_user_list/{userId}"})
+    public ResponseEntity<?> adminUserList(HttpServletRequest request, @PathVariable("userId") String userId){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        if(userId.equals("ALL")){
+            List<UserPageDTO> userPageDTOList = userService.getUserList();
+            return ResponseEntity.ok(userPageDTOList);
+        } else {
+            UserPageDTO userPageDTO = userService.getUserListByUserId(userId);
+            return ResponseEntity.ok(userPageDTO);
+        }
     }
+
+
 }

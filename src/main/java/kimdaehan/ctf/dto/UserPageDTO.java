@@ -11,6 +11,7 @@ public interface UserPageDTO {
     String getName();
     String getAffiliation();
     String getNick_name();
+    String getIs_ban();
     LocalDateTime getRegistration_date_time();
     Long getTotal_score();
 }

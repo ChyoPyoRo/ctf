@@ -75,4 +75,5 @@ public class UserService implements UserDetailsService {
    public List<UserPageDTO> getUserList(){
         return solvedRepository.findScoreUsers();
    }
+   public UserPageDTO getUserListByUserId(String userId) {return  solvedRepository.findScoreUsersByUserId(userId).orElse(null);}
 }
