@@ -58,8 +58,8 @@
           <option id="2" value="UserIP">UserIP</option>
           <option id="3" value="Challenge">Challenge</option>
         </select>
-          <input class="form-control border-0" type="search" style="width:44%; margin-right: 3%;">
-          <button class="btn btn-outline-light" style="width: 83px;">Search</button>
+          <input id="search" class="form-control border-0" type="search" style="width:44%; margin-right: 3%;">
+          <button onclick="search()" class="btn btn-outline-light" style="width: 83px;">Search</button>
         </div>
         <div class="d-flex align-items-center justify-content-between mb-4">
           <h6 class="mb-0">문제 접속 로그</h6>
@@ -102,8 +102,14 @@
 <script th:src="@{/js/admin/main.js}"></script>
 <script th:src="@{/js/admin/admin_log.js}"></script>
 <script>
-  renderPagination(1, "ACCESS");
-
+  renderPagination(1, "ACCESS","","");
+  function search(){
+    let category = document.getElementById("categorySelect").value;
+    let id = document.getElementById("search").value;
+    let userType = (category === null || category === '' ? "" : category);
+    let userId = (id === null || id === '' ? "" : id);
+    renderPagination(1,"ACCESS", userType,userId);
+  }
 </script>
 </body>
 

@@ -95,13 +95,14 @@ public class AdminAPIController extends BaseController{
 
 
     //로그 관련
-    @GetMapping({"/admin_log_list/{logType}"})
+    @GetMapping({"/admin_log_list_no_data/{logType}"})
     public ResponseEntity<?> adminLog(HttpServletRequest request, @PathVariable String logType){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
             return ResponseEntity.badRequest().body("404 error");
         }
+        logger.info("admin_log_list_no_data enter -> user : {}, logType : {}", user.getUserId(), logType);
         List<?> logData;
         switch (logType) {
             case "ACCESS" -> {
@@ -121,12 +122,13 @@ public class AdminAPIController extends BaseController{
     }
 
     @GetMapping({"/admin_log_list/{logType}/{category}"})
-    public ResponseEntity<?> adminLogByCategory(HttpServletRequest request, @PathVariable String logType, @PathVariable String category, @PathVariable(value = "data") String data){
+    public ResponseEntity<?> adminLogByCategory(HttpServletRequest request, @PathVariable String logType, @PathVariable String category, @RequestParam(value = "data") String data){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
             return ResponseEntity.badRequest().body("404 error");
         }
+        logger.info("admin_log_list enter -> user : {}, logType : {}, category : {}, data : {}", user.getUserId(), logType, category, data);
         List<?> logData;
         switch (category) {
             case "UserID" -> {

@@ -16,8 +16,8 @@ const getAjax = function(url) {
 }
 
 
-async function getLogList(category){
-    const url = "/admin_log_list/"+category;
+async function getLogList(logType){
+    const url = "/admin_log_list_no_data/"+logType;
     try {
         return await getAjax(url);
     } catch(e) {
@@ -25,11 +25,23 @@ async function getLogList(category){
     }
 }
 
+async function getLogListByData(logType, category,data){
+    const url = "/admin_log_list/"+logType+"/" + category+"?data="+data;
+    try {
+        return await getAjax(url);
+    } catch(e) {
+        console.log(e);
+    }
+}
 
+async function renderPagination(currentPage, logType,category,inputData) {
+    let data;
+    if(inputData ===""){
+        data = await getLogList(logType);
+    } else {
+        data = await getLogListByData(logType,category,inputData);
+    }
 
-async function renderPagination(currentPage, type) {
-    const contents = document.querySelector("#log-content");
-    const data = await getLogList(type);
     let totalCount = data.length;
 
     let maxPage = Math.ceil(totalCount / 10);
@@ -43,14 +55,14 @@ async function renderPagination(currentPage, type) {
         currentData = data.slice((currentPage-1) * 10, (currentPage) * 10);
     }
     if(totalCount === 0){
-        noDataRender(type);
+        noDataRender(logType);
     } else{
         if( currentGroup === maxGroup ){
-            await renderButton((currentGroup * 5)-4,maxPage, currentPage -((currentGroup * 5)-4),type, maxPage);
-            renderTable(currentData, type);
+            await renderButton((currentGroup * 5)-4,maxPage, currentPage -((currentGroup * 5)-4),logType, maxPage,category,inputData);
+            renderTable(currentData, logType);
         } else {
-            await renderButton((currentGroup * 5)-4, currentGroup * 5, currentPage -((currentGroup * 5)-4),type, maxPage)
-            renderTable(currentData,type);
+            await renderButton((currentGroup * 5)-4, currentGroup * 5, currentPage -((currentGroup * 5)-4),logType, maxPage,category,inputData)
+            renderTable(currentData,logType);
         }
     }
 
@@ -85,7 +97,7 @@ const noDataRender = (type) =>{
     tables.appendChild(table);
 }
 
-const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
+const renderButton = async (page, maxPage, now,type, totalMaxPage,category,inputData) => {
     const buttons = document.querySelector("#paging");
     // 버튼 리스트 초기화
     while (buttons.hasChildNodes()) {
@@ -93,7 +105,7 @@ const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
     }
     // 화면에 최대 5개의 페이지 버튼 생성
     for (let id = page; id <= maxPage; id++) {
-        buttons.appendChild(makeButton(id,type));
+        buttons.appendChild(makeButton(id,type,category,inputData));
     }
     // 첫 버튼 활성화(class="active")
     buttons.children[now].classList.add("active");
@@ -101,12 +113,12 @@ const renderButton = async (page, maxPage, now,type, totalMaxPage) => {
     const prev = document.createElement("button");
     prev.classList.add("btn", "btn-secondary");
     prev.innerHTML = '<i class="fa-solid fa-caret-left"></i>';
-    prev.onclick = () => renderPagination(now,type);
+    prev.onclick = () => renderPagination(now,type,category,inputData);
 
     const next = document.createElement("button");
     next.classList.add("btn", "btn-secondary");
     next.innerHTML = '<i class="fa-solid fa-caret-right"></i>';
-    next.onclick = () => renderPagination(now+2,type);
+    next.onclick = () => renderPagination(now+2,type,category,inputData);
 
     buttons.prepend(prev);
     buttons.append(next);
@@ -139,13 +151,13 @@ const renderTable = (dataSet, type) => {
 
 }
 
-const makeButton = (id,type) => {
+const makeButton = (id,type,category,inputData) => {
     const buttons = document.querySelector("#paging");
     const button = document.createElement("button");
     button.classList.add("btn","btn-secondary");
     button.dataset.num = id;
     button.innerText = id;
-    button.onclick = () => renderPagination(id,type);
+    button.onclick = () => renderPagination(id,type,category,inputData);
     button.addEventListener("click", (e) => {
         Array.prototype.forEach.call(buttons.children, (button) => {
             if (button.dataset.num) button.classList.remove("active");
