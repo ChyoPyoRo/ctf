@@ -6,11 +6,13 @@ import kimdaehan.ctf.dto.ServerTime;
 import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.entity.log.FlagLog;
 import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -118,6 +120,40 @@ public class AdminAPIController extends BaseController{
         return ResponseEntity.ok(logData);
     }
 
+    @GetMapping({"/admin_log_list/{logType}/{category}"})
+    public ResponseEntity<?> adminLogByCategory(HttpServletRequest request, @PathVariable String logType, @PathVariable String category, @PathVariable(value = "data") String data){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        List<?> logData;
+        switch (category) {
+            case "UserID" -> {
+                User logUser = userService.getUserId(data);
+                logData = logService.getLogByUserAndType(logUser, logType);
+            }
+            case "UserIP" -> {
+                logData = logService.getLogByUserIpAndType(data, logType);
+            }
+            case "Challenge" -> {
+                Quiz quiz = quizService.getQuiz(UUID.fromString(data));
+                logData = logService.getLogByQuizAndType(quiz, logType);
+            }
+            case "SuccessOrFail" -> {
+                if(data.equals("SUCCESS") || data.equals("FAIL")){
+                    logData = logService.getFlagLogBySuccessOrNot(FlagLog.SuccessOrNot.valueOf(data));
+                } else {
+                    return ResponseEntity.badRequest().body("Validation error");
+                }
+            }
+            default -> {
+                return ResponseEntity.badRequest().body("Validation error");
+            }
+        }
+        return ResponseEntity.ok(logData);
+    }
+
 
 
     @GetMapping({"/admin_log_list/ACCESS"})
@@ -147,8 +183,8 @@ public class AdminAPIController extends BaseController{
         return ResponseEntity.ok(logData);
     }
 
-    @GetMapping({"/admin_user_list/{affiliation}/{userId}"})
-    public ResponseEntity<?> adminUserList(HttpServletRequest request, @PathVariable("affiliation") String affiliation, @PathVariable("userId") String userId){
+    @GetMapping({"/admin_user_list/{affiliation}"})
+    public ResponseEntity<?> adminUserList(HttpServletRequest request, @PathVariable("affiliation") String affiliation, @RequestParam( value = "id", required = false) String userId){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
@@ -156,14 +192,14 @@ public class AdminAPIController extends BaseController{
         }
         List<UserPageDTO> userPageDTOArrayList = new ArrayList<>();;
         if(affiliation.equals("ALL")){
-            if(userId.equals("ALL")){
+            if(userId == null){
                 userPageDTOArrayList = userService.getUserList();
             } else {
                 UserPageDTO userPageDTO = userService.getUserByUserId(userId);
                 userPageDTOArrayList.add(userPageDTO);
             }
         } else {
-            if(userId.equals("ALL")){
+            if(userId == null){
                 userPageDTOArrayList = userService.getUserListByAffiliation(affiliation);
             } else {
                 UserPageDTO userPageDTO = userService.getUserByAffiliationAndUserId(affiliation,userId);

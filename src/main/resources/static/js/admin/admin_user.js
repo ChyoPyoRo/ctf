@@ -88,7 +88,13 @@ const getAjaxText = function(url) {
 }
 
 async function getUserList(type, id){
-    let url = "/admin_user_list/"+type+'/'+id;
+
+    let url;
+    if(id ===''){
+        url = "/admin_user_list/"+type
+    } else {
+        url = "/admin_user_list/"+type+'?id='+id;
+    }
     try {
         return await getAjax(url);
     } catch(e) {

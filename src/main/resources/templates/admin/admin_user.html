@@ -107,12 +107,12 @@
 <script th:src="@{/js/admin/main.js}"></script>
 <script th:src="@{/js/admin/admin_user.js}"></script>
 <script>
-  renderPagination(1, "ALL","ALL");
+  renderPagination(1, "ALL","");
   function search(){
     let type = document.getElementById("categorySelect").value;
     let id = document.getElementById("search").value;
-    let userType = (type === null ? "ALL" : type);
-    let userId = (id === null ? "id" : id);
+    let userType = (type === null || type === '' ? "ALL" : type);
+    let userId = (id === null || id === '' ? "" : id);
     renderPagination(1, userType,userId);
   }
 </script>
