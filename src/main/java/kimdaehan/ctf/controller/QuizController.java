@@ -58,6 +58,7 @@ public class QuizController extends BaseController{
             List<Quiz> quizList = quizService.getAllQuizByCategory(categoryName);
             mv.addObject(item, quizList);
         }
+        mv.addObject("title", "Challenge");
 
         return mv;
     }
