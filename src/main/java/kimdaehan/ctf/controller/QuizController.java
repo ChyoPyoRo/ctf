@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,11 +76,31 @@ public class QuizController extends BaseController{
     public ResponseEntity<String> solveQuiz(@PathVariable String challengeId, QuizAnswerDto answer) {
         //user정보, quiz 정보 가져오기
         User user = getUser();
-        UUID quizId = UUID.fromString(challengeId);
+        UUID quizId;
+        try {
+            quizId = UUID.fromString(challengeId);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("WrongID");
+        }
         Quiz quiz = quizService.getQuiz(quizId);
+        //quiz값이 없을 경우 (존재하지 않는 ID)
+        if(quiz == null){
+            return ResponseEntity.badRequest().body("NotExistID");
+        }
+        if(serverSettingService.getServerEnd().isBefore( LocalDate.now().atTime(LocalTime.now().plusHours(2)))  ){
+            //에러 문구
+            return ResponseEntity.badRequest().body("ctfFinish");
+        }
+        //2.이 문제의 start time이 현재시간 이후이면 안됨
+        else if(quiz.getStartTime().isAfter(LocalDate.now().atTime(LocalTime.now().plusHours(2)))){
+            System.out.println(serverSettingService.getServerEnd());
+            System.out.println(serverSettingService.getServerStart());
+            System.out.println(LocalDate.now().atTime(LocalTime.now().plusHours(2)));
+            return ResponseEntity.badRequest().body("notOpen");
+        }
         //flag값 비교
         if (quiz.getFlag().equals(answer.getFlag())) {
-            //flag 값이 일치하면
+            //flag 값이 일치하기 전에 시간이 먼저 테스트
             Solved solved = Solved.builder()
                     .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
                     .build();
