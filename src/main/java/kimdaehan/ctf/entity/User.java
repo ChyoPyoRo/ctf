@@ -52,6 +52,12 @@ public class User implements Serializable, UserDetails {
     @Enumerated(EnumType.STRING)
     private Affiliation affiliation;
 
+    @Column(columnDefinition = "VARCHAR(8) NOT NULL", length = 8)
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private IsBan isBan = IsBan.DISABLE;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();
@@ -94,6 +100,9 @@ public class User implements Serializable, UserDetails {
     public enum Affiliation{
         NB, YB, OB, SCH
 
+    }
+    public enum IsBan{
+        ENABLE, DISABLE
     }
 
 }

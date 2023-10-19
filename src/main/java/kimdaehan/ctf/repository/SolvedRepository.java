@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
@@ -22,13 +23,49 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
     List<Solved> findAllBySolved(Quiz quiz);
 
 
+    //유저의 소속, id별 정보(score 포함)
     @Transactional(readOnly = true)
-    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as user_id, u.name as name, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nick_name, u.registration_date_time as registration_date_time, " +
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as user_id, u.name as name, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nick_name, u.registration_date_time as registration_date_time, u.is_ban as is_ban, " +
             "       COALESCE(SUM(q.score), 0) AS total_score " +
             "FROM user u " +
             "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
             "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
-            "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time;", nativeQuery = true)
+            "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time " +
+            "ORDER BY u.registration_date_time DESC;", nativeQuery = true)
     List<UserPageDTO> findScoreUsers();
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as user_id, u.name as name, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nick_name, u.registration_date_time as registration_date_time, u.is_ban as is_ban, " +
+            "       COALESCE(SUM(q.score), 0) AS total_score " +
+            "FROM user u " +
+            "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
+            "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE u.user_id = :userId " +
+            "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time " +
+            "ORDER BY u.registration_date_time DESC;", nativeQuery = true)
+    Optional<UserPageDTO> findScoreUsersByUserId(@Param("userId") String userId);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as user_id, u.name as name, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nick_name, u.registration_date_time as registration_date_time, u.is_ban as is_ban, " +
+            "       COALESCE(SUM(q.score), 0) AS total_score " +
+            "FROM user u " +
+            "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
+            "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE u.affiliation = :affiliation " +
+            "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time " +
+            "ORDER BY u.registration_date_time DESC;", nativeQuery = true)
+    List<UserPageDTO> findScoreUsersByAffiliation(@Param("affiliation") String affiliation);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as user_id, u.name as name, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nick_name, u.registration_date_time as registration_date_time, u.is_ban as is_ban, " +
+            "       COALESCE(SUM(q.score), 0) AS total_score " +
+            "FROM user u " +
+            "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
+            "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE u.affiliation = :affiliation and u.user_id = :userId " +
+            "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time " +
+            "ORDER BY u.registration_date_time DESC;", nativeQuery = true)
+    Optional<UserPageDTO> findScoreUsersByAffiliationAndUserId(@Param("affiliation") String affiliation, @Param("userId") String userId);
+
 
 }

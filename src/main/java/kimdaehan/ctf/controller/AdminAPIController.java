@@ -6,14 +6,17 @@ import kimdaehan.ctf.dto.ServerTime;
 import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.entity.log.FlagLog;
 import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -92,13 +95,14 @@ public class AdminAPIController extends BaseController{
 
 
     //로그 관련
-    @GetMapping({"/admin_log_list/{logType}"})
+    @GetMapping({"/admin_log_list_no_data/{logType}"})
     public ResponseEntity<?> adminLog(HttpServletRequest request, @PathVariable String logType){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
             return ResponseEntity.badRequest().body("404 error");
         }
+        logger.info("admin_log_list_no_data enter -> user : {}, logType : {}", user.getUserId(), logType);
         List<?> logData;
         switch (logType) {
             case "ACCESS" -> {
@@ -109,6 +113,41 @@ public class AdminAPIController extends BaseController{
             }
             case "DOWNLOAD" -> {
                 logData = logService.getAllDownloadLog();
+            }
+            default -> {
+                return ResponseEntity.badRequest().body("Validation error");
+            }
+        }
+        return ResponseEntity.ok(logData);
+    }
+
+    @GetMapping({"/admin_log_list/{logType}/{category}"})
+    public ResponseEntity<?> adminLogByCategory(HttpServletRequest request, @PathVariable String logType, @PathVariable String category, @RequestParam(value = "data") String data){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        logger.info("admin_log_list enter -> user : {}, logType : {}, category : {}, data : {}", user.getUserId(), logType, category, data);
+        List<?> logData;
+        switch (category) {
+            case "UserID" -> {
+                User logUser = userService.getUserId(data);
+                logData = logService.getLogByUserAndType(logUser, logType);
+            }
+            case "UserIP" -> {
+                logData = logService.getLogByUserIpAndType(data, logType);
+            }
+            case "Challenge" -> {
+                Quiz quiz = quizService.getQuiz(UUID.fromString(data));
+                logData = logService.getLogByQuizAndType(quiz, logType);
+            }
+            case "SuccessOrFail" -> {
+                if(data.equals("SUCCESS") || data.equals("FAIL")){
+                    logData = logService.getFlagLogBySuccessOrNot(FlagLog.SuccessOrNot.valueOf(data));
+                } else {
+                    return ResponseEntity.badRequest().body("Validation error");
+                }
             }
             default -> {
                 return ResponseEntity.badRequest().body("Validation error");
@@ -146,9 +185,49 @@ public class AdminAPIController extends BaseController{
         return ResponseEntity.ok(logData);
     }
 
-    @GetMapping({"/admin_user_list"})
-    public ResponseEntity<?> adminUserList(){
-        List<UserPageDTO> userPageDTOList = userService.getUserList();
-        return ResponseEntity.ok(userPageDTOList);
+    @GetMapping({"/admin_user_list/{affiliation}"})
+    public ResponseEntity<?> adminUserList(HttpServletRequest request, @PathVariable("affiliation") String affiliation, @RequestParam( value = "id", required = false) String userId){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        List<UserPageDTO> userPageDTOArrayList = new ArrayList<>();;
+        if(affiliation.equals("ALL")){
+            if(userId == null){
+                userPageDTOArrayList = userService.getUserList();
+            } else {
+                UserPageDTO userPageDTO = userService.getUserByUserId(userId);
+                userPageDTOArrayList.add(userPageDTO);
+            }
+        } else {
+            if(userId == null){
+                userPageDTOArrayList = userService.getUserListByAffiliation(affiliation);
+            } else {
+                UserPageDTO userPageDTO = userService.getUserByAffiliationAndUserId(affiliation,userId);
+                userPageDTOArrayList.add(userPageDTO);
+            }
+        }
+        return ResponseEntity.ok(userPageDTOArrayList);
+    }
+
+    @GetMapping({"/admin_user_ban/{userId}"})
+    public ResponseEntity<?> adminUserBan(HttpServletRequest request, @PathVariable("userId") String userId){
+        User user = getUser();
+        if(user.getType() != User.Type.ADMIN){
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            return ResponseEntity.badRequest().body("404 error");
+        }
+        User member = userService.getUserId(userId);
+        if(member == null){
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        if(member.getIsBan() == User.IsBan.DISABLE){
+            member.setIsBan(User.IsBan.ENABLE);
+        } else {
+            member.setIsBan(User.IsBan.DISABLE);
+        }
+        userService.upsertUser(member);
+        return ResponseEntity.ok("success");
     }
 }
