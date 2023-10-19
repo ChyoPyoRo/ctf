@@ -1,5 +1,6 @@
 package kimdaehan.ctf.service;
 
+import kimdaehan.ctf.dto.DynamicScoreDTO;
 import kimdaehan.ctf.dto.QuizAnswerDto;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
@@ -75,6 +76,8 @@ public class QuizService {
     public List<Solved> getSolvedListByUserId(String userId){
         return solvedRepository.findAllBySolvedIdSolvedUserId(userId);
     }
-
+    public DynamicScoreDTO getDynamicScoreByQuizId(UUID quizId){
+        return quizRepository.findDynamicScore(quizId).orElse(null);
+    }
 
 }
