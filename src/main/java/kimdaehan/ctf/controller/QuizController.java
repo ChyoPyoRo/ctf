@@ -107,6 +107,7 @@ public class QuizController extends BaseController{
                     .build();
             solved.setSolved(quiz);
             quizService.upsertSolvedQuiz(solved);
+            //OB, ADMIN, isBan 3개는 점수 추가 안하고 로그만 남기기
             return ResponseEntity.ok("Correct");
         } else {
             //일치하지 않으면
