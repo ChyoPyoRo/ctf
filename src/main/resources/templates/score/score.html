@@ -30,7 +30,6 @@
 
     <!-- Basic Stylesheet -->
     <link th:href="@{/css/common.css}" rel="stylesheet">
-    <link th:href="@{/css/score/style.css}" rel="stylesheet">
 
 </head>
 
@@ -43,7 +42,17 @@
     <div class="layout-center-title">
         <div class="center-title"th:replace="centerTitle :: div"></div>
     </div>
+    <div class="container-fluid pt-4 px-4">
+        <div class="g-4" style="display: flex; justify-content: center;">
+            <div class="col-xl-6" style="width: 70%;">
+                <div class="bg-secondary rounded p-4" style="height: 400px; width: 100%;">
+                    <h6 class="mb-4">TOP 5(YB)</h6>
+                    <canvas id="line-chart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
