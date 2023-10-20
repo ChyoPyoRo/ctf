@@ -20,6 +20,21 @@
 }
 
 
+.content{
+    flex-direction: column;
+    align-items: center;
+    max-width: 1680px;
+    /*position : fixed;*/
+    margin: 0 auto;
+    background: var(--dark);
+    background-image: url("../../images/login/star.jpg");
+    transition: 0.5s;
+    display:flex;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    min-height : 940px;
+}
 
 /*** Navbar ***/
 .content .navbar .navbar-nav .nav-link {

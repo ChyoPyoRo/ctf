@@ -17,6 +17,10 @@ async function showPopup(id) {
         let flagDiv = document.createElement("input");
         let buttonDiv =document.createElement("button");
 
+
+        let attatchmentDiv = document.createElement('a');
+        let titleAttatchmentDiv = document.createElement("h3");
+
         //quiz정보 입력
         titleNameDiv.innerText = "문제이름"
         titleWriterDiv.innerText = "작성자"
@@ -86,11 +90,7 @@ async function showPopup(id) {
             });
         });
         if (quiz.attachment != null){
-            //추가파일이 있으면
-            let attatchmentDiv = document.createElement('a');
-            let titleAttatchmentDiv = document.createElement("h3");
-
-            attatchmentDiv.innerText="file 명";
+             attatchmentDiv.innerText="file 명";
             titleAttatchmentDiv.innerText = "파일";
             attatchmentDiv.href = quiz.attachment;
 
