@@ -67,6 +67,7 @@ public class QuizController extends BaseController{
     @GetMapping({"/quiz/{quizId}"})
     public ResponseEntity<Quiz> quizListByCategory(@PathVariable String quizId){
         UUID uuid = UUID.fromString(quizId);
+        //start시간 제출이 안되면
         Quiz quizDetail = quizService.getQuiz(uuid);
         quizDetail.setFlag("나쁜짓 하지 마세요");
         return ResponseEntity.ok(quizDetail);
