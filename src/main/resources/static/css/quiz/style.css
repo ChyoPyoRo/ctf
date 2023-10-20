@@ -1,6 +1,7 @@
 
 /* Sidebar */
 
+
 .content .navbar .navbar-nav .nav-link.active {
     color: var(--primary);
 }

@@ -30,10 +30,10 @@
 
     <!-- Basic Stylesheet -->
     <link th:href="@{/css/common.css}" rel="stylesheet">
-    <link th:href="@{/css/score/style.css}" rel="stylesheet">
     <style>
         .card-font {
-
+            font-size: 18px;
+            line-height: 190%;
         }
     </style>
 </head>
@@ -50,66 +50,20 @@
     <div class="container">
         <div class="card mb-4 bg-secondary">
             <div class="card-body">
-                <div class="card-title card-font">본 대회의 시상은 정보보호학과 SecurityFirst 회원으로 제한됩니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">개인전이므로 문제에 대한 정답, 풀이방법, 힌트 공유, 문제에 대한 정보 공유 등은 금지됩니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">모든 플래그는 SF{~} 형식으로 되어있으며, 문제를 정상적으로 풀이하여 성공하면 플래그를 얻을 수 있습니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">대회 참가자를 제외한 외부 인원에게 문제를 공유하는 것은 금지되어있습니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">동점자 발생 시, 먼저 점수를 획득한 사람이 더 높은 순위를 획득합니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">SQLMap, Nessus 등과 같은 서버, 네트워크 상에서 동작하는 자동화툴은 모두 금지되어 있습니다. (문제에서 사용가능을 명시하는 경우 제외)</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">대회 진행중 Flag에 대한 brute-force attack은 금지합니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">인가된 방법을 통한 문제 접근 외에 비정상적인 서버 접근이나 서버에 대한 공격행위는 허용되지 않습니다.</div>
-            </div>
-        </div><div class="card mb-4">
-        <div class="card-body">
-            <div class="card-title card-font">대회 공지사항은 Discord를 통해 공지가 됩니다.</div>
-        </div>
-    </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">대회와 관련된 공지, 규칙 등을 읽지 않았을 경우 발생하는 모든 상황에 대한 책임 또한 참가자 본인에게 있습니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">SecurityFirst 회원의 경우 준회원 NB, 정회원 YB, 명예회원 OB로 체크 후 회원가입을 해주셔야하며, 회원이 아닌 참가자는 SCH로 가입해주시면 됩니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">본 대회의 참여도, 성적, 부정행위 여부 등은 신입회원과 정회원 모두 회원평가에 반영됩니다.</div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="card-title card-font">위 규칙들을 준수하지 않았거나 부정행위 적발 시 운영진의 판단과 권한으로 향후 대회참가 자격이 박탈될 수 있으며, 모든 민/형사상의 책임은 참가자 본인에게 있습니다.</div>
+                <div class="card-title card-font">대회 규칙<br>
+                    - 본 대회의 시상은 정보보호학과 SecurityFirst 회원으로 제한됩니다.<br>
+                    - 개인전이므로 문제에 대한 정답, 풀이방법, 힌트 공유, 문제에 대한 정보 공유 등은 금지됩니다.<br>
+                    - 모든 플래그는 SF{~} 형식으로 되어있으며, 문제를 정상적으로 풀이하여 성공하면 플래그를 얻을 수 있습니다.<br>
+                    - 대회 참가자를 제외한 외부 인원에게 문제를 공유하는 것은 금지되어있습니다.<br>
+                    - 동점자 발생 시, 먼저 점수를 획득한 사람이 더 높은 순위를 획득합니다.<br>
+                    - SQLMap, Nessus 등과 같은 서버, 네트워크 상에서 동작하는 자동화툴은 모두 금지되어 있습니다. (문제에서 사용가능을 명시하는 경우 제외)<br>
+                    - 대회 진행중 Flag에 대한 brute-force attack은 금지합니다.<br>
+                    - 인가된 방법을 통한 문제 접근 외에 비정상적인 서버 접근이나 서버에 대한 공격행위는 허용되지 않습니다.<br>
+                    - 대회 공지사항은 Discord를 통해 공지가 됩니다.<br>
+                    - 대회와 관련된 공지, 규칙 등을 읽지 않았을 경우 발생하는 모든 상황에 대한 책임 또한 참가자 본인에게 있습니다.<br>
+                    - SecurityFirst 회원의 경우 준회원 NB, 정회원 YB, 명예회원 OB로 체크 후 회원가입을 해주셔야하며, 회원이 아닌 참가자는 SCH로 가입해주시면 됩니다.<br>
+                    - 본 대회의 참여도, 성적, 부정행위 여부 등은 신입회원과 정회원 모두 회원평가에 반영됩니다.<br>
+                    - 위 규칙들을 준수하지 않았거나 부정행위 적발 시 운영진의 판단과 권한으로 향후 대회참가 자격이 박탈될 수 있으며, 모든 민/형사상의 책임은 참가자 본인에게 있습니다.</div>
             </div>
         </div>
 

@@ -30,10 +30,10 @@
     background-image: url("../../images/login/star.jpg");
     transition: 0.5s;
     display:flex;
-    justify-content: center;
+    justify-content: flex-start;
     background-repeat: no-repeat;
     background-size: cover;
-    min-height : 940px;
+    min-height: 868px;
 }
 
 /*** Navbar ***/
