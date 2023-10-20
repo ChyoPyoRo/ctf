@@ -3,6 +3,7 @@ package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
+import kimdaehan.ctf.dto.DynamicScoreDTO;
 import kimdaehan.ctf.dto.QuizAnswerDto;
 import kimdaehan.ctf.dto.QuizDto;
 import kimdaehan.ctf.entity.Quiz;
@@ -123,5 +124,13 @@ public class QuizController extends BaseController{
         solved.setSolved(quiz);
         quizService.upsertSolvedQuiz(solved);
         return ResponseEntity.ok("good");
+    }
+
+
+    @GetMapping({"/test2/{quizId}"})
+    public ResponseEntity<?> test2(@PathVariable String quizId){
+        User user = getUser();
+        DynamicScoreDTO dynamicScoreDTO = quizService.getDynamicScoreByQuizId(UUID.fromString(quizId));
+        return ResponseEntity.ok(dynamicScoreDTO);
     }
 }
