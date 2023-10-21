@@ -81,4 +81,6 @@ public class UserService implements UserDetailsService {
         return solvedRepository.findScoreUsersByAffiliation(affiliation);
     }
     public UserPageDTO getUserByAffiliationAndUserId(String affiliation, String userId) {return  solvedRepository.findScoreUsersByAffiliationAndUserId(affiliation,userId).orElse(null);}
+
+    public List<UserPageDTO> getRankAndScoreUsersByAffiliation(String affiliation) {return  solvedRepository.findRankAndScoreUsersByAffiliation(affiliation);}
 }

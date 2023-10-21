@@ -13,7 +13,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Transactional(readOnly= true)
     Optional<User> findByUserId(String userId);
 
-
+    @Transactional(readOnly = true)
+    List<User> findAllByTypeAndAffiliationAndIsBan(User.Type type, User.Affiliation affiliation, User.IsBan isBan);
 
 
 }
