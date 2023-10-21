@@ -55,10 +55,10 @@ public class RankScheduler {
                     .recordKey(new RecordKey(user, localDateTime))
                     .rankAffiliation(User.Affiliation.YB)
                     .score(Math.toIntExact(yb.getTotal_score()))
-                    .userRank(nbRank)
+                    .userRank(ybRank)
                     .build();
             rankService.upsertRank(rank);
-            nbRank += 1;
+            ybRank += 1;
         }
 
     }
