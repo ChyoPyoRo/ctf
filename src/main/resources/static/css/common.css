@@ -27,7 +27,7 @@
     /*position : fixed;*/
     margin: 0 auto;
     background: var(--dark);
-    background-image: url("../../images/login/star.jpg");
+    background-image: url("../images/login/space2.jpg");
     transition: 0.5s;
     display:flex;
     justify-content: flex-start;
@@ -124,7 +124,7 @@
 
 /*** content-login ***/
 .content-login {
-    background-image: url("../images/login/space.jpg");
+    background-image: url("../images/login/ship1.jpg");
     background-repeat: no-repeat;
 }
 
