@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -81,4 +82,9 @@ public class UserService implements UserDetailsService {
         return solvedRepository.findScoreUsersByAffiliation(affiliation);
     }
     public UserPageDTO getUserByAffiliationAndUserId(String affiliation, String userId) {return  solvedRepository.findScoreUsersByAffiliationAndUserId(affiliation,userId).orElse(null);}
+
+    public void changeUserCurrentSolvedDateTime(User user){
+        user.setCurrentSolvedDateTime(LocalDateTime.now());
+        userRepository.save(user);
+    }
 }

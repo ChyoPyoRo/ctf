@@ -99,10 +99,19 @@ public class QuizController extends BaseController{
         //user정보, quiz 정보 가져오기
         User user = getUser();
         UUID quizId;
+        //id의 형식이 uuid가 맞는지
         try {
             quizId = UUID.fromString(challengeId);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("WrongID");
+        }
+        //로그 조회 -> uuid의 형식이 아니면 로그 조회가 불가능
+//        logService.getLogByUserAndType(user, quizId);
+
+        //flag값이 비어있음
+        if(answer.getFlag() == null){
+            //logger 남겨야 하나 + isBan어떻게 하지
+            return ResponseEntity.badRequest().body("emptyFlag");
         }
         Quiz quiz = quizService.getQuiz(quizId);
         //quiz값이 없을 경우 (존재하지 않는 ID)
@@ -129,17 +138,21 @@ public class QuizController extends BaseController{
             //로그 남기기
             FlagLog.SuccessOrNot successOrNot = FlagLog.SuccessOrNot.SUCCESS;
             FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),successOrNot);
+            logService.upsertFlag(flagLog);
+            //user의 currentSolvedDateTime수정
+            userService.changeUserCurrentSolvedDateTime(user);
             return ResponseEntity.ok("Correct");
         } else {
             //일치하지 않으면
             //로그만
             FlagLog.SuccessOrNot successOrNot = FlagLog.SuccessOrNot.FAIL;
             FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),successOrNot);
+            logService.upsertFlag(flagLog);
             return ResponseEntity.ok("Wrong");
         }
     }
     @GetMapping({"/quiz/download/{quizId}"})
-    public void download(HttpServletResponse response, @PathVariable String quizId){
+    public void download(HttpServletResponse response, @PathVariable String quizId, HttpServletRequest request){
         User user = getUser();
         Quiz quiz = quizService.getQuiz((UUID.fromString(quizId)));
         String filePath = quiz.getAttachment();
@@ -168,9 +181,11 @@ public class QuizController extends BaseController{
             while((readCount = fis.read(buffer))!= -1){
                 out.write(buffer,0,readCount);
             }
-
+        DownloadLog downloadLog = logService.buildDownloadLogByQuizAndUserIP(quiz, user, request.getRemoteAddr());
+            logService.upsertDownload(downloadLog);
         }catch(Exception e){
-            throw new RuntimeException("file save Error");
+            //여기도 logger 남겨야 하나
+            throw new RuntimeException("file Download Error");
         }
     }
 
