@@ -46,6 +46,23 @@ public class LogService {
                 .build();
     }
 
+    public DownloadLog buildDownloadLogByQuizAndUserIP(Quiz quiz, User user, String userIp){
+        return DownloadLog.builder()
+                .quizId(quiz)
+                .userIp(userIp)
+                .recordKey(new RecordKey(user, LocalDateTime.now()))
+                .build();
+    }
+
+    public FlagLog buildFlagLogByQuizAndUserIPAndSuccessFail(Quiz quiz, User user, String userIp, FlagLog.SuccessOrNot successOrNot){
+        return FlagLog.builder()
+                .quizId(quiz)
+                .userIp(userIp)
+                .recordKey(new RecordKey(user, LocalDateTime.now()))
+                .successFail(successOrNot)
+                .build();
+    }
+
 
 
     //로그 검색

@@ -2,6 +2,7 @@ package kimdaehan.ctf.controller;
 
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.entity.User;
+import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +12,7 @@ public class BaseController {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     protected final UserService userService;
     private final AuthenticationFacade authenticationFacade;
+    protected LogService logService;
 
     public BaseController(UserService userService, AuthenticationFacade authenticationFacade) {
         this.userService = userService;

@@ -7,6 +7,7 @@ import kimdaehan.ctf.entity.log.AccessLog;
 import kimdaehan.ctf.entity.log.DownloadLog;
 import kimdaehan.ctf.entity.log.FlagLog;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,11 @@ public interface FlagLogRepository extends JpaRepository<FlagLog, RecordKey> {
     List<FlagLog> findAllByQuizIdOrderByRecordKeyDateTimeDesc(Quiz quiz);
     @Transactional(readOnly= true)
     List<FlagLog> findAllBySuccessFailOrderByRecordKeyDateTimeDesc(FlagLog.SuccessOrNot successOrNot);
+
+//    @Transactional(readOnly = true)
+//    @Query(value="SELECT d FROM flaglog AS d WHERE"
+//    )
+//    List<FlagLog> find
 
 
     @Transactional
