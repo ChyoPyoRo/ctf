@@ -12,23 +12,7 @@ async function showPopup(id) {
         })
         const postUrl = "/challenge/" + id
         //quiz가 값이 필요함
-        if(quiz == "notOpen"){
-            let warngingDiv = document.createElement('h1');
-            warngingDiv.innerText="아직 문제를 풀 수 있는 시간이 아닙니다";
-            warngingDiv.className="warning";
-            let popupElement = document.getElementById('popup');
-            popupElement.innerHTML = '';
-            popupElement.appendChild(warngingDiv);
-
-
-            // Show the dimmed background and popup
-            document.getElementById('dimmed-bg').style.display = 'block';
-
-            // Show the dimmed background and popup
-            document.getElementById('dimmed-bg').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
-        }
-        else if(quiz == "ValidationError"){
+        if(quiz == "ValidationError"){
             alert("Validation Error")
         }
         else if(quiz=="undefined"){
@@ -37,7 +21,7 @@ async function showPopup(id) {
         else {
 
             //Div Element 추가
-            let titleNameDiv = document.createElement('h3');
+
             let nameDiv = document.createElement('div');
             let titleWriterDiv = document.createElement('h3');
             let writerDiv = document.createElement('div');
@@ -54,23 +38,24 @@ async function showPopup(id) {
             let titleAttatchmentDiv = document.createElement("h3");
 
             //quiz정보 입력
-            titleNameDiv.innerText = "문제이름"
-            titleWriterDiv.innerText = "작성자"
-            titleScoreDiv.innerText = "점수"
-            titleDescriptionDiv.innerText = "설 명"
+            titleWriterDiv.innerText = "Author"
+            titleScoreDiv.innerText = "Score"
+            titleDescriptionDiv.innerText = "Description"
             titleFlag.innerText = "Flag"
 
-            nameDiv.className = 'popupBoxContent';
             writerDiv.className = 'popupBoxContent';
             scoreDiv.className = 'popupBoxContent';
             descriptionDiv.className = 'popupBoxContent description';
 
-            titleNameDiv.className = 'popupBoxTitle';
+            nameDiv.className = 'popupBoxTitle';
+            nameDiv.id="nameDiv"
             titleWriterDiv.className = 'popupBoxTitle';
             titleScoreDiv.className = 'popupBoxTitle';
             titleDescriptionDiv.className = 'popupBoxTitle'
             titleFlag.className = 'popupBoxTitle flag-title'
 
+            flagDiv.className="popupFlagInput";
+            flagDiv.placeholder="Flag 입력"
             // descriptionDiv.className="description"
             // titleFlag.className="flag-title";
 
@@ -78,7 +63,7 @@ async function showPopup(id) {
             writerDiv.innerText = quiz.quizWriter.name;
             scoreDiv.innerText = quiz.score;
             descriptionDiv.innerText = quiz.description;
-            buttonDiv.innerText = "제 출";
+            buttonDiv.innerText = "Answer";
 
             // popup
             let popupElement = document.getElementById('popup');
@@ -111,14 +96,17 @@ async function showPopup(id) {
                         } else if (jqXHR.responseText == "emptyFlag") {
                             alert("Flag 값이 비어있습니다")
                             window.location.href = "/challenge";
-                        } else {
+                        } else if (jqXHR.responseText="TooManyRequest"){
+                            alert("1분에 5번 이상 입력 금지입니다")
+                        }
+                        else {
                             alert("에러가 발생했습니다")
                         }
                     }
                 });
             });
             if (quiz.attachment != null) {
-                attatchmentDiv.innerText = "file 명";
+                attatchmentDiv.innerText = "첨부 파일 다운로드";
                 titleAttatchmentDiv.innerText = "파일";
                 attatchmentDiv.href = "/quiz/download/" + id
 
@@ -128,7 +116,7 @@ async function showPopup(id) {
 
 
             // Append new div elements to the popup
-            popupElement.appendChild(titleNameDiv);
+
             popupElement.appendChild(nameDiv);
             popupElement.appendChild(titleWriterDiv);
             popupElement.appendChild(writerDiv);

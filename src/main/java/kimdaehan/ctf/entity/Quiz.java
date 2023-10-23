@@ -73,7 +73,7 @@ public class Quiz implements Serializable {
 
 
     public enum CategoryType{
-        REVERSING, PWN, WEB, FORENSICS, MISC, CRYPTO
+        REVERSING, PWN, WEB, FORENSICS, MISC
     }
 
     public enum levelType{

@@ -49,12 +49,12 @@
                 <!-- REVERSING -->
                 <h3 style="font-size: 1.5em;" class="category-title">REVERSING</h3>
                 <div class="category-container">
-                    <div class="one-quiz-block" th:each="quiz:${REVERSING}" th:data-quiz-id="${quiz.quizId}"
+                    <div class="one-quiz-block" th:each="quiz:${REVERSING}" th:data-quiz-id="${quiz.quizIdAsUuid}"
                          onClick="showPopup(this.getAttribute('data-quiz-id'))">
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
                             <div class="score" th:text="${quiz.score}">Score</div>
-                            <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                            <div class="writer" th:text="${quiz.author}"></div>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
                             <div class="score" th:text="${quiz.score}">Score</div>
-                            <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                            <div class="writer" th:text="${quiz.author}"></div>
                         </div>
                     </div>
                 </div>
@@ -78,7 +78,7 @@
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
                             <div class="score" th:text="${quiz.score}">Score</div>
-                            <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                            <div class="writer" th:text="${quiz.author}"></div>
                         </div>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
                             <div class="score" th:text="${quiz.score}">Score</div>
-                            <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                            <div class="writer" th:text="${quiz.author}"></div>
                         </div>
                     </div>
                 </div>
@@ -102,7 +102,7 @@
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
                             <div class="score" th:text="${quiz.score}">Score</div>
-                            <div class="writer" th:text="${quiz.quizWriter.nickName}"></div>
+                            <div class="writer" th:text="${quiz.author}"></div>
                         </div>
                     </div>
                 </div>

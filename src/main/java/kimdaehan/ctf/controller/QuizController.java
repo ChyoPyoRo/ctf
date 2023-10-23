@@ -6,7 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.DynamicScoreDTO;
 import kimdaehan.ctf.dto.QuizAnswerDto;
-import kimdaehan.ctf.dto.QuizDto;
+import kimdaehan.ctf.dto.QuizGetDTO;
+import kimdaehan.ctf.dto.QuizListDTO;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.SolvedId;
@@ -32,13 +33,9 @@ import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Controller
@@ -67,7 +64,12 @@ public class QuizController extends BaseController{
         ArrayList <String> categoryList = new ArrayList<>(Arrays.asList("REVERSING", "PWN", "WEB", "FORENSICS", "MISC"));
         for(String item : categoryList){
             Quiz.CategoryType categoryName = Quiz.CategoryType.valueOf(item);
-            List<Quiz> quizList = quizService.getAllQuizByCategory(categoryName);
+            List<QuizListDTO> quizList = quizService.findQuizAfterStartTime(categoryName);
+            List<QuizGetDTO> quizGetDTOS = new ArrayList<>();
+            for(QuizListDTO quiz : quizList){
+                quizGetDTOS.add(QuizGetDTO.from(quiz));
+            }
+
             mv.addObject(item, quizList);
         }
         mv.addObject("title", "Challenge");
@@ -96,7 +98,7 @@ public class QuizController extends BaseController{
         if(quizDetail.getStartTime().isAfter(LocalDate.now().atTime(LocalTime.now()))){
             //logger 생성
             logger.info("Access try before start time -> user : {}, router : Get(quiz/{quizId})", user.getUserId());
-            return ResponseEntity.badRequest().body("notOpen");
+            return ResponseEntity.badRequest().body("ValidationError");
         }
         //로그 기록
         AccessLog accessLog = logService.buildAccessLogByQuizAndUserAndIP(quizDetail, user, request.getRemoteAddr());

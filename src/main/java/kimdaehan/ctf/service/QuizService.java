@@ -3,15 +3,19 @@ package kimdaehan.ctf.service;
 import kimdaehan.ctf.dto.DynamicScoreDTO;
 import kimdaehan.ctf.dto.QuizAnswerDto;
 import kimdaehan.ctf.dto.QuizDto;
+import kimdaehan.ctf.dto.QuizListDTO;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.Solved;
-import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.UUID;
 
 @Service
@@ -33,7 +37,13 @@ public class QuizService {
 
     //카테고리별로 Quiz 가져오기
     public List<Quiz> getAllQuizByCategory(Quiz.CategoryType categoryType){
+
         return quizRepository.findAllByCategoryOrderByLevelAscRegistrationTimeAsc(categoryType);
+    }
+    //Start 시간이 지난 문제들 불러오기
+    public List<QuizListDTO> findQuizAfterStartTime(Quiz.CategoryType categoryType){
+        return quizRepository.findQuizListAfterStartTimeWithCategory(categoryType.toString(), LocalDate.now().atTime(LocalTime.now()));
+
     }
     //Quiz 저장
     public void upsertQuiz(Quiz quiz){

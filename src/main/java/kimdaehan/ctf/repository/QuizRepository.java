@@ -1,10 +1,10 @@
 package kimdaehan.ctf.repository;
 
 
-import com.fasterxml.jackson.databind.deser.impl.BeanPropertyMap;
 import kimdaehan.ctf.dto.DynamicScoreDTO;
+import kimdaehan.ctf.dto.QuizListDTO;
+
 import kimdaehan.ctf.entity.User;
-import kimdaehan.ctf.entity.log.AccessLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import kimdaehan.ctf.entity.Quiz;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,6 +13,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,6 +28,17 @@ public interface QuizRepository extends JpaRepository<Quiz, String> {
 
     @Transactional(readOnly= true)
     List<Quiz> findAllByCategoryOrderByLevelAscRegistrationTimeAsc(Quiz.CategoryType categoryType);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT HEX(q.quiz_id) AS quizId, " +
+            "q.quiz_name as quizName, q.category AS category, q.score AS score, " +
+            "CONVERT(u.nick_name USING utf8) AS author "
+            + "FROM quiz q "
+            +"LEFT JOIN user u ON (q.user_id = u.user_id)"
+            +" WHERE category = :category AND start_time < :nowTime"
+            , nativeQuery = true
+    )
+    List<QuizListDTO> findQuizListAfterStartTimeWithCategory(@Param("category") String category , @Param("nowTime") LocalDateTime nowTime);
 
     @Transactional
     void deleteByQuizWriter(User user);
