@@ -4,10 +4,7 @@ package kimdaehan.ctf.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kimdaehan.ctf.auth.AuthenticationFacade;
-import kimdaehan.ctf.dto.DynamicScoreDTO;
-import kimdaehan.ctf.dto.QuizAnswerDto;
-import kimdaehan.ctf.dto.QuizListDTO;
-import kimdaehan.ctf.dto.QuizMainListDTO;
+import kimdaehan.ctf.dto.*;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.SolvedId;
@@ -103,8 +100,8 @@ public class QuizController extends BaseController{
         //로그 기록
         AccessLog accessLog = logService.buildAccessLogByQuizAndUserAndIP(quizDetail, user, request.getRemoteAddr());
         logService.upsertAccess(accessLog);
-        quizDetail.setFlag("나쁜짓 하지 마세요");
-        return ResponseEntity.ok(quizDetail);
+        QuizOneDto quizOne = QuizOneDto.from(quizDetail);
+        return ResponseEntity.ok(quizOne);
     }
 
     @PostMapping({"/challenge/{challengeId}"})

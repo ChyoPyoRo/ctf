@@ -4,6 +4,7 @@ package kimdaehan.ctf.repository;
 import kimdaehan.ctf.dto.DynamicScoreDTO;
 import kimdaehan.ctf.dto.QuizListDTO;
 
+import kimdaehan.ctf.dto.QuizOneDto;
 import kimdaehan.ctf.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import kimdaehan.ctf.entity.Quiz;
@@ -22,6 +23,13 @@ import java.util.UUID;
 public interface QuizRepository extends JpaRepository<Quiz, String> {
     @Transactional(readOnly= true)
     Optional<Quiz> findByQuizId(UUID quizId);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT q.quizName, q.description, u.nickName AS author, q.score, q.startTime " +
+            " FROM Quiz AS q " +
+            " LEFT JOIN User u ON(q.quizWriter.userId = u.userId) " +
+            " WHERE q.quizId = :quizId ")
+    QuizOneDto findOneQuiz(@Param("quizId") UUID quizId);
 
     @Transactional(readOnly= true)
     List<Quiz> findAllByOrderByLevelAscRegistrationTimeAsc();

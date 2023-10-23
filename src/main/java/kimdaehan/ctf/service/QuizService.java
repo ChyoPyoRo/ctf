@@ -1,9 +1,6 @@
 package kimdaehan.ctf.service;
 
-import kimdaehan.ctf.dto.DynamicScoreDTO;
-import kimdaehan.ctf.dto.QuizAnswerDto;
-import kimdaehan.ctf.dto.QuizDto;
-import kimdaehan.ctf.dto.QuizListDTO;
+import kimdaehan.ctf.dto.*;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.repository.*;
@@ -29,6 +26,10 @@ public class QuizService {
 
     public Quiz getQuiz(UUID quizId){
         return quizRepository.findByQuizId(quizId).orElse(null);
+    }
+
+    public QuizOneDto getQuizWithDto(UUID quizId){
+        return quizRepository.findOneQuiz(quizId);
     }
     //모든 Quiz 가져오기
     public List<Quiz> getAllQuiz(){

@@ -61,7 +61,7 @@
                 <!-- PWN -->
                 <h3 style="font-size: 1.5em;" class="category-title">PWN</h3>
                 <div class="category-container">
-                    <div class="one-quiz-block" th:each="quiz:${PWN}" th:data-quiz-id="${quiz.quizId}"
+                    <div class="one-quiz-block" th:each="quiz:${PWN}" th:data-quiz-id="${quiz.quizIdAsUuid}"
                          onClick="showPopup(this.getAttribute('data-quiz-id'))">
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
@@ -73,7 +73,7 @@
                 <!-- WEB -->
                 <h3 style="font-size: 1.5em;" class="category-title">WEB</h3>
                 <div class="category-container">
-                    <div class="one-quiz-block" th:each="quiz:${WEB}" th:data-quiz-id="${quiz.quizId}"
+                    <div class="one-quiz-block" th:each="quiz:${WEB}" th:data-quiz-id="${quiz.quizIdAsUuid}"
                          onClick="showPopup(this.getAttribute('data-quiz-id'))">
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
@@ -85,7 +85,7 @@
                 <!-- FORENSICS -->
                 <h3 style="font-size: 1.5em;" class="category-title">FORENSICS</h3>
                 <div class="category-container">
-                    <div class="one-quiz-block" th:each="quiz:${FORENSICS}" th:data-quiz-id="${quiz.quizId}"
+                    <div class="one-quiz-block" th:each="quiz:${FORENSICS}" th:data-quiz-id="${quiz.quizIdAsUuid}"
                          onClick="showPopup(this.getAttribute('data-quiz-id'))">
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">
@@ -97,7 +97,7 @@
                 <!-- MISC -->
                 <h3 style="font-size: 1.5em;" class="category-title">MISC</h3>
                 <div class="category-container">
-                    <div class="one-quiz-block" th:each="quiz:${MISC}" th:data-quiz-id="${quiz.quizId}"
+                    <div class="one-quiz-block" th:each="quiz:${MISC}" th:data-quiz-id="${quiz.quizIdAsUuid}"
                          onClick="showPopup(this.getAttribute('data-quiz-id'))">
                         <div class="title" th:text="${quiz.quizName}"></div>
                         <div class="bottom-row">

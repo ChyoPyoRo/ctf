@@ -60,7 +60,7 @@ async function showPopup(id) {
             // titleFlag.className="flag-title";
 
             nameDiv.innerText = quiz.quizName;
-            writerDiv.innerText = quiz.quizWriter.name;
+            writerDiv.innerText = quiz.author;
             scoreDiv.innerText = quiz.score;
             descriptionDiv.innerText = quiz.description;
             buttonDiv.innerText = "Answer";
