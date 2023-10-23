@@ -69,6 +69,8 @@ public class QuizController extends BaseController{
 
             mv.addObject(item, quizList);
         }
+        mv.addObject("user", user.getUserId());
+        mv.addObject("type", user.getType());
         mv.addObject("title", "Challenge");
 
         return mv;
