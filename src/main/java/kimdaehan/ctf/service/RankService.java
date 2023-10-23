@@ -21,4 +21,8 @@ public class RankService {
     public List<RankGraphDTO> getRankGraphByAffiliation(String affiliation){
         return rankRepository.findRankGraphByAffiliation(affiliation);
     }
+
+    public List<RankGraphDTO> getRankListByUser(String userId){
+        return rankRepository.findRankGraphByUserId(userId);
+    }
 }

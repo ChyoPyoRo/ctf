@@ -44,10 +44,22 @@
     </div>
     <div class="container-fluid pt-4 px-4">
         <div class="g-4" style="display: flex; justify-content: center;">
-            <div class="col-xl-6" style="width: 70%;">
-                <div class="bg-secondary rounded p-4" style="height: 400px; width: 100%;">
-                    <h6 class="mb-4">TOP 5(YB)</h6>
-                    <canvas id="line-chart"></canvas>
+            <div class="col-xl-6" style="width: 100%; display: flex; justify-content: center;">
+                <div class="bg-secondary rounded p-4" style="height: 430px; width: 760px;">
+                    <div style="display: flex; height: 8%;" class="mb-2">
+                        <div style="width: 75%; height: 80%; display: flex; justify-content: start;">
+                            <h6 style="font-size: 1.2rem">TOP 5 Ranking</h6>
+                        </div>
+                        <div class="btn-group" style="width: 25%; display: flex; justify-content: end; height: 80%;">
+                            <input type="radio" class="btn-check" name="YB" id="YB" autocomplete="off" onclick="ybClick()" checked>
+                            <label style="font-size: small; padding: 2px 0 2px 0;" class="btn btn-outline-primary" for="YB">YB</label>
+                            <input type="radio" class="btn-check" name="NB" id="NB" onclick="nbClick()" autocomplete="off">
+                            <label  style="font-size: small; padding: 2px 0 2px 0;" class="btn btn-outline-primary" for="NB">NB</label>
+                        </div>
+                    </div>
+                    <div id="chartContainer" style="height: 100%;">
+                        <canvas id="rank-chart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -59,9 +71,40 @@
 <!--<script th:src="@{/js/moment.min.js}"></script>-->
 <script th:src="@{/js/moment-timezone.min.js}"></script>
 <script th:src="@{/js/tempusdominus-bootstrap-4.min.js}"></script>
-
+<script th:src="@{/js/chart.min.js}"></script>
 <!-- Template Javascript -->
+<script th:src="@{/js/score/graph.js}"></script>
 <!--<script th:src="@{/js/admin/main.js}"></script>-->
 </body>
+<script>
+    createRankGraph("YB");
 
+    function ybClick(){
+        const rankChartCanvas = document.getElementById("rank-chart");
+        const ybRadio = document.getElementById("YB");
+        const nbRadio = document.getElementById("NB");
+
+        // YB 라디오 버튼 체크
+        ybRadio.checked = true;
+        // NB 라디오 버튼 체크 해제
+        nbRadio.checked = false;
+        Chart.getChart(rankChartCanvas).destroy();
+        createRankGraph("YB");
+
+    }
+
+    function nbClick(){
+        const rankChartCanvas = document.getElementById("rank-chart");
+
+        const ybRadio = document.getElementById("YB");
+        const nbRadio = document.getElementById("NB");
+
+        // YB 라디오 버튼 체크
+        ybRadio.checked = false;
+        // NB 라디오 버튼 체크 해제
+        nbRadio.checked = true;
+        Chart.getChart(rankChartCanvas).destroy();
+        createRankGraph("NB");
+    }
+</script>
 </html>
