@@ -8,7 +8,7 @@ import java.util.UUID;
 @Data
 @Getter
 @Setter
-public class QuizGetDTO {
+public class QuizMainListDTO {
     private UUID quizId;
     private String quizName;
     private String author;
@@ -16,7 +16,7 @@ public class QuizGetDTO {
     private Integer score;
     private String test;
 
-    private QuizGetDTO(QuizListDTO quiz){
+    private QuizMainListDTO(QuizListDTO quiz){
         this.quizId = quiz.getQuizIdAsUuid();
         this.test = quiz.getTest();
         this.quizName = quiz.getQuizName();
@@ -25,7 +25,7 @@ public class QuizGetDTO {
         this.score = quiz.getScore();
     }
 
-    public static QuizGetDTO from(QuizListDTO quiz){
-        return new QuizGetDTO(quiz);
+    public static QuizMainListDTO from(QuizListDTO quiz){
+        return new QuizMainListDTO(quiz);
     }
 }

@@ -6,8 +6,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.DynamicScoreDTO;
 import kimdaehan.ctf.dto.QuizAnswerDto;
-import kimdaehan.ctf.dto.QuizGetDTO;
 import kimdaehan.ctf.dto.QuizListDTO;
+import kimdaehan.ctf.dto.QuizMainListDTO;
 import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.SolvedId;
@@ -65,9 +65,9 @@ public class QuizController extends BaseController{
         for(String item : categoryList){
             Quiz.CategoryType categoryName = Quiz.CategoryType.valueOf(item);
             List<QuizListDTO> quizList = quizService.findQuizAfterStartTime(categoryName);
-            List<QuizGetDTO> quizGetDTOS = new ArrayList<>();
+            List<QuizMainListDTO> quizGetDTOS = new ArrayList<>();
             for(QuizListDTO quiz : quizList){
-                quizGetDTOS.add(QuizGetDTO.from(quiz));
+                quizGetDTOS.add(QuizMainListDTO.from(quiz));
             }
 
             mv.addObject(item, quizList);
