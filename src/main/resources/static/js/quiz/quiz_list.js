@@ -1,10 +1,18 @@
 async function showPopup(id) {
     try {
         const url = "/quiz/" + id
-        const quiz = await getQuizData(url).catch(error=> console.log(error))
+        const quiz = await getQuizData(url).catch(error=>{
+        if(error.responseText == 'notOpen'){
+            return "notOpen"
+        }else if (error.responseText == 'ValidationError'){
+            return "ValidationError"
+        }else {
+            return "undefined"
+        }
+        })
         const postUrl = "/challenge/" + id
         //quiz가 값이 필요함
-        if(quiz == undefined){
+        if(quiz == "notOpen"){
             let warngingDiv = document.createElement('h1');
             warngingDiv.innerText="아직 문제를 풀 수 있는 시간이 아닙니다";
             warngingDiv.className="warning";
@@ -19,6 +27,12 @@ async function showPopup(id) {
             // Show the dimmed background and popup
             document.getElementById('dimmed-bg').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
+        }
+        else if(quiz == "ValidationError"){
+            alert("Validation Error")
+        }
+        else if(quiz=="undefined"){
+            alert("Error")
         }
         else {
 
@@ -79,7 +93,7 @@ async function showPopup(id) {
                         flag: flagDiv.value
                     },
                     success: function (response) {
-                        console.log(response);  // 성공적으로 응답 받은 경우, 콘솔에 출력합니다.
+                          // 성공적으로 응답 받은 경우, 콘솔에 출력합니다.
                         if (response == "Wrong") {
                             alert("틀렸습니다");
                             window.location.href = "/challenge";
@@ -89,15 +103,13 @@ async function showPopup(id) {
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.responseText == "WrongID") {
-                            alert("존재하지 않는 ID입니다")
-                        } else if (jqXHR.responseText == "NotExistID") {
-                            alert("존재하지 않는 문제입니다")
+                        if (jqXHR.responseText == "ValidationError") {
+                            alert("Validation Error")
                         } else if (jqXHR.responseText == "ctfFinish") {
                             alert("대회가 종료됬습니다")
                             window.location.href = "/";
-                        } else if (jqXHR.responseText == "notOpen") {
-                            alert("해당 문제는 아직 풀 수 없습니다")
+                        } else if (jqXHR.responseText == "emptyFlag") {
+                            alert("Flag 값이 비어있습니다")
                             window.location.href = "/challenge";
                         } else {
                             alert("에러가 발생했습니다")
@@ -161,9 +173,8 @@ function getQuizData(url) {
                 resolve(response);
             },
             error: function(error) {
-                console.log(error);
                 reject(error)
-            }
+            },
         });
     });
 }

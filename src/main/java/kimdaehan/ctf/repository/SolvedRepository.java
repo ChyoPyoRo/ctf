@@ -78,4 +78,6 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
             "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time " +
             "ORDER BY total_score DESC;", nativeQuery = true)
     List<UserPageDTO> findRankAndScoreUsersByAffiliation(@Param("affiliation") String affiliation);
+
+
 }

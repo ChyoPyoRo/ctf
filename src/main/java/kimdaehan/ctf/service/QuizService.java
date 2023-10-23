@@ -63,8 +63,8 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
-    public void saveQuizScore(Quiz quiz, User user){
-
+    public void saveQuizScore(Quiz quiz, DynamicScoreDTO score){
+        quizRepository.updateQuizScore(quiz.getQuizId(), score.getCalculated_score());
     }
     public void upsertSolvedQuiz(Solved solved){
         solvedRepository.save(solved);

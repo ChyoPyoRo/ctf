@@ -54,11 +54,12 @@ public class LogService {
                 .build();
     }
 
-    public FlagLog buildFlagLogByQuizAndUserIPAndSuccessFail(Quiz quiz, User user, String userIp, FlagLog.SuccessOrNot successOrNot){
+    public FlagLog buildFlagLogByQuizAndUserIPAndSuccessFail(Quiz quiz, User user, String userIp, String answer, FlagLog.SuccessOrNot successOrNot){
         return FlagLog.builder()
                 .quizId(quiz)
                 .userIp(userIp)
                 .recordKey(new RecordKey(user, LocalDateTime.now()))
+                .flag(answer)
                 .successFail(successOrNot)
                 .build();
     }
@@ -105,5 +106,9 @@ public class LogService {
     }
     public List<FlagLog> getFlagLogBySuccessOrNot(FlagLog.SuccessOrNot successOrNot){
         return flagLogRepository.findAllBySuccessFailOrderByRecordKeyDateTimeDesc(successOrNot);
+    }
+
+    public List<FlagLog> getFlagLogByUserOneMinuteAgo(UUID quizId, User user ){
+        return flagLogRepository.findListBeforeOneMinute(user.getUserId(), quizId, LocalDateTime.now().minusMinutes(1));
     }
 }

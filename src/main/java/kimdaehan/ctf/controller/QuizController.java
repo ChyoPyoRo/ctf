@@ -78,12 +78,24 @@ public class QuizController extends BaseController{
     @GetMapping({"/quiz/{quizId}"})
     public ResponseEntity<?> quizListByCategory(@PathVariable String quizId,  HttpServletRequest request){
         User user = getUser();
-        UUID uuid = UUID.fromString(quizId);
+        UUID uuid;
+        try {
+            uuid = UUID.fromString(quizId);
+        } catch (IllegalArgumentException e) {
+            //UUID가 아닌 형식으로 요청
+            logger.info("Attempting to submit an ID that is not in UUID format  -> user : {}, router :  Get(quiz/{quizId})", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
         Quiz quizDetail = quizService.getQuiz(uuid);
+        if(quizDetail == null){
+            //존재하지 않는 요청
+            logger.info("Submitted UUID of non-existent challenge  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
         //start시간 제출이 안되면
-        if(quizDetail.getStartTime().isAfter(LocalDate.now().atTime(LocalTime.now().plusHours(2)))){
+        if(quizDetail.getStartTime().isAfter(LocalDate.now().atTime(LocalTime.now()))){
             //logger 생성
-            logger.info("Access try before start time -> user : {}", user.getUserId());
+            logger.info("Access try before start time -> user : {}, router : Get(quiz/{quizId})", user.getUserId());
             return ResponseEntity.badRequest().body("notOpen");
         }
         //로그 기록
@@ -99,45 +111,61 @@ public class QuizController extends BaseController{
         //user정보, quiz 정보 가져오기
         User user = getUser();
         UUID quizId;
+
         //id의 형식이 uuid가 맞는지
         try {
             quizId = UUID.fromString(challengeId);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("WrongID");
+            //wrongID
+            logger.info("Attempting to submit an ID that is not in UUID format  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
         }
         //로그 조회 -> uuid의 형식이 아니면 로그 조회가 불가능
-//        logService.getLogByUserAndType(user, quizId);
-
+        List<FlagLog> isBruteForce = logService.getFlagLogByUserOneMinuteAgo( quizId,user);
+        if(isBruteForce.size() > 5){
+            //같은 문제에 대해서 5번 이상 요청이 들어왔었으면
+            logger.info("Request at least 5 times in 1 minute  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
+            return ResponseEntity.badRequest().body("TooManyRequest");
+        }
         //flag값이 비어있음
         if(answer.getFlag() == null){
-            //logger 남겨야 하나 + isBan어떻게 하지
+            logger.info("Attempting to submit Empty Flag  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
             return ResponseEntity.badRequest().body("emptyFlag");
         }
         Quiz quiz = quizService.getQuiz(quizId);
         //quiz값이 없을 경우 (존재하지 않는 ID)
         if(quiz == null){
-            return ResponseEntity.badRequest().body("NotExistID");
+            //not Exist ID
+            logger.info("Submitted UUID of non-existent challenge  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
         }
-        if(serverSettingService.getServerEnd().isBefore( LocalDate.now().atTime(LocalTime.now().plusHours(2)))  ){
+        if(serverSettingService.getServerEnd().isBefore( LocalDate.now().atTime(LocalTime.now()))  ){
             //시간이 지났는데 제출 시도, logger 남겨야 되나
-
+            logger.info("Try submitting after ending time -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
             return ResponseEntity.badRequest().body("ctfFinish");
         }
         //2.이 문제의 start time이 현재시간 이후이면 안됨 >> get으로 옮김
-
         //flag값 비교
         if (quiz.getFlag().equals(answer.getFlag())) {
             //flag 값이 일치하기 전에 시간이 먼저 테스트
-            Solved solved = Solved.builder()
-                    .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
-                    .build();
-            solved.setSolved(quiz);
-            quizService.upsertSolvedQuiz(solved);
+
             //OB, ADMIN, isBan 3개는 점수 추가 안하고 로그만 남기기
             //점수 추가
+            if(!user.getType().equals(User.Type.ADMIN) && user.getIsBan().equals(User.IsBan.DISABLE) && !user.getAffiliation().equals(User.Affiliation.OB)){
+                //ADMIN이 아니면 AND isBan 당하지 않았으면 AND OB가 아니면
+                Solved solved = Solved.builder()
+                        .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
+                        .build();
+                solved.setSolved(quiz);
+                //solved 저장
+                quizService.upsertSolvedQuiz(solved);
+                //저장 후 점수 계산 및 quiz Table Score 수정
+                DynamicScoreDTO scoreInfo =quizService.getDynamicScoreByQuizId(quizId);
+                quizService.saveQuizScore(quiz, scoreInfo);
+            }
             //로그 남기기
             FlagLog.SuccessOrNot successOrNot = FlagLog.SuccessOrNot.SUCCESS;
-            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),successOrNot);
+            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),answer.getFlag(), successOrNot);
             logService.upsertFlag(flagLog);
             //user의 currentSolvedDateTime수정
             userService.changeUserCurrentSolvedDateTime(user);
@@ -146,18 +174,35 @@ public class QuizController extends BaseController{
             //일치하지 않으면
             //로그만
             FlagLog.SuccessOrNot successOrNot = FlagLog.SuccessOrNot.FAIL;
-            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),successOrNot);
+            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),answer.getFlag(), successOrNot);
             logService.upsertFlag(flagLog);
             return ResponseEntity.ok("Wrong");
         }
     }
-    @GetMapping({"/quiz/download/{quizId}"})
-    public void download(HttpServletResponse response, @PathVariable String quizId, HttpServletRequest request){
+    @GetMapping({"/quiz/download/{challengId}"})
+    public ResponseEntity<?> download(HttpServletResponse response, @PathVariable String challengId, HttpServletRequest request){
         User user = getUser();
-        Quiz quiz = quizService.getQuiz((UUID.fromString(quizId)));
+        UUID quizId;
+        try {
+            quizId = UUID.fromString(challengId);
+        } catch (IllegalArgumentException e) {
+            //wrongID
+            logger.info("Attempting to submit an ID that is not in UUID format  -> user : {}, router : Get(quiz/download)", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
+        Quiz quiz = quizService.getQuiz(quizId);
+        if(quiz == null){
+            //not Exist ID
+            logger.info("Submitted UUID of non-existent challenge   -> user : {}, router : Get(quiz/download)", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
+        if(quiz.getAttachment() == null){
+            //파일이 없는 ID에 요청
+            logger.info("Try to download to a challenge that does not have a file  -> user : {}, router : Get(quiz/download)", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
         String filePath = quiz.getAttachment();
         File file = new File(filePath);
-
         String fileName=file.getName();
         //파일명 가져오기
         MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
@@ -181,33 +226,35 @@ public class QuizController extends BaseController{
             while((readCount = fis.read(buffer))!= -1){
                 out.write(buffer,0,readCount);
             }
-        DownloadLog downloadLog = logService.buildDownloadLogByQuizAndUserIP(quiz, user, request.getRemoteAddr());
+            DownloadLog downloadLog = logService.buildDownloadLogByQuizAndUserIP(quiz, user, request.getRemoteAddr());
             logService.upsertDownload(downloadLog);
+            return ResponseEntity.ok().body("DownloadSuccess");
         }catch(Exception e){
             //여기도 logger 남겨야 하나
+            logger.info("file download error  -> user : {}", user.getUserId());
             throw new RuntimeException("file Download Error");
         }
     }
 
 
-    @GetMapping({"/test/{quizId}"})
-    public ResponseEntity<?> test(@PathVariable String quizId){
-        User user = getUser();
-        Quiz quiz = quizService.getQuiz(UUID.fromString(quizId));
-        Solved solved = Solved.builder()
-                .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
-                .build();
-        solved.setSolved(quiz);
-        quizService.upsertSolvedQuiz(solved);
-        return ResponseEntity.ok("good");
-    }
-
-
-
-    @GetMapping({"/test2/{quizId}"})
-    public ResponseEntity<?> test2(@PathVariable String quizId){
-        User user = getUser();
-        DynamicScoreDTO dynamicScoreDTO = quizService.getDynamicScoreByQuizId(UUID.fromString(quizId));
-        return ResponseEntity.ok(dynamicScoreDTO);
-    }
+//    @GetMapping({"/test/{quizId}"})
+//    public ResponseEntity<?> test(@PathVariable String quizId){
+//        User user = getUser();
+//        Quiz quiz = quizService.getQuiz(UUID.fromString(quizId));
+//        Solved solved = Solved.builder()
+//                .solvedId(new SolvedId(quiz.getQuizId(), user.getUserId()))
+//                .build();
+//        solved.setSolved(quiz);
+//        quizService.upsertSolvedQuiz(solved);
+//        return ResponseEntity.ok("good");
+//    }
+//
+//
+//
+//    @GetMapping({"/test2/{quizId}"})
+//    public ResponseEntity<?> test2(@PathVariable String quizId){
+//        User user = getUser();
+//        DynamicScoreDTO dynamicScoreDTO = quizService.getDynamicScoreByQuizId(UUID.fromString(quizId));
+//        return ResponseEntity.ok(dynamicScoreDTO);
+//    }
 }
