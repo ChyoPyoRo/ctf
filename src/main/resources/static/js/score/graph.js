@@ -75,6 +75,7 @@ async function createRankGraph(affiliation){
         dateStringList.push(`${year}-${month}-${day}T${hours}:00:00`);
         graphLabel.push(`${hours}:00`);
     }
+
     for(let i = 0; i<Object.keys(userDict).length; i++){
         for(let j= 0; j<dateStringList.length; j++){
             for(let k = 0; k<Object.keys(userDict[i+1].history).length; k++){
@@ -83,6 +84,7 @@ async function createRankGraph(affiliation){
                     break;
                 }
                 if(dateStringList[j] !== userDict[i+1].history[k].dateTime && k === Object.keys(userDict[i+1].history).length -1 ){
+                    console.log(userDict[i+1].history[k])
                     userDict[i+1].score.push(null);
                 }
             }
@@ -91,6 +93,7 @@ async function createRankGraph(affiliation){
     await console.log(userDict);
     const hour = (dateNow.getHours()).toString().padStart(2,"0");
     const min = (dateNow.getMinutes()).toString().padStart(2,"0");
+    graphLabel.reverse()
     graphLabel.push(`${hour}:${min}`);
 
 
