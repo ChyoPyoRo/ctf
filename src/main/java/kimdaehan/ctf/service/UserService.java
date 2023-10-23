@@ -1,5 +1,6 @@
 package kimdaehan.ctf.service;
 
+import kimdaehan.ctf.dto.RankGraphCurrentDTO;
 import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.repository.*;
@@ -85,6 +86,7 @@ public class UserService implements UserDetailsService {
 
     public List<UserPageDTO> getRankAndScoreUsersByAffiliation(String affiliation) {return  solvedRepository.findRankAndScoreUsersByAffiliation(affiliation);}
 
+    public List<RankGraphCurrentDTO> getRankAndScoreUsersByAffiliationTop5(String affiliation){return solvedRepository.findRankAndScoreUsersByAffiliationTop5(affiliation);}
     public void changeUserCurrentSolvedDateTime(User user){
         user.setCurrentSolvedDateTime(LocalDateTime.now());
         userRepository.save(user);

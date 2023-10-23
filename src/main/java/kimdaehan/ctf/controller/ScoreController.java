@@ -2,7 +2,9 @@ package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
+import kimdaehan.ctf.dto.RankGraphCurrentDTO;
 import kimdaehan.ctf.dto.RankGraphDTO;
+import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.RankService;
 import kimdaehan.ctf.service.UserService;
@@ -47,5 +49,26 @@ public class ScoreController extends  BaseController{
             return ResponseEntity.badRequest().body("Validation error");
         }
         return ResponseEntity.ok(rankGraphDTOList);
+    }
+    @GetMapping({"/rank-graph-current/{affiliation}"})
+    @ResponseBody
+    public ResponseEntity<?> rankGraphCurrent(HttpServletRequest request, @PathVariable("affiliation") String affiliation){
+        User user = getUser();
+        logger.info("Try access rank-graph-current-> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        List<RankGraphCurrentDTO> userPageDTOList;
+        if(affiliation.equals("YB") || affiliation.equals("NB")){
+            userPageDTOList = userService.getRankAndScoreUsersByAffiliationTop5(affiliation);
+        }  else {
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        return ResponseEntity.ok(userPageDTOList);
+    }
+
+    @GetMapping({"/rank-graph-history/{userId}"})
+    @ResponseBody
+    public ResponseEntity<?> rankGraphHistroy(HttpServletRequest request, @PathVariable("userId") String userId){
+        User user = getUser();
+        logger.info("Try access rank-graph-history -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        return ResponseEntity.ok(rankService.getRankListByUser(userId));
     }
 }

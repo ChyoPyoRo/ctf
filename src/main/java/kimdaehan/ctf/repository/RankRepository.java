@@ -22,5 +22,9 @@ public interface RankRepository extends JpaRepository<UserRank, RecordKey> {
             "ORDER BY dateTime ASC, userRank ASC;",nativeQuery = true)
     List<RankGraphDTO> findRankGraphByAffiliation(@Param("affiliation") String affiliation);
 
-
+    @Query(value = "SELECT CONVERT(user_id USING utf8) as userId, user_rank as userRank, score as score, registration_date_time as dateTime " +
+            "FROM user_rank " +
+            "WHERE user_id = :userId " +
+            "ORDER BY dateTime DESC;",nativeQuery = true)
+    List<RankGraphDTO> findRankGraphByUserId(@Param("userId") String userId);
 }
