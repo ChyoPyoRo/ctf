@@ -3,7 +3,7 @@ package kimdaehan.ctf.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.Result;
-import kimdaehan.ctf.entity.Quiz;
+import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.QuizService;
@@ -26,7 +26,6 @@ import java.util.List;
 public class CenterController extends BaseController{
     private final PasswordEncoder passwordEncoder;
     private final QuizService quizService;
-
     @Autowired
     public CenterController(UserService userService, AuthenticationFacade authenticationFacade, PasswordEncoder passwordEncoder, QuizService quizService) {
         super(userService, authenticationFacade);
@@ -54,14 +53,24 @@ public class CenterController extends BaseController{
         return mv;
     }
 
-    @GetMapping({"/myPage"})
+    @GetMapping({"/myPage/profile"})
     public ModelAndView getMyPage() {
         User user = getUser();
-        ModelAndView mv = new ModelAndView("/info");
-        List<Solved> solvedList = quizService.getSolvedListByUserId(user.getUserId());
+        ModelAndView mv = new ModelAndView("/mypage/profile");
+        UserPageDTO userByAffiliationAndUserId = userService.getUserByAffiliationAndUserId(user.getAffiliation().toString(), user.getUserId());
         mv.addObject("user", user.getUserId());
         mv.addObject("type", user.getType());
         mv.addObject("userInfo", user);
+        mv.addObject("score",userByAffiliationAndUserId.getTotal_score());
+        return mv;
+    }
+    @GetMapping({"/myPage/solved"})
+    public ModelAndView getSolvedQuiz() {
+        User user = getUser();
+        ModelAndView mv = new ModelAndView("/mypage/solved");
+        List<Solved> solvedList = quizService.getSolvedListByUserId(user.getUserId());
+        mv.addObject("user", user.getUserId());
+        mv.addObject("type", user.getType());
         mv.addObject("solvedList", solvedList);
         return mv;
     }
@@ -94,7 +103,6 @@ public class CenterController extends BaseController{
     private void userSet(User editUser, User user) {
         String encodedPassword = passwordEncoder.encode(editUser.getPassword());
         user.setPassword(encodedPassword);
-        user.setAffiliation(editUser.getAffiliation());
         user.setName(editUser.getName());
         user.setNickName(editUser.getNickName());
     }

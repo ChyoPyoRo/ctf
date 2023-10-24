@@ -56,33 +56,8 @@
                                     <input type="text" class="mt-2 form-control h-50" id="nickName" th:value="${userInfo.nickName}">
                                 </div>
                                 <div class="mb-1" style="height: 100px;">
-                                    <span style="color: white; font-weight: bold;">Affiliation</span>
-                                    <select class="mt-2 form-control h-50" id="affiliation" style="background: #000;">
-                                        <option th:if="${userInfo.affiliation} != ${T(kimdaehan.ctf.entity.User.Affiliation).YB}"
-                                                value="YB">SecurityFirst YB
-                                        </option>
-                                        <option th:if="${userInfo.affiliation} != ${T(kimdaehan.ctf.entity.User.Affiliation).NB}"
-                                                value="NB">SecurityFirst NB
-                                        </option>
-                                        <option th:if="${userInfo.affiliation} != ${T(kimdaehan.ctf.entity.User.Affiliation).OB}"
-                                                value="OB">SecurityFirst OB
-                                        </option>
-                                        <option th:if="${userInfo.affiliation} != ${T(kimdaehan.ctf.entity.User.Affiliation).SCH}"
-                                                value="SCH">순천향대 학생
-                                        </option>
-                                        <option th:if="${userInfo.affiliation} == ${T(kimdaehan.ctf.entity.User.Affiliation).YB}"
-                                                value="YB" selected>SecurityFirst YB
-                                        </option>
-                                        <option th:if="${userInfo.affiliation} == ${T(kimdaehan.ctf.entity.User.Affiliation).NB}"
-                                                value="NB" selected>SecurityFirst NB
-                                        </option>
-                                        <option th:if="${userInfo.affiliation} == ${T(kimdaehan.ctf.entity.User.Affiliation).OB}"
-                                                value="OB" selected>SecurityFirst OB
-                                        </option>
-                                        <option th:if="${userInfo.affiliation} == ${T(kimdaehan.ctf.entity.User.Affiliation).SCH}"
-                                                value="SCH" selected>순천향대 학생
-                                        </option>
-                                    </select>
+                                    <span style="color: white; font-weight: bold;">Score</span>
+                                    <input style="background: black;" type="text" class="mt-2 form-control h-50" id="score" th:value="${score}" readonly>
                                 </div>
                                 <div style="display: flex; justify-content: right;">
                                     <button onclick="editUser();" type="submit" class="btn btn-primary">

@@ -4,14 +4,12 @@ function editUser(){
     const id = document.querySelector("input[id=id]").value;
     const password = document.querySelector("input[id=password]").value;
     const name = document.querySelector("input[id=name]").value;
-    const affiliation = document.querySelector("select[id=affiliation]").value;
     const nickName = document.querySelector("input[id=nickName]").value;
     const body = {
         userId: id,
         password: password,
         name: name,
-        nickName : nickName,
-        affiliation : affiliation
+        nickName : nickName
     };
 
     const url = "/editUser";
