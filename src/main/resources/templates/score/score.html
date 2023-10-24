@@ -30,6 +30,8 @@
 
     <!-- Basic Stylesheet -->
     <link th:href="@{/css/common.css}" rel="stylesheet">
+    <link th:href="@{/css/score/style.css}"rel="stylesheet">
+
 
 </head>
 
@@ -44,9 +46,9 @@
     </div>
     <div class="container-fluid pt-4 px-4">
         <div class="g-4" style="display: flex; justify-content: center;">
-            <div class="col-xl-6" style="width: 100%; display: flex; justify-content: center;">
-                <div class="bg-secondary rounded p-4" style="height: 430px; width: 760px;">
-                    <div style="display: flex; height: 8%;" class="mb-2">
+            <div class="col-xl-6" style="margin-bottom:10%; width: 100%; display: flex; justify-content: center;">
+                <div class="bg-secondary rounded p-4" style="height: auto; width: 760px;">
+                    <div style="display: flex; height: 30.55px;" class="mb-2">
                         <div style="width: 75%; height: 80%; display: flex; justify-content: start;">
                             <h6 style="font-size: 1.2rem">TOP 5 Ranking</h6>
                         </div>
@@ -57,8 +59,21 @@
                             <label  style="font-size: small; padding: 2px 0 2px 0;" class="btn btn-outline-primary" for="NB">NB</label>
                         </div>
                     </div>
-                    <div id="chartContainer" style="height: 100%;">
+                    <div id="chartContainer" style="margin-bottom: 10%" >
                         <canvas id="rank-chart"></canvas>
+                    </div>
+                    <div id="scoreContainer" >
+                        <table id="scoreTable" class="scoreTable">
+                            <thead class="rank-title">
+                            <tr class="scoreElement">
+                                <td class="scoreRank">Rank</td>
+                                <td class="scoreNickName">NickName</td>
+                                <td class="scoreScore">Score</td>
+                                <td class="scoreSolvedCount">Solved Count</td>
+                                <td class="scoreSolvedTime">Last Solved Time</td>
+                            </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -75,14 +90,18 @@
 <!-- Template Javascript -->
 <script th:src="@{/js/score/graph.js}"></script>
 <!--<script th:src="@{/js/admin/main.js}"></script>-->
+<script th:src="@{/js/score/scoreList.js}"></script>
+
 </body>
 <script>
+    const scoreList = document.getElementById("scoreTable");
     createRankGraph("YB");
-
+    getScoreList("YB", scoreList)
     function ybClick(){
         const rankChartCanvas = document.getElementById("rank-chart");
         const ybRadio = document.getElementById("YB");
         const nbRadio = document.getElementById("NB");
+        const scoreList = document.getElementById("scoreTable");
 
         // YB 라디오 버튼 체크
         ybRadio.checked = true;
@@ -90,7 +109,7 @@
         nbRadio.checked = false;
         Chart.getChart(rankChartCanvas).destroy();
         createRankGraph("YB");
-
+        getScoreList("YB", scoreList)
     }
 
     function nbClick(){
@@ -98,6 +117,7 @@
 
         const ybRadio = document.getElementById("YB");
         const nbRadio = document.getElementById("NB");
+        const scoreList = document.getElementById("scoreTable");
 
         // YB 라디오 버튼 체크
         ybRadio.checked = false;
@@ -105,6 +125,7 @@
         nbRadio.checked = true;
         Chart.getChart(rankChartCanvas).destroy();
         createRankGraph("NB");
+        getScoreList("NB", scoreList)
     }
 </script>
 </html>

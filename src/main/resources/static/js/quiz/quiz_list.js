@@ -1,29 +1,27 @@
 async function showPopup(id) {
     try {
         const url = "/quiz/" + id
-        const quiz = await getQuizData(url).catch(error=> console.log(error))
+        const quiz = await getQuizData(url).catch(error=>{
+        if(error.responseText == 'notOpen'){
+            return "notOpen"
+        }else if (error.responseText == 'ValidationError'){
+            return "ValidationError"
+        }else {
+            return "undefined"
+        }
+        })
         const postUrl = "/challenge/" + id
         //quiz가 값이 필요함
-        if(quiz == undefined){
-            let warngingDiv = document.createElement('h1');
-            warngingDiv.innerText="아직 문제를 풀 수 있는 시간이 아닙니다";
-            warngingDiv.className="warning";
-            let popupElement = document.getElementById('popup');
-            popupElement.innerHTML = '';
-            popupElement.appendChild(warngingDiv);
-
-
-            // Show the dimmed background and popup
-            document.getElementById('dimmed-bg').style.display = 'block';
-
-            // Show the dimmed background and popup
-            document.getElementById('dimmed-bg').style.display = 'block';
-            document.getElementById('popup').style.display = 'block';
+        if(quiz == "ValidationError"){
+            alert("Validation Error")
+        }
+        else if(quiz=="undefined"){
+            alert("Error")
         }
         else {
 
             //Div Element 추가
-            let titleNameDiv = document.createElement('h3');
+
             let nameDiv = document.createElement('div');
             let titleWriterDiv = document.createElement('h3');
             let writerDiv = document.createElement('div');
@@ -40,31 +38,32 @@ async function showPopup(id) {
             let titleAttatchmentDiv = document.createElement("h3");
 
             //quiz정보 입력
-            titleNameDiv.innerText = "문제이름"
-            titleWriterDiv.innerText = "작성자"
-            titleScoreDiv.innerText = "점수"
-            titleDescriptionDiv.innerText = "설 명"
+            titleWriterDiv.innerText = "Author"
+            titleScoreDiv.innerText = "Score"
+            titleDescriptionDiv.innerText = "Description"
             titleFlag.innerText = "Flag"
 
-            nameDiv.className = 'popupBoxContent';
             writerDiv.className = 'popupBoxContent';
             scoreDiv.className = 'popupBoxContent';
             descriptionDiv.className = 'popupBoxContent description';
 
-            titleNameDiv.className = 'popupBoxTitle';
+            nameDiv.className = 'popupBoxTitle';
+            nameDiv.id="nameDiv"
             titleWriterDiv.className = 'popupBoxTitle';
             titleScoreDiv.className = 'popupBoxTitle';
             titleDescriptionDiv.className = 'popupBoxTitle'
             titleFlag.className = 'popupBoxTitle flag-title'
 
+            flagDiv.className="popupFlagInput";
+            flagDiv.placeholder="Flag 입력"
             // descriptionDiv.className="description"
             // titleFlag.className="flag-title";
 
             nameDiv.innerText = quiz.quizName;
-            writerDiv.innerText = quiz.quizWriter.name;
+            writerDiv.innerText = quiz.author;
             scoreDiv.innerText = quiz.score;
             descriptionDiv.innerText = quiz.description;
-            buttonDiv.innerText = "제 출";
+            buttonDiv.innerText = "Answer";
 
             // popup
             let popupElement = document.getElementById('popup');
@@ -79,7 +78,7 @@ async function showPopup(id) {
                         flag: flagDiv.value
                     },
                     success: function (response) {
-                        console.log(response);  // 성공적으로 응답 받은 경우, 콘솔에 출력합니다.
+                          // 성공적으로 응답 받은 경우, 콘솔에 출력합니다.
                         if (response == "Wrong") {
                             alert("틀렸습니다");
                             window.location.href = "/challenge";
@@ -89,24 +88,26 @@ async function showPopup(id) {
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        if (jqXHR.responseText == "WrongID") {
-                            alert("존재하지 않는 ID입니다")
-                        } else if (jqXHR.responseText == "NotExistID") {
-                            alert("존재하지 않는 문제입니다")
+                        if (jqXHR.responseText == "ValidationError") {
+                            alert("Validation Error")
                         } else if (jqXHR.responseText == "ctfFinish") {
                             alert("대회가 종료됬습니다")
                             window.location.href = "/";
-                        } else if (jqXHR.responseText == "notOpen") {
-                            alert("해당 문제는 아직 풀 수 없습니다")
+                        } else if (jqXHR.responseText == "emptyFlag") {
+                            alert("Flag 값이 비어있습니다")
                             window.location.href = "/challenge";
-                        } else {
+                        } else if (jqXHR.responseText="TooManyRequest"){
+                            console.log(jqXHR)
+                            alert("1분에 5번 이상 입력 금지입니다")
+                        }
+                        else {
                             alert("에러가 발생했습니다")
                         }
                     }
                 });
             });
             if (quiz.attachment != null) {
-                attatchmentDiv.innerText = "file 명";
+                attatchmentDiv.innerText = "첨부 파일 다운로드";
                 titleAttatchmentDiv.innerText = "파일";
                 attatchmentDiv.href = "/quiz/download/" + id
 
@@ -116,7 +117,7 @@ async function showPopup(id) {
 
 
             // Append new div elements to the popup
-            popupElement.appendChild(titleNameDiv);
+
             popupElement.appendChild(nameDiv);
             popupElement.appendChild(titleWriterDiv);
             popupElement.appendChild(writerDiv);
@@ -161,9 +162,8 @@ function getQuizData(url) {
                 resolve(response);
             },
             error: function(error) {
-                console.log(error);
                 reject(error)
-            }
+            },
         });
     });
 }

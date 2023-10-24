@@ -2,6 +2,7 @@ package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
+import kimdaehan.ctf.dto.RankAllDTO;
 import kimdaehan.ctf.dto.RankGraphCurrentDTO;
 import kimdaehan.ctf.dto.RankGraphDTO;
 import kimdaehan.ctf.dto.UserPageDTO;
@@ -31,9 +32,12 @@ public class ScoreController extends  BaseController{
 
     @GetMapping({"/score"})
     public ModelAndView scoreMain(HttpServletRequest request){
+        User user = getUser();
         ModelAndView mv = new ModelAndView();
         mv.setViewName(("/score/score"));
         mv.addObject("title", "ScoreBoard");
+        mv.addObject("user", user.getUserId());
+        mv.addObject("type", user.getType());
         return mv;
     }
 
@@ -70,5 +74,19 @@ public class ScoreController extends  BaseController{
         User user = getUser();
         logger.info("Try access rank-graph-history -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
         return ResponseEntity.ok(rankService.getRankListByUser(userId));
+    }
+
+    @GetMapping({"/rank-all/{affiliation}"})
+    @ResponseBody
+    public ResponseEntity<?> rankAllData(HttpServletRequest request, @PathVariable String affiliation){
+        User user = getUser();
+        logger.info("Try access rank-all-> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        List<RankAllDTO> userPageDTOList;
+        if(affiliation.equals("YB") || affiliation.equals("NB")){
+            userPageDTOList = userService.findScoreUsersByAffiliationAndUserIdWithoudIsBan(affiliation);
+        }  else {
+            return ResponseEntity.badRequest().body("Validation error");
+        }
+        return ResponseEntity.ok(userPageDTOList);
     }
 }

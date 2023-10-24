@@ -28,6 +28,7 @@ public class FlagLog {
     private String flag;
 
     @Column(columnDefinition = "VARBINARY(64) NOT NULL")
+    @Enumerated(EnumType.STRING)
     private SuccessOrNot successFail;
 
 

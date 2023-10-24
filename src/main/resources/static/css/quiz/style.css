@@ -104,8 +104,11 @@
 
 .popupBoxTitle {
     color : var(--primary);
-    font-family: "Font Awesome 5 Free";
     margin-bottom: 10px;
+}
+#nameDiv{
+    font-size : 4em;
+    font-weight: bold;
 }
 
 #popup {
@@ -123,9 +126,7 @@
     margin-bottom: 5px;
     color : white;
     height : 8%;
-    background-color : #51566e;
     overflow: auto;
-    padding-left : 8px;
     display: flex;
     align-items: center;
 }
@@ -145,4 +146,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+.popupFlagInput{
+    background-color: #000;
+    color : #6c7293;
+    border : 1px solid #000;
 }

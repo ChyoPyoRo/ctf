@@ -8,11 +8,14 @@ import kimdaehan.ctf.entity.log.DownloadLog;
 import kimdaehan.ctf.entity.log.FlagLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface FlagLogRepository extends JpaRepository<FlagLog, RecordKey> {
@@ -37,6 +40,9 @@ public interface FlagLogRepository extends JpaRepository<FlagLog, RecordKey> {
 //    @Query(value="SELECT d FROM flaglog AS d WHERE"
 //    )
 //    List<FlagLog> find
+    @Transactional(readOnly = true)
+    @Query("SELECT f FROM FlagLog AS f WHERE f.recordKey.dateTime >= :oneMinuteAgo AND f.recordKey.userId = :userId AND f.quizId = :quizId ")
+    List<FlagLog> findListBeforeOneMinute(@Param("userId") User userId,@Param("quizId") Quiz quizId, @Param("oneMinuteAgo") LocalDateTime oneMinuteAgo);
 
 
     @Transactional
