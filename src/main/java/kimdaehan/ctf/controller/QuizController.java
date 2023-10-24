@@ -112,7 +112,11 @@ public class QuizController extends BaseController{
         //user정보, quiz 정보 가져오기
         User user = getUser();
         UUID quizId;
-
+        //flag값이 비어있음
+        if(answer.getFlag() == null){
+            logger.info("Attempting to submit Empty Flag  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
+            return ResponseEntity.badRequest().body("emptyFlag");
+        }
         //id의 형식이 uuid가 맞는지
         try {
             quizId = UUID.fromString(challengeId);
@@ -121,24 +125,19 @@ public class QuizController extends BaseController{
             logger.info("Attempting to submit an ID that is not in UUID format  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
             return ResponseEntity.badRequest().body("ValidationError");
         }
-        //로그 조회 -> uuid의 형식이 아니면 로그 조회가 불가능
-        List<FlagLog> isBruteForce = logService.getFlagLogByUserOneMinuteAgo( quizId,user);
-        if(isBruteForce.size() > 5){
-            //같은 문제에 대해서 5번 이상 요청이 들어왔었으면
-            logger.info("Request at least 5 times in 1 minute  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
-            return ResponseEntity.badRequest().body("TooManyRequest");
-        }
-        //flag값이 비어있음
-        if(answer.getFlag() == null){
-            logger.info("Attempting to submit Empty Flag  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
-            return ResponseEntity.badRequest().body("emptyFlag");
-        }
         Quiz quiz = quizService.getQuiz(quizId);
         //quiz값이 없을 경우 (존재하지 않는 ID)
         if(quiz == null){
             //not Exist ID
             logger.info("Submitted UUID of non-existent challenge  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
             return ResponseEntity.badRequest().body("ValidationError");
+        }
+        //로그 조회 -> uuid의 형식이 아니면 로그 조회가 불가능
+        List<FlagLog> isBruteForce = logService.getFlagLogByUserOneMinuteAgo(quiz,user);
+        if(isBruteForce.size() > 5){
+            //같은 문제에 대해서 5번 이상 요청이 들어왔었으면
+            logger.info("Request at least 5 times in 1 minute  -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
+            return ResponseEntity.badRequest().body("TooManyRequest");
         }
         if(serverSettingService.getServerEnd().isBefore( LocalDate.now().atTime(LocalTime.now()))  ){
             //시간이 지났는데 제출 시도, logger 남겨야 되나

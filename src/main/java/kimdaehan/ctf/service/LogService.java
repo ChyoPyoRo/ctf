@@ -108,7 +108,7 @@ public class LogService {
         return flagLogRepository.findAllBySuccessFailOrderByRecordKeyDateTimeDesc(successOrNot);
     }
 
-    public List<FlagLog> getFlagLogByUserOneMinuteAgo(UUID quizId, User user ){
-        return flagLogRepository.findListBeforeOneMinute(user.getUserId(), quizId, LocalDateTime.now().minusMinutes(1));
+    public List<FlagLog> getFlagLogByUserOneMinuteAgo(Quiz quizId, User user ){
+        return flagLogRepository.findListBeforeOneMinute(user, quizId, LocalDateTime.now().minusMinutes(1));
     }
 }

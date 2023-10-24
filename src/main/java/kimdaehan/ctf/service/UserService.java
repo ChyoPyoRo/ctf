@@ -1,5 +1,6 @@
 package kimdaehan.ctf.service;
 
+import kimdaehan.ctf.dto.RankAllDTO;
 import kimdaehan.ctf.dto.RankGraphCurrentDTO;
 import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.User;
@@ -90,5 +91,8 @@ public class UserService implements UserDetailsService {
     public void changeUserCurrentSolvedDateTime(User user){
         user.setCurrentSolvedDateTime(LocalDateTime.now());
         userRepository.save(user);
+    }
+    public List<RankAllDTO> findScoreUsersByAffiliationAndUserIdWithoudIsBan(String affiliation){
+        return solvedRepository.findScoreUsersByAffiliationAndUserIdWithoudIsBan(affiliation);
     }
 }

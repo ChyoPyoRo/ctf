@@ -97,6 +97,7 @@ async function showPopup(id) {
                             alert("Flag 값이 비어있습니다")
                             window.location.href = "/challenge";
                         } else if (jqXHR.responseText="TooManyRequest"){
+                            console.log(jqXHR)
                             alert("1분에 5번 이상 입력 금지입니다")
                         }
                         else {

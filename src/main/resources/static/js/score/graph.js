@@ -14,8 +14,6 @@ const getAjax = function(url) {
         });
     });
 }
-
-
 async function getRank(affiliation){
     const url = "/rank-graph/"+affiliation;
     try {
@@ -32,7 +30,6 @@ async function getRankCurrent(affiliation){
         console.log(e);
     }
 }
-
 async function getRankHistory(userId){
     const url = "/rank-graph-history/"+userId;
     try {
@@ -41,11 +38,8 @@ async function getRankHistory(userId){
         console.log(e);
     }
 }
-
-
 async function createRankGraph(affiliation){
     let rankData = await getRankCurrent(affiliation);
-
     let userDict = {};
     let historyCount = 0;
     let dateStringList = [];
@@ -94,7 +88,6 @@ async function createRankGraph(affiliation){
     graphLabel.push(`${hour}:${min}`);
 
 
-
     const redColor =["#FF7A7A", "#FF4646","#FC0000", "#A61804", "#5D0D02"];
     const blueColor = ["#015C92", "#2D82B5","#53A7D8","#88CDF6","#BCE6FF"];
     const color1 =["#33539E", "#7FACD6", "#BFB8DA", "#E8B7D4", "#A5678E"]
@@ -116,7 +109,6 @@ async function createRankGraph(affiliation){
         labels: graphLabel,
         datasets: dataSet
     };
-
     const options = {
         responsive: true,
         scales: {
@@ -130,11 +122,4 @@ async function createRankGraph(affiliation){
         data: data,
         options: options
     });
-
-
-
-
-
-
-
 }

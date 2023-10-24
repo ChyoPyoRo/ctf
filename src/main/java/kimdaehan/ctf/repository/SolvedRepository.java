@@ -1,5 +1,6 @@
 package kimdaehan.ctf.repository;
 
+import kimdaehan.ctf.dto.RankAllDTO;
 import kimdaehan.ctf.dto.RankGraphCurrentDTO;
 import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.Quiz;
@@ -67,6 +68,18 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
             "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time " +
             "ORDER BY u.registration_date_time DESC;", nativeQuery = true)
     Optional<UserPageDTO> findScoreUsersByAffiliationAndUserId(@Param("affiliation") String affiliation, @Param("userId") String userId);
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as userId, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nickName," +
+            " u.current_solved_date_time as solvedTime,  " +
+            "       COALESCE(SUM(q.score), 0) AS score , COUNT(q.score) AS solvedCount " +
+            "FROM user u " +
+            "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
+            "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE u.affiliation = :affiliation and u.is_ban = 'DISABLE' and u.type = 'USER' " +
+            "GROUP BY u.user_id, u.nick_name, u.affiliation " +
+            "ORDER BY score DESC;", nativeQuery = true)
+    List<RankAllDTO> findScoreUsersByAffiliationAndUserIdWithoudIsBan(@Param("affiliation") String affiliation);
 
     // Rank 사용할 거
     @Transactional(readOnly = true)

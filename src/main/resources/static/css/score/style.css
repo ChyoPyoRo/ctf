@@ -3,5 +3,30 @@
     align-items: center;
     display:flex;
     justify-content: center;
-    background-image: url("../../images/login/space.jpg");
+    /*background-image: url("../../images/login/space.jpg");*/
+}
+
+#scoreContainer{
+    margin-bottom: 10%;
+    margin-top:10%;
+}
+
+.scoreTable{
+    vertical-align: middle !important;
+    text-align: left !important;
+    width : 100%;
+    border-collapse: collapse;
+}
+
+.scoreElement{
+    border-color : inherit;
+    border-style: solid;
+    border-width: 1px 0;
+}
+.scoreElement td{
+    padding: 0.5rem 0.5rem;
+}
+
+#scoreContainer td{
+    width:20%;
 }

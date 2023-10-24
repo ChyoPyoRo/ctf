@@ -28,9 +28,6 @@ public class QuizService {
         return quizRepository.findByQuizId(quizId).orElse(null);
     }
 
-    public QuizOneDto getQuizWithDto(UUID quizId){
-        return quizRepository.findOneQuiz(quizId);
-    }
     //모든 Quiz 가져오기
     public List<Quiz> getAllQuiz(){
         return quizRepository.findAllByOrderByLevelAscRegistrationTimeAsc();
@@ -58,7 +55,6 @@ public class QuizService {
         accessLogRepository.deleteByQuizId(quiz);
         downloadLogRepository.deleteByQuizId(quiz);
         flagLogRepository.deleteByQuizId(quiz);
-
         // 퀴즈 삭제
         quizRepository.delete(quiz);
     }

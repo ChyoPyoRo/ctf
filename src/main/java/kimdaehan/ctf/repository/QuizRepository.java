@@ -24,12 +24,6 @@ public interface QuizRepository extends JpaRepository<Quiz, String> {
     @Transactional(readOnly= true)
     Optional<Quiz> findByQuizId(UUID quizId);
 
-    @Transactional(readOnly = true)
-    @Query(value = "SELECT q.quizName, q.description, u.nickName AS author, q.score, q.startTime " +
-            " FROM Quiz AS q " +
-            " LEFT JOIN User u ON(q.quizWriter.userId = u.userId) " +
-            " WHERE q.quizId = :quizId ")
-    QuizOneDto findOneQuiz(@Param("quizId") UUID quizId);
 
     @Transactional(readOnly= true)
     List<Quiz> findAllByOrderByLevelAscRegistrationTimeAsc();

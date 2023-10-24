@@ -42,7 +42,7 @@ public interface FlagLogRepository extends JpaRepository<FlagLog, RecordKey> {
 //    List<FlagLog> find
     @Transactional(readOnly = true)
     @Query("SELECT f FROM FlagLog AS f WHERE f.recordKey.dateTime >= :oneMinuteAgo AND f.recordKey.userId = :userId AND f.quizId = :quizId ")
-    List<FlagLog> findListBeforeOneMinute(@Param("quizId") String userId,@Param("quizId") UUID quizId, @Param("oneMinuteAgo") LocalDateTime oneMinuteAgo);
+    List<FlagLog> findListBeforeOneMinute(@Param("userId") User userId,@Param("quizId") Quiz quizId, @Param("oneMinuteAgo") LocalDateTime oneMinuteAgo);
 
 
     @Transactional
