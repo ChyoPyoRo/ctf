@@ -95,4 +95,8 @@ public class UserService implements UserDetailsService {
     public List<RankAllDTO> findScoreUsersByAffiliationAndUserIdWithoudIsBan(String affiliation){
         return solvedRepository.findScoreUsersByAffiliationAndUserIdWithoudIsBan(affiliation);
     }
+
+    public List<String> getAllQuizNameByUserId(String userId, String category){
+        return solvedRepository.findAllQuizNameByUserId(userId, category);
+    }
 }

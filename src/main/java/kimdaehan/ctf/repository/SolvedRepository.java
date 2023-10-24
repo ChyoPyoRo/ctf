@@ -104,6 +104,11 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
             "ORDER BY totalScore DESC LIMIT 5;", nativeQuery = true)
     List<RankGraphCurrentDTO> findRankAndScoreUsersByAffiliationTop5(@Param("affiliation") String affiliation);
 
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT q.quiz_name FROM quiz q " +
+            "JOIN solved s ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE s.solved_user_id = :userId AND q.category = :category", nativeQuery = true)
+    List<String> findAllQuizNameByUserId(@Param("userId") String userId, @Param("category") String category);
 
 
 }

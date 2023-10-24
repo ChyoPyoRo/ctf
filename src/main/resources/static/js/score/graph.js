@@ -116,7 +116,10 @@ async function createRankGraph(affiliation){
         responsive: true,
         scales: {
             y: {
-                beginAtZero: true
+                beginAtZero: true,
+                ticks: {
+                    maxTicksLimit: 10
+                }
             }
         }
     };

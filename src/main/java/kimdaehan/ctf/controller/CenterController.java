@@ -68,10 +68,21 @@ public class CenterController extends BaseController{
     public ModelAndView getSolvedQuiz() {
         User user = getUser();
         ModelAndView mv = new ModelAndView("/mypage/solved");
-        List<Solved> solvedList = quizService.getSolvedListByUserId(user.getUserId());
         mv.addObject("user", user.getUserId());
         mv.addObject("type", user.getType());
-        mv.addObject("solvedList", solvedList);
+
+        List<String> reversing = userService.getAllQuizNameByUserId(user.getUserId(),"REVERSING");
+        List<String> pwn = userService.getAllQuizNameByUserId(user.getUserId(),"PWN");
+        List<String> web = userService.getAllQuizNameByUserId(user.getUserId(),"WEB");
+        List<String> forensics = userService.getAllQuizNameByUserId(user.getUserId(),"FORENSICS");
+        List<String> misc = userService.getAllQuizNameByUserId(user.getUserId(),"MISC");
+
+        mv.addObject("reversing", reversing);
+        mv.addObject("pwn", pwn);
+        mv.addObject("web", web);
+        mv.addObject("forensics", forensics);
+        mv.addObject("misc", misc);
+
         return mv;
     }
 
