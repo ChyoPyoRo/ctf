@@ -2,10 +2,9 @@ package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import kimdaehan.ctf.auth.AuthenticationFacade;
-import kimdaehan.ctf.dto.RankAllDTO;
-import kimdaehan.ctf.dto.RankGraphCurrentDTO;
-import kimdaehan.ctf.dto.RankGraphDTO;
-import kimdaehan.ctf.dto.UserPageDTO;
+import kimdaehan.ctf.dto.*;
+import kimdaehan.ctf.entity.Quiz;
+import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.RankService;
 import kimdaehan.ctf.service.UserService;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class ScoreController extends  BaseController{
@@ -88,5 +88,27 @@ public class ScoreController extends  BaseController{
             return ResponseEntity.badRequest().body("Validation error");
         }
         return ResponseEntity.ok(userPageDTOList);
+    }
+
+    @GetMapping({"/rank/challenge/{challengId}"})
+    public ResponseEntity<?> rankForSingleChallenge(HttpServletRequest request, @PathVariable String challengId){
+        User user = getUser();
+        UUID quizId;
+        logger.info("Try access single challenge Rank -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        try{
+            quizId = UUID.fromString(challengId);
+        } catch (IllegalArgumentException e) {
+            //wrongID
+            logger.info("Attempting to submit an ID that is not in UUID format  -> user : {}, router : Get(/rank/challenge/)", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
+        List<QuizRankDto> returnList;
+        returnList = rankService.getRankListByChallenge(quizId);
+        if(returnList == null){
+            //not Exist ID
+            logger.info("Submitted UUID of non-existent challenge   -> user : {}, router : Get(/rank/challenge/)", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
+        return ResponseEntity.ok(returnList);
     }
 }

@@ -6,35 +6,61 @@ async function getScoreList(affiliation, scoreList){
         scoreList.removeChild(scoreList.lastChild)
     }
     rankData.forEach(function(item, index){
-        var lineElement = document.createElement('tr');
-        lineElement.className="scoreElement"
-        var rankElement = document.createElement('td');
-        rankElement.textContent = index + 1;
-        rankElement.className="scoreRank"
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
 
-        var nickNameElement = document.createElement('td');
-        nickNameElement.textContent = item.nickName;
-        nickNameElement.className="scoreNickName"
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
 
-        var scoreElement = document.createElement('td');
-        scoreElement.textContent = item.score;
-        scoreElement.className="scoreScore"
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
 
-        var solvedCountElement = document.createElement("td")
-        solvedCountElement.textContent=item.solvedCount;
-        solvedCountElement.className="scoreSolvedCount"
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
 
-        var solvedTimeElement = document.createElement('td')
-        solvedTimeElement.textContent=item.solvedTime;
-        solvedTimeElement.className="scoreSolvedTime"
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
 
-        lineElement.appendChild(rankElement)
-        lineElement.appendChild(nickNameElement)
-        lineElement.appendChild(scoreElement)
-        lineElement.appendChild(solvedCountElement)
-        lineElement.appendChild(solvedTimeElement)
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
 
-        scoreList.appendChild(lineElement);
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
+
+        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
+        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
+        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
+        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
+        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
+        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
     })
 }
 
@@ -45,4 +71,12 @@ async function getRankAll(affilation){
     } catch(e){
         console.log(e)
     }
+}
+
+function createElementAndAppend(tag, text, className, parent) {
+    var element = document.createElement(tag);
+    element.textContent = text;
+    element.className = className;
+    parent.appendChild(element);
+    return element;
 }

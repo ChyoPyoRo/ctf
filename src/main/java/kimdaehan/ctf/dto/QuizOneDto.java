@@ -12,6 +12,7 @@ public class QuizOneDto {
     private String description;
     private Integer score;
     private LocalDateTime startTime;
+    private String attachment;
 
     private  QuizOneDto(Quiz quiz){
         this.quizName = quiz.getQuizName();
@@ -19,6 +20,7 @@ public class QuizOneDto {
         this.description = quiz.getDescription();
         this.score = quiz.getScore();
         this.startTime = quiz.getStartTime();
+        this.attachment=quiz.getAttachment();
     }
 
     public static QuizOneDto from(Quiz quiz){
