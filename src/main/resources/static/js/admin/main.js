@@ -1,95 +1,148 @@
-(function ($) {
-    "use strict";
-
-    // Spinner
-    var spinner = function () {
-        setTimeout(function () {
-            if ($('#spinner').length > 0) {
-                $('#spinner').removeClass('show');
+const getAjax = function(url) {
+    return new Promise((resolve, reject) => { // 1.
+        $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json"
+            ,
+            success: (res) => {
+                resolve(res);  // 2.
+            },
+            error: (e) => {
+                reject(e);  // 3.
             }
-        }, 1);
-    };
-    spinner();
-    
-    
-    // Back to top button
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 300) {
-            $('.back-to-top').fadeIn('slow');
-        } else {
-            $('.back-to-top').fadeOut('slow');
-        }
-    });
-    $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
-        return false;
-    });
-
-
-    // Sidebar Toggler
-    $('.sidebar-toggler').click(function () {
-        $('.sidebar, .content').toggleClass("open");
-        return false;
-    });
-
-
-    // Progress Bar
-    $('.pg-bar').waypoint(function () {
-        $('.progress .progress-bar').each(function () {
-            $(this).css("width", $(this).attr("aria-valuenow") + '%');
         });
-    }, {offset: '80%'});
-
-
-    // Calender
-    $('#calender').datetimepicker({
-        inline: true,
-        format: 'L'
     });
+}
+async function getRank(affiliation){
+    const url = "/rank-graph/"+affiliation;
+    try {
+        return await getAjax(url);
+    } catch(e) {
+        console.log(e);
+    }
+}
+async function getRankCurrent(affiliation){
+    const url = "/rank-graph-current/"+affiliation;
+    try {
+        return await getAjax(url);
+    } catch(e) {
+        console.log(e);
+    }
+}
+async function getRankHistory(userId){
+    const url = "/rank-graph-history/"+userId;
+    try {
+        return await getAjax(url);
+    } catch(e) {
+        console.log(e);
+    }
+}
 
 
-    // Testimonials carousel
-    $(".testimonial-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        items: 1,
-        dots: true,
-        loop: true,
-        nav : false
-    });
+async function getParseData(affiliation){
+    let rankData = await getRankCurrent(affiliation);
+    let userDict = {};
+    let historyCount = 0;
+    let dateStringList = [];
+    let graphLabel = [];
 
 
+    const dateNow = new Date();
+    for(let i = 0; i< rankData.length; i++){
+        let history = await getRankHistory(rankData[i].userId);
+        userDict[i+1] = {"nickName": rankData[i].nickName, "history":history, "score": [rankData[i].totalScore]};
+        if(historyCount < history.length){
+            historyCount = history.length;
+        }
+    }
+    await console.log(userDict);
+    for (let i = 0; i < historyCount; i++) {
+        const timeAgo = new Date(dateNow.getTime() - (i * 60 * 60 * 1000));
+
+        timeAgo.setMinutes(0);
+        timeAgo.setSeconds(0);
+
+        const year = timeAgo.getFullYear();
+        const month = (timeAgo.getMonth() + 1).toString().padStart(2,"0");
+        const day = (timeAgo.getDate()).toString().padStart(2,"0");
+        const hours = (timeAgo.getHours()).toString().padStart(2,"0");
+
+        dateStringList.push(`${year}-${month}-${day}T${hours}:00:00`);
+        graphLabel.push(`${hours}:00`);
+    }
+
+    for(let i = 0; i<Object.keys(userDict).length; i++){
+        for(let j= 0; j<dateStringList.length; j++){
+            for(let k = 0; k<Object.keys(userDict[i+1].history).length; k++){
+                if(dateStringList[j] === userDict[i+1].history[k].dateTime){
+                    userDict[i+1].score.push(userDict[i+1].history[k].score);
+                    break;
+                }
+                if(dateStringList[j] !== userDict[i+1].history[k].dateTime && k === Object.keys(userDict[i+1].history).length -1 ){
+                    console.log(userDict[i+1].history[k])
+                    userDict[i+1].score.push(null);
+                }
+            }
+        }
+    }
+    await console.log(userDict);
+    const hour = (dateNow.getHours()).toString().padStart(2,"0");
+    const min = (dateNow.getMinutes()).toString().padStart(2,"0");
+    graphLabel.reverse()
+    graphLabel.push(`${hour}:${min}`);
+
+
+    const redColor =["#FF7A7A", "#FF4646","#FC0000", "#A61804", "#5D0D02"];
+    const blueColor = ["#015C92", "#2D82B5","#53A7D8","#88CDF6","#BCE6FF"];
+    const color1 =["#33539E", "#7FACD6", "#BFB8DA", "#E8B7D4", "#A5678E"]
+    const color2 = ["#ff7b89", "#8a5082", "#6f5f90", "#758eb7", "#a5cad2"];
+
+    const testData =[[0,200],[0,300],[0,400],[0,500],[0,600]]
+    let dataSet = [];
+    for(let i = 0; i<Object.keys(userDict).length; i++){
+        dataSet.push({
+            label: userDict[i+1].nickName,
+            data: userDict[i+1].score.reverse(),
+            borderColor: redColor[i],
+            tension: 0.1,
+            fill: false
+        });
+    }
+    const data = {
+        labels: graphLabel,
+        datasets: dataSet
+    };
+    return data;
+}
+
+
+
+
+( async function ($) {
     // Chart Global Color
     Chart.defaults.color = "#6C7293";
     Chart.defaults.borderColor = "#000000";
-
+    const nbData = await getParseData("NB");
+    const ybData = await getParseData("YB");
+    const options = {
+        responsive: true,
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    maxTicksLimit: 10
+                }
+            }
+        }
+    };
 
     // Worldwide Sales Chart
     var ctx1 = $("#worldwide-sales").get(0).getContext("2d");
     var myChart1 = new Chart(ctx1, {
-        type: "bar",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "USA",
-                    data: [15, 30, 55, 65, 60, 80, 95],
-                    backgroundColor: "rgba(235, 22, 22, .7)"
-                },
-                {
-                    label: "UK",
-                    data: [8, 35, 40, 60, 70, 55, 75],
-                    backgroundColor: "rgba(235, 22, 22, .5)"
-                },
-                {
-                    label: "AU",
-                    data: [12, 25, 45, 55, 65, 70, 60],
-                    backgroundColor: "rgba(235, 22, 22, .3)"
-                }
-            ]
-            },
-        options: {
-            responsive: true
-        }
+        type: "line",
+        data: nbData,
+        options:options
     });
 
 
@@ -97,114 +150,8 @@
     var ctx2 = $("#salse-revenue").get(0).getContext("2d");
     var myChart2 = new Chart(ctx2, {
         type: "line",
-        data: {
-            labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022"],
-            datasets: [{
-                    label: "Salse",
-                    data: [15, 30, 55, 45, 70, 65, 85],
-                    backgroundColor: "rgba(235, 22, 22, .7)",
-                    fill: true
-                },
-                {
-                    label: "Revenue",
-                    data: [99, 135, 170, 130, 190, 180, 270],
-                    backgroundColor: "rgba(235, 22, 22, .5)",
-                    fill: true
-                }
-            ]
-            },
-        options: {
-            responsive: true
-        }
-    });
-    
-
-
-    // Single Line Chart
-    var ctx3 = $("#line-chart").get(0).getContext("2d");
-    var myChart3 = new Chart(ctx3, {
-        type: "line",
-        data: {
-            labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
-            datasets: [{
-                label: "Salse",
-                fill: false,
-                backgroundColor: "rgba(235, 22, 22, .7)",
-                data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Single Bar Chart
-    var ctx4 = $("#bar-chart").get(0).getContext("2d");
-    var myChart4 = new Chart(ctx4, {
-        type: "bar",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(235, 22, 22, .7)",
-                    "rgba(235, 22, 22, .6)",
-                    "rgba(235, 22, 22, .5)",
-                    "rgba(235, 22, 22, .4)",
-                    "rgba(235, 22, 22, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Pie Chart
-    var ctx5 = $("#pie-chart").get(0).getContext("2d");
-    var myChart5 = new Chart(ctx5, {
-        type: "pie",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(235, 22, 22, .7)",
-                    "rgba(235, 22, 22, .6)",
-                    "rgba(235, 22, 22, .5)",
-                    "rgba(235, 22, 22, .4)",
-                    "rgba(235, 22, 22, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
-    });
-
-
-    // Doughnut Chart
-    var ctx6 = $("#doughnut-chart").get(0).getContext("2d");
-    var myChart6 = new Chart(ctx6, {
-        type: "doughnut",
-        data: {
-            labels: ["Italy", "France", "Spain", "USA", "Argentina"],
-            datasets: [{
-                backgroundColor: [
-                    "rgba(235, 22, 22, .7)",
-                    "rgba(235, 22, 22, .6)",
-                    "rgba(235, 22, 22, .5)",
-                    "rgba(235, 22, 22, .4)",
-                    "rgba(235, 22, 22, .3)"
-                ],
-                data: [55, 49, 44, 24, 15]
-            }]
-        },
-        options: {
-            responsive: true
-        }
+        data: ybData,
+        options:options
     });
 
     
