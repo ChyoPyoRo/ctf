@@ -1,7 +1,7 @@
 async function showPopup(id) {
     try {
-        const url = "/quiz/" + id
-        const quiz = await getQuizData(url).catch(error=>{
+        const quizUrl = "/quiz/" + id
+        const quiz = await getData(quizUrl).catch(error=>{
         if(error.responseText == 'notOpen'){
             return "notOpen"
         }else if (error.responseText == 'ValidationError'){
@@ -11,6 +11,7 @@ async function showPopup(id) {
         }
         })
         const postUrl = "/challenge/" + id
+        const rankUrl = '/rank/challenge/'+id
         //quiz가 값이 필요함
         if(quiz == "ValidationError"){
             alert("Validation Error")
@@ -22,37 +23,68 @@ async function showPopup(id) {
 
             //Div Element 추가
 
+            let challengeContentDiv = document.createElement('input')
+            let challengeContentButton = document.createElement('label');
+            let challengeRankDiv = document.createElement('input');
+            let challengeRankButton = document.createElement('label')
+
+            let contentDiv= document.createElement('div');
+            let rankDiv= document.createElement('div');
+
             let nameDiv = document.createElement('div');
+            let titleFlexDiv = document.createElement('div');
             let titleWriterDiv = document.createElement('h3');
             let writerDiv = document.createElement('div');
-            let titleScoreDiv = document.createElement('h3');
             let scoreDiv = document.createElement('div');
             let titleDescriptionDiv = document.createElement('h3');
             let descriptionDiv = document.createElement('div');
-            let titleFlag = document.createElement('h3');
             let flagDiv = document.createElement("input");
             let buttonDiv = document.createElement("button");
 
+            let flagFlexDiv = document.createElement('div');
 
             let attatchmentDiv = document.createElement('a');
             let titleAttatchmentDiv = document.createElement("h3");
 
+
+            let rankTableDiv = document.createElement('table');
+            let rankTableTitle = document.createElement('thead');
+            let rankTableTitleTr = document.createElement('tr')
+            let rankTableTitleName = document.createElement('td');
+            let rankTableTitleRank = document.createElement('td');
+            let rankTableTitleTime=document.createElement('td');
+
+            let rankTableContent = document.createElement('tr');
+            let rankTableContentName = document.createElement('td');
+            let rankTableContentRank = document.createElement('td');
+            let rankTableContentTime = document.createElement('td');
+
+
+
+
+            titleFlexDiv.className="titleFlex"
+            flagFlexDiv.className='flagFlex'
+
+            contentDiv.id='contentDiv'
+
             //quiz정보 입력
-            titleWriterDiv.innerText = "Author"
-            titleScoreDiv.innerText = "Score"
+            titleWriterDiv.innerText = "Author : "
             titleDescriptionDiv.innerText = "Description"
-            titleFlag.innerText = "Flag"
 
             writerDiv.className = 'popupBoxContent';
-            scoreDiv.className = 'popupBoxContent';
+            scoreDiv.className = 'popupBoxTitle';
+            scoreDiv.id= "popupTitle"
             descriptionDiv.className = 'popupBoxContent description';
 
+
+
             nameDiv.className = 'popupBoxTitle';
-            nameDiv.id="nameDiv"
+            nameDiv.id="popupTitle"
             titleWriterDiv.className = 'popupBoxTitle';
-            titleScoreDiv.className = 'popupBoxTitle';
             titleDescriptionDiv.className = 'popupBoxTitle'
-            titleFlag.className = 'popupBoxTitle flag-title'
+
+
+            scoreDiv.style="font-size : 2em;"
 
             flagDiv.className="popupFlagInput";
             flagDiv.placeholder="Flag 입력"
@@ -63,7 +95,72 @@ async function showPopup(id) {
             writerDiv.innerText = quiz.author;
             scoreDiv.innerText = quiz.score;
             descriptionDiv.innerText = quiz.description;
-            buttonDiv.innerText = "Answer";
+            buttonDiv.innerText = "Submit";
+            buttonDiv.className="myButton"
+
+            rankTableDiv.className='rankTableDiv'
+            rankTableDiv.id='rankTableDiv'
+            rankTableTitle.className='rankTableTitle'
+            rankTableTitleTr.className='rankTableTitleTr'
+            rankTableTitleName.className='rankTableTitleName'
+            rankTableTitleRank.className='rankTableTitleRank'
+            rankTableTitleTime.className='rankTableTitleTime'
+            rankTableContent.className='rankTableContent'
+            rankTableContentName.className='rankTableContentName'
+            rankTableContentRank.className='rankTableContentRank'
+            rankTableContentTime.className='rankTableContentTime'
+
+            rankTableTitleName.innerText="NickName"
+            rankTableTitleRank.innerText="Rank"
+            rankTableTitleTime.innerText='Solved Time'
+
+            rankTableTitleTr.appendChild(rankTableTitleRank)
+            rankTableTitleTr.appendChild(rankTableTitleName)
+            rankTableTitleTr.appendChild(rankTableTitleTime)
+            rankTableTitle.appendChild(rankTableTitleTr);
+            rankTableDiv.appendChild(rankTableTitle);
+            rankTableDiv.appendChild(rankTableContent);
+
+            //버튼 추가
+            challengeContentDiv.className="content-button";
+            challengeContentDiv.autocomplete="off";
+            challengeContentDiv.onclick=async function showChallenge() {
+                document.getElementById('contentDiv').style.display = 'block';
+                document.getElementById('rankTableDiv').style.display='none';
+            }
+            challengeContentDiv.checked=true;
+            challengeContentDiv.className='btn-check';
+            challengeContentDiv.name='ch'
+            challengeContentDiv.id='ch'
+
+            challengeContentButton.className='btn btn-outline-primary'
+            challengeContentButton.htmlFor='ch'
+            challengeContentButton.innerText='Challenge'
+
+
+            challengeRankDiv.className="content-button";
+            challengeRankDiv.autocomplete="off";
+            challengeRankDiv.onclick=  async function showRankTable() {
+                const rank = await getData(rankUrl);
+                document.getElementById('contentDiv').style.display = 'none';
+                document.getElementById('rankTableDiv').style.display='block';
+                for(let i=0; i < rank.length; i++){
+                    rankTableContentRank.innerText= i+1;
+                    rankTableContentName.innerText = rank[i].nickName;
+                    rankTableContentTime.innerText = rank[i].solvedTime;
+                    rankTableContent.appendChild(rankTableContentRank)
+                    rankTableContent.appendChild(rankTableContentName)
+                    rankTableContent.appendChild(rankTableContentTime)
+                }
+            }
+            challengeRankDiv.className='btn-check';
+            challengeRankDiv.name='ra'
+            challengeRankDiv.id='ra'
+
+            challengeRankButton.className='btn btn-outline-primary'
+            challengeRankButton.htmlFor='ra'
+            challengeRankButton.innerText='Rank'
+
 
             // popup
             let popupElement = document.getElementById('popup');
@@ -117,25 +214,31 @@ async function showPopup(id) {
 
 
             // Append new div elements to the popup
-
+            popupElement.appendChild(challengeContentDiv);
+            popupElement.appendChild(challengeContentButton)
+            popupElement.appendChild(challengeRankDiv);
+            popupElement.appendChild(challengeRankButton)
             popupElement.appendChild(nameDiv);
-            popupElement.appendChild(titleWriterDiv);
-            popupElement.appendChild(writerDiv);
-            popupElement.appendChild(titleScoreDiv);
             popupElement.appendChild(scoreDiv);
-            popupElement.appendChild(titleDescriptionDiv);
-            popupElement.appendChild(descriptionDiv);
+            titleFlexDiv.appendChild(titleWriterDiv);
+            titleFlexDiv.appendChild(writerDiv);
+            contentDiv.appendChild(titleFlexDiv);
+            contentDiv.appendChild(titleDescriptionDiv);
+            contentDiv.appendChild(descriptionDiv);
             if (quiz.attachment != null) {
-                popupElement.appendChild(titleAttatchmentDiv);
-                popupElement.appendChild(attatchmentDiv);
+                // popupElement.appendChild(titleAttatchmentDiv);
+                contentDiv.appendChild(attatchmentDiv);
             }
-            popupElement.appendChild(titleFlag);
-            popupElement.appendChild(flagDiv);
-            popupElement.appendChild(buttonDiv);
+            flagFlexDiv.appendChild(flagDiv);
+            flagFlexDiv.appendChild(buttonDiv);
+            contentDiv.appendChild(flagFlexDiv);
+            popupElement.appendChild(contentDiv);
+            popupElement.appendChild(rankTableDiv);
 
             // Show the dimmed background and popup
             document.getElementById('dimmed-bg').style.display = 'block';
 
+            document.getElementById('rankTableDiv').style.display='none';
             // Show the dimmed background and popup
             document.getElementById('dimmed-bg').style.display = 'block';
             document.getElementById('popup').style.display = 'block';
@@ -152,7 +255,7 @@ document.getElementById('dimmed-bg').addEventListener('click', function() {
     document.getElementById('popup').style.display = 'none';
 });
 
-function getQuizData(url) {
+function getData(url) {
     return new Promise(function(resolve, reject) {
         $.ajax({
             url: url,  // Replace with your API endpoint URL
@@ -167,3 +270,4 @@ function getQuizData(url) {
         });
     });
 }
+

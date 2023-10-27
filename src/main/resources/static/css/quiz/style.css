@@ -106,9 +106,10 @@
     color : var(--primary);
     margin-bottom: 10px;
 }
-#nameDiv{
+#popupTitle{
     font-size : 4em;
     font-weight: bold;
+    text-align: center;
 }
 
 #popup {
@@ -149,7 +150,48 @@
 }
 
 .popupFlagInput{
-    background-color: #000;
+    background-color: white;
     color : #6c7293;
     border : 1px solid #000;
+    flex: 0 0 80%;
+}
+
+.titleFlex{
+    display: flex;
+    align-items: center;
+}
+.titleFlex .popupBoxContent{
+    padding-left : 1%;
+}
+
+.myButton {
+    flex: 0 0 20%;
+    background-color:var(--primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    transition-duration: 0.4s;
+}
+
+.myButton:active {
+    background-color: #8B0000;
+    color: white;
+}
+
+.flagFlex{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.rankTableContent td{
+    width:33%;
+}
+.rankTableTitleTr td{
+    width:33%;
 }
