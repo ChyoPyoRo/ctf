@@ -96,6 +96,14 @@ public class CenterController extends BaseController{
         if(!editUser.getUserId().equals(user.getUserId())){
             return code;
         }
+        if(!(user.getNickName().equals(editUser.getNickName()))){
+            User existNickName = userService.getUserByNickName(editUser.getNickName());
+            if(existNickName != null){
+                code = Result.Code.NICK_NAME_EXIST;
+                return code;
+            }
+        }
+
         if(!isMissingItem(user)){
             try{
                 userSet(editUser, user);

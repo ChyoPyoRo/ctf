@@ -53,9 +53,9 @@ public class LoginController {
                 logger.info("try saveUser id : {}",user.getUserId());
 
                 User existId = userService.getUserId(user.getUserId()); // 아이디 있는지 확인
-                logger.info("existId : {}", existId);
 
-                if(existId == null) {
+                User existNickName = userService.getUserByNickName(user.getNickName()); // 닉네임 겹치는지 확인
+                if(existId == null && existNickName == null) {
                     String encodedPassword = passwordEncoder.encode(user.getPassword());
                     user.setPassword(encodedPassword);
                     user.setType(User.Type.USER);
@@ -63,8 +63,12 @@ public class LoginController {
                     userService.upsertUser(user); //회원가입
                     code = Result.Code.OK;
                     logger.info("Created User : {}", user.getUserId());
+                } else if(existNickName != null){
+                    code = Result.Code.NICK_NAME_EXIST;
+                    logger.info("existNickName : {}", existNickName.getNickName());
                 } else {
                     code = Result.Code.ID_EXIST;
+                    logger.info("existId : {}", existId.getUserId());
                 }
 
             } catch (Exception exception){

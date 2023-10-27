@@ -61,6 +61,9 @@ public class UserService implements UserDetailsService {
        userRepository.save(existUser);
    }
 
+   public User getUserByNickName(String nickName){
+        return userRepository.findByNickName(nickName).orElse(null);
+   }
 
    @Transactional
    public void deleteUser(User user){
