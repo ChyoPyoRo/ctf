@@ -34,7 +34,9 @@ function editUser(){
                 if (data === 'OK') {
                     window.location.href = "/logout";
                     alert("정상적으로 변경 되었습니다.");
-                } else{
+                } if(data === "NICK_NAME_EXIST"){
+                    alert("이미 존재하는 닉네임 입니다.");
+                }else {
                     alert("회원 가입 실패");
                 }
             });

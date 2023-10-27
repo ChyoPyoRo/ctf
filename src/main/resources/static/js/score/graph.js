@@ -103,7 +103,7 @@ async function createRankGraph(affiliation){
         dataSet.push({
            label: userDict[i+1].nickName,
            data: userDict[i+1].score.reverse(),
-            borderColor: color1[i],
+            borderColor: color2[i],
             tension: 0.1,
             fill: false
         });

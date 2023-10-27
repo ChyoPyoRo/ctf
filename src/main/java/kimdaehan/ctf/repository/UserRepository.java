@@ -16,5 +16,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     @Transactional(readOnly = true)
     List<User> findAllByTypeAndAffiliationAndIsBan(User.Type type, User.Affiliation affiliation, User.IsBan isBan);
 
+    @Transactional(readOnly = true)
+    Optional<User> findByNickName(String nickName);
 
 }

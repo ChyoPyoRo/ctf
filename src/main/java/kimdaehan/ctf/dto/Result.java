@@ -17,6 +17,6 @@ public class Result <T>{
     }
 
     public enum Code {
-        OK, ERROR, ID_EXIST
+        OK, ERROR, ID_EXIST, NICK_NAME_EXIST
     }
 }
