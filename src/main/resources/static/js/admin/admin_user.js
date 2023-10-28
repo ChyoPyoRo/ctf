@@ -107,7 +107,11 @@ async function userBan(id){
     try {
         const data = await getAjaxText(url);
         console.log(data);
-        window.location.reload();
+        if(data === "ADMIN"){
+            alert("ADMIN은 Ban을 할 수가 없습니다.")
+        } else{
+            window.location.reload();
+        }
     } catch(e) {
         console.log(e);
         alert("Ban Error");

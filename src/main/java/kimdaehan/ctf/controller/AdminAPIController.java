@@ -222,6 +222,9 @@ public class AdminAPIController extends BaseController{
         if(member == null){
             return ResponseEntity.badRequest().body("Validation error");
         }
+        if(member.getType() == User.Type.ADMIN){
+            return ResponseEntity.ok("ADMIN");
+        }
         if(member.getIsBan() == User.IsBan.DISABLE){
             member.setIsBan(User.IsBan.ENABLE);
         } else {

@@ -21,8 +21,7 @@ async function showPopup(id) {
         }
         else {
 
-            //Div Element 추가
-
+            //Div Element 추가d
             let challengeContentDiv = document.createElement('input')
             let challengeContentButton = document.createElement('label');
             let challengeRankDiv = document.createElement('input');
