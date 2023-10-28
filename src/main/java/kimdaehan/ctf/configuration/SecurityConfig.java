@@ -42,6 +42,12 @@ public class SecurityConfig {
                 /*.sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )*/
+                .sessionManagement(sessionManagement ->
+                        sessionManagement
+                                .maximumSessions(1)
+                                .maxSessionsPreventsLogin(true)
+                                .expiredUrl("/login")
+                )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers("/", "/register","/rule", "/saveUser", "/login", "/login-process").permitAll()
