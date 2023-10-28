@@ -44,7 +44,7 @@ public class SecurityConfig {
                 )*/
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/register", "/saveUser", "/login", "/login-process").permitAll()
+                        .requestMatchers("/", "/register","/rule", "/saveUser", "/login", "/login-process").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())
