@@ -59,15 +59,16 @@ public class QuizController extends BaseController{
         ModelAndView mv = new ModelAndView();
         mv.setViewName("/quiz/quiz_main");
         ArrayList <String> categoryList = new ArrayList<>(Arrays.asList("REVERSING", "PWN", "WEB", "FORENSICS", "MISC"));
+        List<Solved> solvedList = quizService.getSolvedListByUserId(user.getUserId());
         for(String item : categoryList){
             Quiz.CategoryType categoryName = Quiz.CategoryType.valueOf(item);
             List<QuizListDTO> quizList = quizService.findQuizAfterStartTime(categoryName);
             List<QuizMainListDTO> quizGetDTOS = new ArrayList<>();
             for(QuizListDTO quiz : quizList){
-                quizGetDTOS.add(QuizMainListDTO.from(quiz));
+                boolean isSolved = solvedList.stream().anyMatch(solved -> solved.getSolved().getQuizId().equals(quiz.getQuizIdAsUuid()));
+                quizGetDTOS.add(QuizMainListDTO.from(quiz, isSolved));
             }
-
-            mv.addObject(item, quizList);
+            mv.addObject(item, quizGetDTOS); // 수정된 부분
         }
         mv.addObject("user", user.getUserId());
         mv.addObject("type", user.getType());

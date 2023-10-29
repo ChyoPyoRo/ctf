@@ -27,9 +27,7 @@ async function showPopup(id) {
             let challengeContentButton = document.createElement('label');
             let challengeRankDiv = document.createElement('input');
             let challengeRankButton = document.createElement('label')
-
             let contentDiv= document.createElement('div');
-            let rankDiv= document.createElement('div');
 
             let nameDiv = document.createElement('div');
             let titleFlexDiv = document.createElement('div');
@@ -124,16 +122,20 @@ async function showPopup(id) {
             //버튼 추가
             challengeContentDiv.className="content-button";
             challengeContentDiv.autocomplete="off";
-            challengeContentDiv.onclick=async function showChallenge() {
+            challengeContentDiv.onclick= function showChallenge() {
                 document.getElementById('contentDiv').style.display = 'block';
                 document.getElementById('rankTableDiv').style.display='none';
+                document.getElementById('chB').style="background : white ;color: black;";
+                document.getElementById('raB').style="background : transparent;margin-left: 5%;"
             }
             challengeContentDiv.checked=true;
             challengeContentDiv.className='btn-check';
             challengeContentDiv.name='ch'
             challengeContentDiv.id='ch'
 
-            challengeContentButton.className='btn btn-outline-primary'
+            challengeContentButton.id='chB'
+            challengeContentButton.className='change-challenge-rank'
+            challengeContentButton.style="background : white ;color: black;";
             challengeContentButton.htmlFor='ch'
             challengeContentButton.innerText='Challenge'
 
@@ -152,13 +154,17 @@ async function showPopup(id) {
                     rankTableContent.appendChild(rankTableContentName)
                     rankTableContent.appendChild(rankTableContentTime)
                 }
+                document.getElementById('raB').style="background : white ;color: black; margin-left: 5%;";
+                document.getElementById('chB').style="background : transparent;"
             }
             challengeRankDiv.className='btn-check';
             challengeRankDiv.name='ra'
             challengeRankDiv.id='ra'
 
-            challengeRankButton.className='btn btn-outline-primary'
+            challengeRankButton.id='raB'
+            challengeRankButton.className='change-challenge-rank'
             challengeRankButton.htmlFor='ra'
+            challengeRankButton.style='margin-left: 5%;'
             challengeRankButton.innerText='Rank'
 
 
@@ -203,11 +209,10 @@ async function showPopup(id) {
                     }
                 });
             });
-            if (quiz.attachment != null) {
-                attatchmentDiv.innerText = "첨부 파일 다운로드";
-                titleAttatchmentDiv.innerText = "파일";
+            if (quiz.attachment != null){
+                let fileName = quiz.attachment.split('/').pop();
+                attatchmentDiv.innerText = fileName;
                 attatchmentDiv.href = "/quiz/download/" + id
-
                 attatchmentDiv.className = 'popupBoxContent';
                 titleAttatchmentDiv.className = 'popupBoxTitle';
             }
@@ -218,8 +223,8 @@ async function showPopup(id) {
             popupElement.appendChild(challengeContentButton)
             popupElement.appendChild(challengeRankDiv);
             popupElement.appendChild(challengeRankButton)
-            popupElement.appendChild(nameDiv);
-            popupElement.appendChild(scoreDiv);
+            contentDiv.appendChild(nameDiv);
+            contentDiv.appendChild(scoreDiv);
             titleFlexDiv.appendChild(titleWriterDiv);
             titleFlexDiv.appendChild(writerDiv);
             contentDiv.appendChild(titleFlexDiv);

@@ -7,6 +7,7 @@ import kimdaehan.ctf.dto.UserPageDTO;
 import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.QuizService;
+import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
 import kimdaehan.ctf.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,13 @@ import java.util.List;
 public class CenterController extends BaseController{
     private final PasswordEncoder passwordEncoder;
     private final QuizService quizService;
+    private final ServerSettingService serverSettingService ;
     @Autowired
-    public CenterController(UserService userService, AuthenticationFacade authenticationFacade, PasswordEncoder passwordEncoder, QuizService quizService) {
+    public CenterController(UserService userService, AuthenticationFacade authenticationFacade, PasswordEncoder passwordEncoder, QuizService quizService, ServerSettingService serverSettingService) {
         super(userService, authenticationFacade);
         this.passwordEncoder = passwordEncoder;
         this.quizService = quizService;
+        this.serverSettingService = serverSettingService;
     }
 
 
@@ -41,8 +44,7 @@ public class CenterController extends BaseController{
     public ModelAndView getMain() {
         User user = getUser();
         ModelAndView mv = new ModelAndView("main");
-
-
+        mv.addObject("time", serverSettingService.getServerEnd());
         if(user == null){
             mv.addObject("user", null);
             mv.addObject("type", null);

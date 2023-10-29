@@ -12,20 +12,20 @@
 
     <script th:src="@{/js/main/time.js}" defer="defer"></script>
 </head>
-<body>
+<body >
 <div class="layout-nav">
     <nav th:replace="nav :: nav"></nav>
 </div>
 <div>
     <div class="background layout-content-no-footer">
-        <div class="main-title" style="top: 250px;">
-            <span>SW융합대학 해킹방어 대회</span>
+        <div class="main-title" style="top: 250px;display: flex;align-items: center;">
+            <span>2023 Security First</span>
+            <span>연말 해킹 대회</span>
             <h1 >
                 현재 남은 시간
             </h1>
             <span id="main-time-clock"></span>
         </div>
-
             <video width = "1680px" loop autoplay  muted id="background-video">
                 <source src="images\main\main.mp4"type="video/mp4">
                 영상이 재상 안됨
@@ -39,7 +39,36 @@
 </div>
 </body>
 
-<script>
+<script th:inline="javascript">
+    function updateClock() {
+        /*<![CDATA[*/
+        const now = new Date();
+        const time = /*[[${time}]]*/;
+        const end = new Date(time);
+        console.log("time", time);
+        console.log('end', end);
+        const last = end - now;
+        const millisecondsInOneSecond = 1000;
+        const millisecondsInOneMinute = millisecondsInOneSecond * 60;
+        const millisecondsInOneHour = millisecondsInOneMinute * 60;
+        const millisecondsInOneDay = millisecondsInOneHour * 24;
 
+        const day = Math.floor(last / millisecondsInOneDay);
+        const hours = Math.floor((last % millisecondsInOneDay) / millisecondsInOneHour);
+        const minutes = Math.floor((last % millisecondsInOneHour) / millisecondsInOneMinute);
+        const seconds = Math.floor((last % millisecondsInOneMinute) / millisecondsInOneSecond);
+
+        const timeString = day +"일 "+ hours + ":" + (minutes < 10 ? "0" : "") + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+
+        document.getElementById("main-time-clock").innerHTML = timeString;
+    }
+
+    // 1초마다 시간 업데이트
+    setInterval(updateClock, 1000);
+
+    // 페이지 로드 시 초기 시간 업데이트
+    updateClock();
+
+    /*]]>*/
 </script>
 </html>

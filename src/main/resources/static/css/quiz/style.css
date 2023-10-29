@@ -19,6 +19,8 @@
 
 .category-title {
     width : 1100px;
+    margin-bottom: 2%;
+    margin-top: 2%
 }
 
 .category-container {
@@ -103,7 +105,7 @@
 }
 
 .popupBoxTitle {
-    color : var(--primary);
+    color : white;
     margin-bottom: 10px;
 }
 #popupTitle{
@@ -113,13 +115,13 @@
 }
 
 #popup {
-    background-color:  var(--dark);
+    background-color:  #181818;
     padding-left : 2%;
     padding-right: 2%;
     padding-top:0.5%;
     padding-bottom : 0.5%;
     margin-top: 20px;
-    border : red solid 1px;
+
     overflow: auto;
 }
 
@@ -127,7 +129,7 @@
     margin-bottom: 5px;
     color : white;
     height : 8%;
-    overflow: auto;
+
     display: flex;
     align-items: center;
 }
@@ -136,7 +138,7 @@
 
 }
 .popupBoxContent.description  {
-    height : 20%;
+    height : 45%;
     overflow: auto;
     display: block;
     align-items: stretch;
@@ -154,11 +156,13 @@
     color : #6c7293;
     border : 1px solid #000;
     flex: 0 0 80%;
+    margin-right: 2%;
 }
 
 .titleFlex{
     display: flex;
     align-items: center;
+    height : 8%;
 }
 .titleFlex .popupBoxContent{
     padding-left : 1%;
@@ -166,8 +170,8 @@
 
 .myButton {
     flex: 0 0 20%;
-    background-color:var(--primary);
-    color: white;
+    background-color:white;
+    color: black;
     border: none;
     padding: 10px 20px;
     text-align: center;
@@ -178,20 +182,45 @@
 }
 
 .myButton:active {
-    background-color: #8B0000;
+    background-color: black;
     color: white;
 }
 
 .flagFlex{
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 90%;
+    padding-bottom: 5%;
+    box-sizing: border-box;
 }
 
 
 .rankTableContent td{
     width:33%;
+    color : white;
 }
 .rankTableTitleTr td{
     width:33%;
+    color : white;
 }
+.rankTableDiv td {
+    width : 33%;
+    color : white;
+}
+
+.rankTableDiv{
+    margin-top: 5%;
+}
+#contentDiv{
+    height : 90%;
+}
+.change-challenge-rank{
+    border-color : transparent;color : white; padding-right: 2%; padding-left : 2%;
+    border-radius:20px;
+}
+
+label:hover, label:active, input:hover+label, input:active+label {
+    background-color: white;
+    color : black;
+}
+

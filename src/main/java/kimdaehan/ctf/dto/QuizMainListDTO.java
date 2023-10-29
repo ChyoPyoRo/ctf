@@ -9,23 +9,27 @@ import java.util.UUID;
 @Getter
 @Setter
 public class QuizMainListDTO {
-    private UUID quizId;
+    private UUID quizIdAsUuid;
     private String quizName;
     private String author;
     private Quiz.CategoryType category;
     private Integer score;
     private String test;
+    private Boolean isSolved;
 
-    private QuizMainListDTO(QuizListDTO quiz){
-        this.quizId = quiz.getQuizIdAsUuid();
+    private QuizMainListDTO(QuizListDTO quiz, Boolean isSolved){
+        this.quizIdAsUuid = quiz.getQuizIdAsUuid();
         this.test = quiz.getTest();
         this.quizName = quiz.getQuizName();
         this.author = quiz.getAuthor();
         this.category = quiz.getCategoryByEnum();
         this.score = quiz.getScore();
+        this.isSolved = isSolved;
     }
-
-    public static QuizMainListDTO from(QuizListDTO quiz){
-        return new QuizMainListDTO(quiz);
+    public static QuizMainListDTO from(QuizListDTO quiz, Boolean isSolved){
+        return new QuizMainListDTO(quiz, isSolved );
+    }
+    public boolean isSolved(){
+        return isSolved;
     }
 }
