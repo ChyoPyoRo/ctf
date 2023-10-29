@@ -90,4 +90,6 @@ public class QuizService {
     public void initQuizScore(){
         quizRepository.updateQuizScoreInit(1000);
     }
+
+    public Solved findBySolvedAndSolvedIdSolvedUserId(String userId, Quiz solved){return solvedRepository.findBySolvedAndSolvedIdSolvedUserId(solved,userId);}
 }

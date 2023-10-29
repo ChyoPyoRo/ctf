@@ -30,6 +30,7 @@ import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.*;
@@ -54,9 +55,14 @@ public class QuizController extends BaseController{
 
     @GetMapping({"/challenge"})
     public ModelAndView challengeMain(HttpServletRequest request){
-        //메인 페이지
         User user = getUser();
         ModelAndView mv = new ModelAndView();
+        if(serverSettingService.getServerStart().isAfter(LocalDateTime.now())){
+            logger.info("Try access challenge main before start-> user : {}, router : Get(/challenge)", user.getUserId());
+            mv.setViewName("/error/access_before_start");
+            return mv;
+        }
+        //메인 페이지
         mv.setViewName("/quiz/quiz_main");
         ArrayList <String> categoryList = new ArrayList<>(Arrays.asList("REVERSING", "PWN", "WEB", "FORENSICS", "MISC"));
         List<Solved> solvedList = quizService.getSolvedListByUserId(user.getUserId());
@@ -148,8 +154,12 @@ public class QuizController extends BaseController{
         //2.이 문제의 start time이 현재시간 이후이면 안됨 >> get으로 옮김
         //flag값 비교
         if (quiz.getFlag().equals(answer.getFlag())) {
-            //flag 값이 일치하기 전에 시간이 먼저 테스트
-
+            //맞췄을 시에 이미 정답을 맞췄으면 에러 발생
+            Solved isSolvedBefore = quizService.findBySolvedAndSolvedIdSolvedUserId(user.getUserId(), quiz);
+            if(isSolvedBefore!=null){
+                logger.info("Try submitting already correct challenge -> user : {}, router : Post(challenge/{challengeID})", user.getUserId());
+                return ResponseEntity.badRequest().body("correctAlready");
+            }
             //OB, ADMIN, isBan 3개는 점수 추가 안하고 로그만 남기기
             //점수 추가
             if(!user.getType().equals(User.Type.ADMIN) && user.getIsBan().equals(User.IsBan.DISABLE) && !user.getAffiliation().equals(User.Affiliation.OB)){

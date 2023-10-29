@@ -12,55 +12,6 @@ async function getScoreList(affiliation, scoreList){
         createElementAndAppend('td', item.score, 'scoreScore', lineElement);
         createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
         createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
-
-        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
-        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
-        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
-        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
-        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
-        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
-
-        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
-        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
-        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
-        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
-        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
-        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
-
-        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
-        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
-        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
-        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
-        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
-        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
-
-        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
-        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
-        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
-        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
-        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
-        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
-
-        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
-        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
-        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
-        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
-        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
-        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
-
-        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
-        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
-        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
-        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
-        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
-        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
-
-        var lineElement = createElementAndAppend('tr', '', 'scoreElement', scoreList);
-        createElementAndAppend('td', index + 1, 'scoreRank', lineElement);
-        createElementAndAppend('td', item.nickName, 'scoreNickName', lineElement);
-        createElementAndAppend('td', item.score, 'scoreScore', lineElement);
-        createElementAndAppend('td', item.solvedCount, 'scoreSolvedCount', lineElement);
-        createElementAndAppend('td', item.solvedTime, 'scoreSolvedTime', lineElement);
     })
 }
 

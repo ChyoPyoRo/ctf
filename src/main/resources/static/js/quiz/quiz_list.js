@@ -183,7 +183,6 @@ async function showPopup(id) {
                           // 성공적으로 응답 받은 경우, 콘솔에 출력합니다.
                         if (response == "Wrong") {
                             alert("틀렸습니다");
-                            window.location.href = "/challenge";
                         } else if (response == "Correct") {
                             alert("맞았습니다");
                             window.location.href = "/challenge";
@@ -198,9 +197,11 @@ async function showPopup(id) {
                         } else if (jqXHR.responseText == "emptyFlag") {
                             alert("Flag 값이 비어있습니다")
                             window.location.href = "/challenge";
-                        } else if (jqXHR.responseText="TooManyRequest"){
-                            console.log(jqXHR)
+                        } else if (jqXHR.responseText=="TooManyRequest"){
                             alert("1분에 5번 이상 입력 금지입니다")
+                        } else if (jqXHR.responseText=='correctAlready'){
+                            alert("이미 맞춘 문제입니다");
+                            window.location.href = "/challenge";
                         }
                         else {
                             alert("에러가 발생했습니다")

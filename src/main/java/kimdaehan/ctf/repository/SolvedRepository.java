@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
@@ -25,6 +26,9 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
 
     @Transactional(readOnly= true)
     List<Solved> findAllBySolved(Quiz quiz);
+
+    @Transactional(readOnly = true)
+    Solved findBySolvedAndSolvedIdSolvedUserId(Quiz solved, String solvedUserId);
 
 
     //유저의 소속, id별 정보(score 포함)

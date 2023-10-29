@@ -7,6 +7,7 @@ import kimdaehan.ctf.entity.Quiz;
 import kimdaehan.ctf.entity.Solved;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.RankService;
+import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,17 +25,24 @@ import java.util.UUID;
 public class ScoreController extends  BaseController{
 
     private final RankService rankService;
+    private final ServerSettingService serverSettingService;
 
     @Autowired
-    public ScoreController(UserService userService, AuthenticationFacade authenticationFacade, RankService rankService) {
+    public ScoreController(UserService userService, AuthenticationFacade authenticationFacade, RankService rankService, ServerSettingService serverSettingService) {
         super(userService, authenticationFacade);
         this.rankService = rankService;
+        this.serverSettingService = serverSettingService;
     }
 
     @GetMapping({"/score"})
     public ModelAndView scoreMain(HttpServletRequest request){
         User user = getUser();
         ModelAndView mv = new ModelAndView();
+        if(serverSettingService.getServerStart().isAfter(LocalDateTime.now())){
+            logger.info("Try access challenge main before start-> user : {}, router : Get(/challenge)", user.getUserId());
+            mv.setViewName("/error/access_before_start");
+            return mv;
+        }
         mv.setViewName(("/score/score"));
         mv.addObject("title", "ScoreBoard");
         mv.addObject("user", user.getUserId());
