@@ -176,27 +176,57 @@
     display: flex;
     justify-content: space-between;
     width: 90%;
-    padding-bottom: 5%;
     box-sizing: border-box;
 }
 
 
 .rankTableContent td{
-    width:33%;
+
     color : white;
+    border : solid white 1px;
+}
+
+.rankTableContent {
+    display: flex;
 }
 .rankTableTitleTr td{
-    width:33%;
     color : white;
 }
 .rankTableDiv td {
-    width : 33%;
     color : white;
+}
+.rankTableContentRank {
+    width:20%!important;
+}
+.rankTableTitleRank{
+    width:20%!important;
+}
+.rankTableContentName {
+    width:46%!important;
+}
+.rankTableTitleName{
+    width:46%!important;
+}
+.rankTableContentTime {
+    width:33%!important
+}
+
+.rankTableTitleTime{
+    width:33%!important
 }
 
 .rankTableDiv{
     margin-top: 5%;
+    text-align: center;
 }
+
+.rankTableTitleTr{
+    display : flex;
+}
+.rankTableTitle{
+    display:block;
+}
+
 #contentDiv{
     height : 90%;
 }

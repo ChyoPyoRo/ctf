@@ -53,6 +53,11 @@
         const millisecondsInOneHour = millisecondsInOneMinute * 60;
         const millisecondsInOneDay = millisecondsInOneHour * 24;
 
+        if (last < 0) {
+            document.getElementById("main-time-clock").innerHTML = "대회가 종료되었습니다";
+            return;  // 더 이상 코드를 실행하지 않습니다.
+        }
+
         const day = Math.floor(last / millisecondsInOneDay);
         const hours = Math.floor((last % millisecondsInOneDay) / millisecondsInOneHour);
         const minutes = Math.floor((last % millisecondsInOneHour) / millisecondsInOneMinute);

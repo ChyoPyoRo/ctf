@@ -61,6 +61,7 @@ async function showPopup(id) {
 
             titleFlexDiv.className="titleFlex"
             flagFlexDiv.className='flagFlex'
+            flagFlexDiv.style="height : 44px;"
 
             contentDiv.id='contentDiv'
 
@@ -112,7 +113,7 @@ async function showPopup(id) {
             rankTableContentTime.className='rankTableContentTime'
 
             rankTableTitleName.innerText="NickName"
-            rankTableTitleRank.innerText="Rank"
+            rankTableTitleRank.innerText="Affiliation"
             rankTableTitleTime.innerText='Solved Time'
 
             rankTableTitleTr.appendChild(rankTableTitleRank)
@@ -128,8 +129,8 @@ async function showPopup(id) {
             challengeContentDiv.onclick= function showChallenge() {
                 document.getElementById('contentDiv').style.display = 'block';
                 document.getElementById('rankTableDiv').style.display='none';
-                document.getElementById('chB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;";
-                document.getElementById('raB').style="background : transparent; color:white;"
+                document.getElementById('chB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;margin-top: 20px; padding-top:4px;";
+                document.getElementById('raB').style="background : transparent; color:white;margin-top: 20px;padding-top:4px"
             }
             challengeContentDiv.checked=true;
             challengeContentDiv.className='btn-check';
@@ -138,7 +139,7 @@ async function showPopup(id) {
 
             challengeContentButton.id='chB'
             challengeContentButton.className='change-challenge-rank'
-            challengeContentButton.style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white;color: white; margin-top: 20px;";
+            challengeContentButton.style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white;color: white; margin-top: 20px;padding-top:4px";
             challengeContentButton.htmlFor='ch'
             challengeContentButton.innerText='Challenge'
 
@@ -150,15 +151,15 @@ async function showPopup(id) {
                 document.getElementById('contentDiv').style.display = 'none';
                 document.getElementById('rankTableDiv').style.display='block';
                 for(let i=0; i < rank.length; i++){
-                    rankTableContentRank.innerText= i+1;
+                    rankTableContentRank.innerText= rank[i].affiliation;
                     rankTableContentName.innerText = rank[i].nickName;
                     rankTableContentTime.innerText = rank[i].solvedTime;
                     rankTableContent.appendChild(rankTableContentRank)
                     rankTableContent.appendChild(rankTableContentName)
                     rankTableContent.appendChild(rankTableContentTime)
                 }
-                document.getElementById('raB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;";
-                document.getElementById('chB').style="background : transparent;color:white;"
+                document.getElementById('raB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;margin-top: 20px;padding-top:4px";
+                document.getElementById('chB').style="background : transparent;color:white;margin-top: 20px;padding-top:4px"
             }
             challengeRankDiv.className='btn-check';
             challengeRankDiv.name='ra'
@@ -167,7 +168,7 @@ async function showPopup(id) {
             challengeRankButton.id='raB'
             challengeRankButton.className='change-challenge-rank'
             challengeRankButton.htmlFor='ra'
-            challengeRankButton.style="margin-top:20px;"
+            challengeRankButton.style="margin-top:20px;padding-top:4px"
             challengeRankButton.innerText='Rank'
 
 
