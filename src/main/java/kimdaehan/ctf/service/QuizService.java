@@ -87,4 +87,7 @@ public class QuizService {
         return quizRepository.findDynamicScore(quizId).orElse(null);
     }
 
+    public void initQuizScore(){
+        quizRepository.updateQuizScoreInit(1000);
+    }
 }

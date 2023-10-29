@@ -70,4 +70,10 @@ public interface QuizRepository extends JpaRepository<Quiz, String> {
             "SET q.score =  :score "+
             " WHERE q.quizId = :quizId")
     void updateQuizScore(@Param("quizId") UUID quizId, @Param("score") Integer score);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Quiz q " +
+            "SET q.score =  :score ")
+    void updateQuizScoreInit(@Param("score") Integer score);
 }

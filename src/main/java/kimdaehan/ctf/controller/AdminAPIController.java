@@ -52,7 +52,8 @@ public class AdminAPIController extends BaseController{
                 if(time.getServerTime() != null && time.getServerDate() != null){
                     serverSettingService.setServerStartDate(time.getServerDate());
                     serverSettingService.setServerStartTime(time.getServerTime());
-                    logService.deleteLogBySeverSettingTime(serverSettingService.getServerStart());
+                    userService.deleteSolvedByServerSettingTime(serverSettingService.getServerStart()); // 푼문제 삭제
+                    quizService.initQuizScore(); // 퀴즈 점수 1000점으로 초기화
                 }
             } else if (time.getType().equals("END")) {
                 if(time.getServerTime() != null && time.getServerDate() != null){
