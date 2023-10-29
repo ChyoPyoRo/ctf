@@ -16,7 +16,16 @@ function postServerTime(type){
             body: JSON.stringify(body)
         };
         fetch(url, options)
-            .then(response => console.log(response));
+            .then(response => response.text())
+            .then(data => {
+                // 문자열 데이터(data)를 사용하여 원하는 작업 수행
+                if(data === "success"){
+                    alert("성공적으로 변경되었습니다.");
+                } else{
+                    alert("에러가 발생하였습니다.")
+                }
+                window.location.reload();
+            });
 
     } else {
         const body = {
@@ -34,6 +43,15 @@ function postServerTime(type){
             body: JSON.stringify(body)
         };
         fetch(url, options)
-            .then(response => console.log(response));
+            .then(response => response.text())
+            .then(data => {
+            // 문자열 데이터(data)를 사용하여 원하는 작업 수행
+                if(data === "success"){
+                    alert("성공적으로 변경되었습니다.");
+                } else{
+                    alert("에러가 발생하였습니다.")
+                }
+                window.location.reload();
+            });
     }
 }
