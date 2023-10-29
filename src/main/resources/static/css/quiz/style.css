@@ -124,7 +124,7 @@
 }
 
 .popupBoxContent{
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     color : white;
     height : 8%;
     display: flex;
@@ -177,6 +177,8 @@
     justify-content: space-between;
     width: 90%;
     box-sizing: border-box;
+    position: absolute;
+    bottom: 8px;
 }
 
 
@@ -230,6 +232,7 @@
 
 #contentDiv{
     height : 90%;
+    position:relative;
 }
 .change-challenge-rank{
     border-color : transparent;color : white; padding-right: 2%; padding-left : 2%;
@@ -250,7 +253,7 @@
     height : 55%;
     display: block;
     align-items: stretch;
-    margin-bottom: 3%;
+    margin-bottom: 8px;
 }
 .attatchmentDiv{
     height : 5%
