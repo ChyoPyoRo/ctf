@@ -27,13 +27,13 @@ async function showPopup(id) {
             let challengeRankDiv = document.createElement('input');
             let challengeRankButton = document.createElement('label')
             let contentDiv= document.createElement('div');
-
-            let nameDiv = document.createElement('div');
+            let nameheightDiv = document.createElement('div');
+            let nameDiv = document.createElement('h4');
             let titleFlexDiv = document.createElement('div');
-            let titleWriterDiv = document.createElement('h3');
+            let titleWriterDiv = document.createElement('h6');
             let writerDiv = document.createElement('div');
             let scoreDiv = document.createElement('div');
-            let titleDescriptionDiv = document.createElement('h3');
+            let titleDescriptionDiv = document.createElement('h6');
             let descriptionDiv = document.createElement('div');
             let flagDiv = document.createElement("input");
             let buttonDiv = document.createElement("button");
@@ -41,7 +41,7 @@ async function showPopup(id) {
             let flagFlexDiv = document.createElement('div');
 
             let attatchmentDiv = document.createElement('a');
-            let titleAttatchmentDiv = document.createElement("h3");
+            let titleAttatchmentDiv = document.createElement("h6");
 
 
             let rankTableDiv = document.createElement('table');
@@ -80,8 +80,8 @@ async function showPopup(id) {
             titleWriterDiv.className = 'popupBoxTitle';
             titleDescriptionDiv.className = 'popupBoxTitle'
 
+            nameheightDiv.className='nameheightDiv';
 
-            scoreDiv.style="font-size : 2em;"
 
             flagDiv.className="popupFlagInput";
             flagDiv.placeholder="Flag 입력"
@@ -124,8 +124,8 @@ async function showPopup(id) {
             challengeContentDiv.onclick= function showChallenge() {
                 document.getElementById('contentDiv').style.display = 'block';
                 document.getElementById('rankTableDiv').style.display='none';
-                document.getElementById('chB').style="background : white ;color: black;";
-                document.getElementById('raB').style="background : transparent;margin-left: 5%;"
+                document.getElementById('chB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;";
+                document.getElementById('raB').style="background : transparent; color:white;"
             }
             challengeContentDiv.checked=true;
             challengeContentDiv.className='btn-check';
@@ -134,7 +134,7 @@ async function showPopup(id) {
 
             challengeContentButton.id='chB'
             challengeContentButton.className='change-challenge-rank'
-            challengeContentButton.style="background : white ;color: black;";
+            challengeContentButton.style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white;color: white; ";
             challengeContentButton.htmlFor='ch'
             challengeContentButton.innerText='Challenge'
 
@@ -153,8 +153,8 @@ async function showPopup(id) {
                     rankTableContent.appendChild(rankTableContentName)
                     rankTableContent.appendChild(rankTableContentTime)
                 }
-                document.getElementById('raB').style="background : white ;color: black; margin-left: 5%;";
-                document.getElementById('chB').style="background : transparent;"
+                document.getElementById('raB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;";
+                document.getElementById('chB').style="background : transparent;color:white;"
             }
             challengeRankDiv.className='btn-check';
             challengeRankDiv.name='ra'
@@ -163,7 +163,7 @@ async function showPopup(id) {
             challengeRankButton.id='raB'
             challengeRankButton.className='change-challenge-rank'
             challengeRankButton.htmlFor='ra'
-            challengeRankButton.style='margin-left: 5%;'
+
             challengeRankButton.innerText='Rank'
 
 
@@ -213,7 +213,7 @@ async function showPopup(id) {
                 let fileName = quiz.attachment.split('/').pop();
                 attatchmentDiv.innerText = fileName;
                 attatchmentDiv.href = "/quiz/download/" + id
-                attatchmentDiv.className = 'popupBoxContent';
+                attatchmentDiv.className = 'popupBoxContent attatchmentDiv';
                 titleAttatchmentDiv.className = 'popupBoxTitle';
             }
 
@@ -223,8 +223,9 @@ async function showPopup(id) {
             popupElement.appendChild(challengeContentButton)
             popupElement.appendChild(challengeRankDiv);
             popupElement.appendChild(challengeRankButton)
-            contentDiv.appendChild(nameDiv);
-            contentDiv.appendChild(scoreDiv);
+            nameheightDiv.appendChild(nameDiv);
+            nameheightDiv.appendChild(scoreDiv);
+            contentDiv.appendChild(nameheightDiv);
             titleFlexDiv.appendChild(titleWriterDiv);
             titleFlexDiv.appendChild(writerDiv);
             contentDiv.appendChild(titleFlexDiv);
