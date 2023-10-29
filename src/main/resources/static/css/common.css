@@ -156,8 +156,8 @@
     z-index: 1;
     top : 310px;
     position : relative;
-    font-family: "Font Awesome 5 Free";
     text-align : center;
     height : 100px;
     flex-direction: column;
+    font-family: 'Noto Sans KR', sans-serif;
 }
