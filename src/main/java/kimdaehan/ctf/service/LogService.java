@@ -11,6 +11,7 @@ import kimdaehan.ctf.repository.DownloadLogRepository;
 import kimdaehan.ctf.repository.FlagLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -110,5 +111,13 @@ public class LogService {
 
     public List<FlagLog> getFlagLogByUserOneMinuteAgo(Quiz quizId, User user ){
         return flagLogRepository.findListBeforeOneMinute(user, quizId, LocalDateTime.now().minusMinutes(1));
+    }
+
+
+    @Transactional(readOnly = false)
+    public void deleteLogBySeverSettingTime(LocalDateTime localDateTime){
+        flagLogRepository.deleteByRecordKeyDateTimeBefore(localDateTime);
+        accessLogRepository.deleteByRecordKeyDateTimeBefore(localDateTime);
+        downloadLogRepository.deleteByRecordKeyDateTimeBefore(localDateTime);
     }
 }

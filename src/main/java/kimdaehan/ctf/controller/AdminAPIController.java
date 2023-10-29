@@ -52,6 +52,7 @@ public class AdminAPIController extends BaseController{
                 if(time.getServerTime() != null && time.getServerDate() != null){
                     serverSettingService.setServerStartDate(time.getServerDate());
                     serverSettingService.setServerStartTime(time.getServerTime());
+                    logService.deleteLogBySeverSettingTime(serverSettingService.getServerStart());
                 }
             } else if (time.getType().equals("END")) {
                 if(time.getServerTime() != null && time.getServerDate() != null){
