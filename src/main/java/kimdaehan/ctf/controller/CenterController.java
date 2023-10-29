@@ -1,6 +1,7 @@
 package kimdaehan.ctf.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import kimdaehan.ctf.auth.AuthenticationFacade;
 import kimdaehan.ctf.dto.Result;
 import kimdaehan.ctf.dto.UserPageDTO;
@@ -41,7 +42,7 @@ public class CenterController extends BaseController{
 
 
     @GetMapping({"/"})
-    public ModelAndView getMain() {
+    public ModelAndView getMain(HttpSession httpSession) {
         User user = getUser();
         ModelAndView mv = new ModelAndView("main");
         mv.addObject("time", serverSettingService.getServerEnd());
@@ -49,6 +50,11 @@ public class CenterController extends BaseController{
             mv.addObject("user", null);
             mv.addObject("type", null);
         } else {
+            if(user.getIsBan() == User.IsBan.ENABLE){
+                httpSession.invalidate();
+                mv.setViewName("error/481");
+                return mv;
+            }
             mv.addObject("user", user.getUserId());
             mv.addObject("type", user.getType());
         }

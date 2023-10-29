@@ -5,9 +5,12 @@ import kimdaehan.ctf.entity.RecordKey;
 import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.entity.log.AccessLog;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,4 +39,8 @@ public interface AccessLogRepository extends JpaRepository<AccessLog, RecordKey>
     void deleteByQuizId(Quiz quiz);
     @Transactional
     void deleteByRecordKeyUserId(User user);
+
+    @Modifying
+    @Query("DELETE FROM AccessLog e WHERE e.recordKey.dateTime <= :dateTime")
+    void deleteByRecordKeyDateTimeBefore(LocalDateTime dateTime);
 }

@@ -1,5 +1,7 @@
 package kimdaehan.ctf.configuration;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kimdaehan.ctf.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.session.*;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+import java.io.IOException;
 import java.time.Duration;
 
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -26,6 +30,7 @@ public class SecurityConfig {
 
     private final UserService userService;
 
+
     @Autowired
     public SecurityConfig(UserService userService) {
         this.userService = userService;
@@ -35,6 +40,20 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
+    private static class RemoveExistingSessionStrategy implements SessionInformationExpiredStrategy {
+        private final SessionInformationExpiredStrategy delegate = new SimpleRedirectSessionInformationExpiredStrategy("/login");
+
+        @Override
+        public void onExpiredSessionDetected(SessionInformationExpiredEvent event) throws IOException, ServletException {
+            // 기존 세션을 제거하는 로직을 구현
+            event.getRequest().getSession().invalidate();
+
+            // 로그인 페이지로 리디렉션
+            delegate.onExpiredSessionDetected(event);
+        }
+    }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
@@ -42,9 +61,15 @@ public class SecurityConfig {
                 /*.sessionManagement((sessionManagement) ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )*/
+                .sessionManagement(sessionManagement ->
+                        sessionManagement
+                                .maximumSessions(1)
+                                .maxSessionsPreventsLogin(false) // 기존 세션 유지 허용
+                                .expiredSessionStrategy(new RemoveExistingSessionStrategy())
+                )
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers("/", "/register", "/saveUser", "/login", "/login-process").permitAll()
+                        .requestMatchers("/", "/register","/rule", "/saveUser", "/login", "/login-process").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults())

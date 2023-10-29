@@ -7,6 +7,7 @@ import kimdaehan.ctf.entity.log.AccessLog;
 import kimdaehan.ctf.entity.log.DownloadLog;
 import kimdaehan.ctf.entity.log.FlagLog;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -50,4 +51,8 @@ public interface FlagLogRepository extends JpaRepository<FlagLog, RecordKey> {
 
     @Transactional
     void deleteByRecordKeyUserId(User user);
+
+    @Modifying
+    @Query("DELETE FROM FlagLog e WHERE e.recordKey.dateTime <= :dateTime")
+    void deleteByRecordKeyDateTimeBefore(LocalDateTime dateTime);
 }

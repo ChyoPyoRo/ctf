@@ -26,6 +26,7 @@ public class UserService implements UserDetailsService {
     private final AccessLogRepository accessLogRepository;
     private final DownloadLogRepository downloadLogRepository;
     private final FlagLogRepository flagLogRepository;
+    private final RankRepository rankRepository;
 
     @Override
     @NonNull
@@ -77,6 +78,11 @@ public class UserService implements UserDetailsService {
         userRepository.delete(user);
    }
 
+   @Transactional
+   public void deleteSolvedByServerSettingTime(LocalDateTime localDateTime){
+        solvedRepository.deleteBySolvedTimeBefore(localDateTime);
+        rankRepository.deleteByRecordKeyDateTimeBefore(localDateTime);
+   }
 
    public List<UserPageDTO> getUserList(){
         return solvedRepository.findScoreUsers();
