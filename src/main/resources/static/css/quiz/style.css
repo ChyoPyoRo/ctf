@@ -60,36 +60,36 @@
     align-self: flex-end;
 }
 
-@media (max-width: 1100px) {
-    .sidebar {
-        margin-left: -250px;
-    }
+/*@media (max-width: 1100px) {*/
+/*    .sidebar {*/
+/*        margin-left: -250px;*/
+/*    }*/
 
-    .sidebar.open {
-        margin-left: 0;
-    }
+/*    .sidebar.open {*/
+/*        margin-left: 0;*/
+/*    }*/
 
-    .content {
-        width: 100%;
-        margin-left: 0;
-    }
-    .challenge{
-        width : 100%;
-    }
-    .category-title {
-        width : 100%;
-    }
-    .chbox{
-        width : 100%;
-    }
-}
+/*    .content {*/
+/*        width: 100%;*/
+/*        margin-left: 0;*/
+/*    }*/
+/*    .challenge{*/
+/*        width : 100%;*/
+/*    }*/
+/*    .category-title {*/
+/*        width : 100%;*/
+/*    }*/
+/*    .chbox{*/
+/*        width : 100%;*/
+/*    }*/
+/*}*/
 
-@media (min-width : 900px){
-    .content{
-        min-width: 1430px;
-    }
+/*@media (min-width : 900px){*/
+/*    .content{*/
+/*        min-width: 1430px;*/
+/*    }*/
 
-}
+/*}*/
 
 .content-in-challenge{
     display: flex;
@@ -222,6 +222,7 @@
 
 .rankTableTitleTr{
     display : flex;
+    margin-bottom:10px;
 }
 .rankTableTitle{
     display:block;
