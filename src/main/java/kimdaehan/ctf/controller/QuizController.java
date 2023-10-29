@@ -57,7 +57,7 @@ public class QuizController extends BaseController{
     public ModelAndView challengeMain(HttpServletRequest request){
         User user = getUser();
         ModelAndView mv = new ModelAndView();
-        if(serverSettingService.getServerStart().isAfter(LocalDateTime.now())){
+        if(serverSettingService.getServerStart().isAfter(LocalDateTime.now()) && !user.getType().equals(User.Type.ADMIN)){
             logger.info("Try access challenge main before start-> user : {}, router : Get(/challenge)", user.getUserId());
             mv.setViewName("/error/access_before_start");
             return mv;

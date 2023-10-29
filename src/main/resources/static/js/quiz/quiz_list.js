@@ -31,7 +31,7 @@ async function showPopup(id) {
             let nameDiv = document.createElement('h4');
             let titleFlexDiv = document.createElement('div');
             let titleWriterDiv = document.createElement('h6');
-            let writerDiv = document.createElement('div');
+            let writerDiv = document.createElement('h6');
             let scoreDiv = document.createElement('div');
             let titleDescriptionDiv = document.createElement('h6');
             let descriptionDiv = document.createElement('div');
@@ -68,7 +68,7 @@ async function showPopup(id) {
             titleWriterDiv.innerText = "Author : "
             titleDescriptionDiv.innerText = "Description"
 
-            writerDiv.className = 'popupBoxContent';
+            writerDiv.className = 'popupBoxTitle';
             scoreDiv.className = 'popupBoxTitle';
             scoreDiv.id= "popupTitle"
             descriptionDiv.className = 'popupBoxContent description';
@@ -78,22 +78,26 @@ async function showPopup(id) {
             nameDiv.className = 'popupBoxTitle';
             nameDiv.id="popupTitle"
             titleWriterDiv.className = 'popupBoxTitle';
+            titleWriterDiv.style="margin-right:10px;"
             titleDescriptionDiv.className = 'popupBoxTitle'
 
             nameheightDiv.className='nameheightDiv';
 
 
-            flagDiv.className="popupFlagInput";
+            flagDiv.className="popupFlagInput form-control";
             flagDiv.placeholder="Flag 입력"
             // descriptionDiv.className="description"
             // titleFlag.className="flag-title";
+            nameDiv.style="font-size: 2.4rem;"
+            scoreDiv.style="font-size:1.4rem"
+
 
             nameDiv.innerText = quiz.quizName;
             writerDiv.innerText = quiz.author;
             scoreDiv.innerText = quiz.score;
             descriptionDiv.innerText = quiz.description;
             buttonDiv.innerText = "Submit";
-            buttonDiv.className="myButton"
+            buttonDiv.className="btn btn-outline-light"
 
             rankTableDiv.className='rankTableDiv'
             rankTableDiv.id='rankTableDiv'
@@ -134,7 +138,7 @@ async function showPopup(id) {
 
             challengeContentButton.id='chB'
             challengeContentButton.className='change-challenge-rank'
-            challengeContentButton.style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white;color: white; ";
+            challengeContentButton.style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white;color: white; margin-top: 20px;";
             challengeContentButton.htmlFor='ch'
             challengeContentButton.innerText='Challenge'
 
@@ -163,7 +167,7 @@ async function showPopup(id) {
             challengeRankButton.id='raB'
             challengeRankButton.className='change-challenge-rank'
             challengeRankButton.htmlFor='ra'
-
+            challengeRankButton.style="margin-top:20px;"
             challengeRankButton.innerText='Rank'
 
 
@@ -215,6 +219,8 @@ async function showPopup(id) {
                 attatchmentDiv.href = "/quiz/download/" + id
                 attatchmentDiv.className = 'popupBoxContent attatchmentDiv';
                 titleAttatchmentDiv.className = 'popupBoxTitle';
+                descriptionDiv.style="height:50%;"
+                attatchmentDiv.style="margin-bottom : 10px;"
             }
 
 
