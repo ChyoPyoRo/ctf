@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -45,7 +46,15 @@ public class CenterController extends BaseController{
     public ModelAndView getMain(HttpSession httpSession) {
         User user = getUser();
         ModelAndView mv = new ModelAndView("main");
-        mv.addObject("time", serverSettingService.getServerEnd());
+        if(serverSettingService.getServerStart().isAfter(LocalDateTime.now())){
+            mv.addObject("time", serverSettingService.getServerStart());
+            mv.addObject("textMain", "시작까지 남은 시간");
+        }
+        else{
+            mv.addObject("time", serverSettingService.getServerEnd());
+            mv.addObject("textMain", "종료까지 남은 시간");
+        }
+
         if(user == null){
             mv.addObject("user", null);
             mv.addObject("type", null);

@@ -24,9 +24,8 @@
         <div class="main-title" style="top: 180px;display: flex;align-items: center;">
             <span>2023 Security First</span>
             <span>연말 해킹 대회</span>
-            <h1 >
-                현재 남은 시간
-            </h1>
+            <h1 id="text" th:text="${textMain}"></h1>
+
             <span id="main-time-clock"></span>
         </div>
             <video width = "1680px" loop autoplay  muted id="background-video">
@@ -46,19 +45,23 @@
     function updateClock() {
         /*<![CDATA[*/
         const now = new Date();
-        const time = /*[[${time}]]*/;
+        const time = /*[[${time}]]*/ ;
         const end = new Date(time);
-        console.log("time", time);
-        console.log('end', end);
         const last = end - now;
         const millisecondsInOneSecond = 1000;
         const millisecondsInOneMinute = millisecondsInOneSecond * 60;
         const millisecondsInOneHour = millisecondsInOneMinute * 60;
         const millisecondsInOneDay = millisecondsInOneHour * 24;
+        const text =  document.getElementById("text").innerText;
 
-        if (last < 0) {
-            document.getElementById("main-time-clock").innerHTML = "대회가 종료되었습니다";
-            return;  // 더 이상 코드를 실행하지 않습니다.
+        if (last <= 0) {
+            if(text=="시작까지 남은 시간"){
+                window.location.href="/";
+            }
+            else{
+                document.getElementById("main-time-clock").innerHTML = "대회가 종료되었습니다";
+                return;  // 더 이상 코드를 실행하지 않습니다.
+                }
         }
 
         const day = Math.floor(last / millisecondsInOneDay);
