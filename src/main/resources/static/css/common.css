@@ -134,6 +134,17 @@
     }
 }
 
+@media (min-height : 750px){
+    .main-title{
+        font-size : 100px !important;
+    }
+}
+@media (min-height : 450px){
+    .main-title{
+        font-size : 30px !important;
+    }
+}
+
 
 /*** content-login ***/
 .content-login {
