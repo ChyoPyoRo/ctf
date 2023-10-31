@@ -87,6 +87,17 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
             "ORDER BY score DESC;", nativeQuery = true)
     List<RankAllDTO> findScoreUsersByAffiliationAndUserIdWithoudIsBan(@Param("affiliation") String affiliation);
 
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as userId, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nickName," +
+            " u.current_solved_date_time as solvedTime,  " +
+            "       COALESCE(SUM(q.score), 0) AS score , COUNT(q.score) AS solvedCount " +
+            "FROM user u " +
+            "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
+            "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE u.is_ban = 'DISABLE' and u.type = 'USER' " +
+            "GROUP BY u.user_id, u.nick_name, u.affiliation " +
+            "ORDER BY score DESC;", nativeQuery = true)
+    List<RankAllDTO> findScoreUsersWithAllAndUserIdWithoudIsBan();
     // Rank 사용할 거
     @Transactional(readOnly = true)
     @Query(value = "SELECT CONVERT(u.user_id USING utf8) as user_id, u.name as name, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nick_name, u.registration_date_time as registration_date_time, u.is_ban as is_ban, " +

@@ -91,9 +91,11 @@ public class ScoreController extends  BaseController{
         User user = getUser();
         logger.info("Try access rank-all-> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
         List<RankAllDTO> userPageDTOList;
-        if(affiliation.equals("YB") || affiliation.equals("NB")){
+        if(affiliation.equals("YB") || affiliation.equals("NB") || affiliation.equals("SCH")){
             userPageDTOList = userService.findScoreUsersByAffiliationAndUserIdWithoudIsBan(affiliation);
-        }  else {
+        } else if (affiliation.equals("ALL")){
+            userPageDTOList = userService.findScoreUsersWithAllAndUserIdWithoudIsBan();
+        }else {
             return ResponseEntity.badRequest().body("Validation error");
         }
         return ResponseEntity.ok(userPageDTOList);
