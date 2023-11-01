@@ -37,9 +37,13 @@ public class RankScheduler {
         if(serverStartTime.isBefore(localDateTime)){
             List<UserPageDTO> nbList = userService.getRankAndScoreUsersByAffiliation("NB");
             List<UserPageDTO> ybList = userService.getRankAndScoreUsersByAffiliation("YB");
-
+            List<UserPageDTO> schList = userService.getRankAndScoreUsersByAffiliation("SCH");
+            List<UserPageDTO> allList = userService.getAllUserList();
             int nbRank = 1;
             int ybRank = 1;
+            int schRank = 1;
+            int allRank = 1;
+
             logger.info("------- NB RankScheduler Start -------");
             for (UserPageDTO nb : nbList){
                 User user = userService.getUserId(nb.getUser_id());
@@ -63,6 +67,32 @@ public class RankScheduler {
                         .build();
                 rankService.upsertRank(rank);
                 ybRank += 1;
+            }
+
+            logger.info("------- SCH RankScheduler Start -------");
+            for (UserPageDTO sch : schList){
+                User user = userService.getUserId(sch.getUser_id());
+                UserRank rank = UserRank.builder()
+                        .recordKey(new RecordKey(user, localDateTime))
+                        .rankAffiliation(User.Affiliation.SCH)
+                        .score(Math.toIntExact(sch.getTotal_score()))
+                        .userRank(schRank)
+                        .build();
+                rankService.upsertRank(rank);
+                schRank += 1;
+            }
+
+            logger.info("------- ALL RankScheduler Start -------");
+            for (UserPageDTO all : allList){
+                User user = userService.getUserId(all.getUser_id());
+                UserRank rank = UserRank.builder()
+                        .recordKey(new RecordKey(user, localDateTime))
+                        .rankAffiliation(User.Affiliation.ALL)
+                        .score(Math.toIntExact(all.getTotal_score()))
+                        .userRank(allRank)
+                        .build();
+                rankService.upsertRank(rank);
+                allRank += 1;
             }
         }
     }

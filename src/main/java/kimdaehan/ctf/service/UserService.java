@@ -92,6 +92,9 @@ public class UserService implements UserDetailsService {
     public List<UserPageDTO> getUserListByAffiliation(String affiliation){
         return solvedRepository.findScoreUsersByAffiliation(affiliation);
     }
+    public List<UserPageDTO> getAllUserList(){
+        return solvedRepository.findALLRankAndScoreUsers();
+    }
     public UserPageDTO getUserByAffiliationAndUserId(String affiliation, String userId) {return  solvedRepository.findScoreUsersByAffiliationAndUserId(affiliation,userId).orElse(null);}
 
     public List<UserPageDTO> getRankAndScoreUsersByAffiliation(String affiliation) {return  solvedRepository.findRankAndScoreUsersByAffiliation(affiliation);}
@@ -101,10 +104,10 @@ public class UserService implements UserDetailsService {
         user.setCurrentSolvedDateTime(LocalDateTime.now());
         userRepository.save(user);
     }
-    public List<RankAllDTO> findScoreUsersByAffiliationAndUserIdWithoudIsBan(String affiliation){
+    public List<RankAllDTO> findScoreUsersByAffiliationAndUserIdWithoutIsBan(String affiliation){
         return solvedRepository.findScoreUsersByAffiliationAndUserIdWithoudIsBan(affiliation);
     }
-    public List<RankAllDTO>findScoreUsersWithAllAndUserIdWithoudIsBan(){
+    public List<RankAllDTO>findScoreUsersWithAllAndUserIdWithoutIsBan(){
         return solvedRepository.findScoreUsersWithAllAndUserIdWithoudIsBan();
     }
 

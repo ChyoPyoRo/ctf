@@ -110,6 +110,18 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
             "ORDER BY total_score DESC;", nativeQuery = true)
     List<UserPageDTO> findRankAndScoreUsersByAffiliation(@Param("affiliation") String affiliation);
 
+
+    @Transactional(readOnly = true)
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as user_id, u.name as name, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nick_name, u.registration_date_time as registration_date_time, u.is_ban as is_ban, " +
+            "       COALESCE(SUM(q.score), 0) AS total_score " +
+            "FROM user u " +
+            "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
+            "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE u.affiliation != 'OB' and u.affiliation != 'ALL' and u.is_ban = 'DISABLE' and u.type = 'USER' " +
+            "GROUP BY u.user_id, u.name, u.affiliation, u.nick_name, u.registration_date_time " +
+            "ORDER BY total_score DESC;", nativeQuery = true)
+    List<UserPageDTO> findALLRankAndScoreUsers();
+
     @Transactional(readOnly = true)
     @Query(value = "SELECT CONVERT(u.user_id USING utf8) as userId, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nickName, " +
             "       COALESCE(SUM(q.score), 0) AS totalScore " +

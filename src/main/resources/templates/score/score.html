@@ -57,6 +57,10 @@
                             <label style="font-size: small; padding: 2px 0 2px 0;" class="btn btn-outline-primary" for="YB">YB</label>
                             <input type="radio" class="btn-check" name="NB" id="NB" onclick="nbClick()" autocomplete="off">
                             <label  style="font-size: small; padding: 2px 0 2px 0;" class="btn btn-outline-primary" for="NB">NB</label>
+                            <input type="radio" class="btn-check" name="NB" id="SCH" onclick="nbClick()" autocomplete="off">
+                            <label  style="font-size: small; padding: 2px 0 2px 0;" class="btn btn-outline-primary" for="SCH">SCH</label>
+                            <input type="radio" class="btn-check" name="NB" id="ALL" onclick="nbClick()" autocomplete="off">
+                            <label  style="font-size: small; padding: 2px 0 2px 0;" class="btn btn-outline-primary" for="ALL">ALL</label>
                         </div>
                     </div>
                     <div id="chartContainer" style="margin-bottom: 5%;" >
@@ -107,12 +111,16 @@
         const rankChartCanvas = document.getElementById("rank-chart");
         const ybRadio = document.getElementById("YB");
         const nbRadio = document.getElementById("NB");
+        const schRadio = document.getElementById("SCH");
+        const allRadio = document.getElementById("ALL");
         const scoreList = document.getElementById("scoreTable");
 
         // YB 라디오 버튼 체크
         ybRadio.checked = true;
         // NB 라디오 버튼 체크 해제
         nbRadio.checked = false;
+        schRadio.checked = false;
+        allRadio.checked = false;
         Chart.getChart(rankChartCanvas).destroy();
         createRankGraph("YB");
         getScoreList("YB", scoreList)
@@ -123,9 +131,13 @@
 
         const ybRadio = document.getElementById("YB");
         const nbRadio = document.getElementById("NB");
+        const schRadio = document.getElementById("SCH");
+        const allRadio = document.getElementById("ALL");
         const scoreList = document.getElementById("scoreTable");
 
         // YB 라디오 버튼 체크
+        schRadio.checked = false;
+        allRadio.checked = false;
         ybRadio.checked = false;
         // NB 라디오 버튼 체크 해제
         nbRadio.checked = true;

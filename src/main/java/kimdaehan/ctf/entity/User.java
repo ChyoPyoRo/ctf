@@ -98,7 +98,7 @@ public class User implements Serializable, UserDetails {
 
     }
     public enum Affiliation{
-        NB, YB, OB, SCH
+        NB, YB, OB, SCH, ALL
 
     }
     public enum IsBan{
