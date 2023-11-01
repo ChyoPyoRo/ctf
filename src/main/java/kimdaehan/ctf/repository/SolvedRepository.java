@@ -134,6 +134,17 @@ public interface SolvedRepository extends JpaRepository<Solved, SolvedId> {
     List<RankGraphCurrentDTO> findRankAndScoreUsersByAffiliationTop5(@Param("affiliation") String affiliation);
 
     @Transactional(readOnly = true)
+    @Query(value = "SELECT CONVERT(u.user_id USING utf8) as userId, u.affiliation as affiliation, CONVERT(u.nick_name USING utf8) as nickName, " +
+            "       COALESCE(SUM(q.score), 0) AS totalScore " +
+            "FROM user u " +
+            "LEFT JOIN solved s ON u.user_id = s.solved_user_id " +
+            "LEFT JOIN quiz q ON s.solved_quiz_id = q.quiz_id " +
+            "WHERE u.affiliation != 'OB' and u.affiliation != 'ALL' and u.is_ban = 'DISABLE' and u.type = 'USER' " +
+            "GROUP BY u.user_id, u.name, u.affiliation " +
+            "ORDER BY totalScore DESC LIMIT 5;", nativeQuery = true)
+    List<RankGraphCurrentDTO> findAllRankAndScoreUsersByAffiliationTop5();
+
+    @Transactional(readOnly = true)
     @Query(value = "SELECT q.quiz_name FROM quiz q " +
             "JOIN solved s ON s.solved_quiz_id = q.quiz_id " +
             "WHERE s.solved_user_id = :userId AND q.category = :category", nativeQuery = true)

@@ -89,6 +89,7 @@ public class UserService implements UserDetailsService {
    }
    public UserPageDTO getUserByUserId(String userId) {return  solvedRepository.findScoreUsersByUserId(userId).orElse(null);}
 
+
     public List<UserPageDTO> getUserListByAffiliation(String affiliation){
         return solvedRepository.findScoreUsersByAffiliation(affiliation);
     }
@@ -100,6 +101,7 @@ public class UserService implements UserDetailsService {
     public List<UserPageDTO> getRankAndScoreUsersByAffiliation(String affiliation) {return  solvedRepository.findRankAndScoreUsersByAffiliation(affiliation);}
 
     public List<RankGraphCurrentDTO> getRankAndScoreUsersByAffiliationTop5(String affiliation){return solvedRepository.findRankAndScoreUsersByAffiliationTop5(affiliation);}
+    public List<RankGraphCurrentDTO> getAllRankAndScoreUsersByAffiliationTop5(){return solvedRepository.findAllRankAndScoreUsersByAffiliationTop5();}
     public void changeUserCurrentSolvedDateTime(User user){
         user.setCurrentSolvedDateTime(LocalDateTime.now());
         userRepository.save(user);
@@ -113,5 +115,8 @@ public class UserService implements UserDetailsService {
 
     public List<String> getAllQuizNameByUserId(String userId, String category){
         return solvedRepository.findAllQuizNameByUserId(userId, category);
+    }
+    public void initCurrentTime(){
+        userRepository.updateCurrentSolvedDateTime();
     }
 }
