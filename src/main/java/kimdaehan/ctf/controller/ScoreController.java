@@ -56,7 +56,7 @@ public class ScoreController extends  BaseController{
         User user = getUser();
         logger.info("Try access rank-graph -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
         List<RankGraphDTO> rankGraphDTOList;
-        if(affiliation.equals("YB") || affiliation.equals("NB")){
+        if(affiliation.equals("YB") || affiliation.equals("NB") || affiliation.equals("SCH") || affiliation.equals("ALL")){
             rankGraphDTOList = rankService.getRankGraphByAffiliation(affiliation);
         }  else {
             return ResponseEntity.badRequest().body("Validation error");
@@ -69,7 +69,7 @@ public class ScoreController extends  BaseController{
         User user = getUser();
         logger.info("Try access rank-graph-current-> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
         List<RankGraphCurrentDTO> userPageDTOList;
-        if(affiliation.equals("YB") || affiliation.equals("NB")){
+        if(affiliation.equals("YB") || affiliation.equals("NB") || affiliation.equals("SCH") || affiliation.equals("ALL")){
             userPageDTOList = userService.getRankAndScoreUsersByAffiliationTop5(affiliation);
         }  else {
             return ResponseEntity.badRequest().body("Validation error");

@@ -1,6 +1,7 @@
 package kimdaehan.ctf.scheduler;
 
 import kimdaehan.ctf.dto.UserPageDTO;
+import kimdaehan.ctf.entity.AffiliationKey;
 import kimdaehan.ctf.entity.UserRank;
 import kimdaehan.ctf.entity.RecordKey;
 import kimdaehan.ctf.entity.User;
@@ -48,8 +49,7 @@ public class RankScheduler {
             for (UserPageDTO nb : nbList){
                 User user = userService.getUserId(nb.getUser_id());
                 UserRank rank = UserRank.builder()
-                        .recordKey(new RecordKey(user, localDateTime))
-                        .rankAffiliation(User.Affiliation.NB)
+                        .affiliationKey(new AffiliationKey(user, localDateTime, User.Affiliation.NB))
                         .score(Math.toIntExact(nb.getTotal_score()))
                         .userRank(nbRank)
                         .build();
@@ -60,8 +60,7 @@ public class RankScheduler {
             for (UserPageDTO yb : ybList){
                 User user = userService.getUserId(yb.getUser_id());
                 UserRank rank = UserRank.builder()
-                        .recordKey(new RecordKey(user, localDateTime))
-                        .rankAffiliation(User.Affiliation.YB)
+                        .affiliationKey(new AffiliationKey(user, localDateTime, User.Affiliation.YB))
                         .score(Math.toIntExact(yb.getTotal_score()))
                         .userRank(ybRank)
                         .build();
@@ -73,8 +72,7 @@ public class RankScheduler {
             for (UserPageDTO sch : schList){
                 User user = userService.getUserId(sch.getUser_id());
                 UserRank rank = UserRank.builder()
-                        .recordKey(new RecordKey(user, localDateTime))
-                        .rankAffiliation(User.Affiliation.SCH)
+                        .affiliationKey(new AffiliationKey(user, localDateTime, User.Affiliation.SCH))
                         .score(Math.toIntExact(sch.getTotal_score()))
                         .userRank(schRank)
                         .build();
@@ -86,8 +84,7 @@ public class RankScheduler {
             for (UserPageDTO all : allList){
                 User user = userService.getUserId(all.getUser_id());
                 UserRank rank = UserRank.builder()
-                        .recordKey(new RecordKey(user, localDateTime))
-                        .rankAffiliation(User.Affiliation.ALL)
+                        .affiliationKey(new AffiliationKey(user, localDateTime, User.Affiliation.ALL))
                         .score(Math.toIntExact(all.getTotal_score()))
                         .userRank(allRank)
                         .build();

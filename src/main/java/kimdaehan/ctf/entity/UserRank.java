@@ -14,7 +14,7 @@ import lombok.*;
 @ToString
 public class UserRank {
     @EmbeddedId
-    RecordKey recordKey;
+    AffiliationKey affiliationKey;
 
     @Column(columnDefinition = "INT NOT NULL")
     @Builder.Default
@@ -23,7 +23,5 @@ public class UserRank {
     @Column(columnDefinition = "INT NOT NULL")
     private Integer userRank;
 
-    @Column(columnDefinition = "VARCHAR(16) NOT NULL", length = 16)
-    @Enumerated(EnumType.STRING)
-    private User.Affiliation rankAffiliation;
+
 }

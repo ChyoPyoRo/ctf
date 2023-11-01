@@ -81,7 +81,7 @@ public class UserService implements UserDetailsService {
    @Transactional
    public void deleteSolvedByServerSettingTime(LocalDateTime localDateTime){
         solvedRepository.deleteBySolvedTimeBefore(localDateTime);
-        rankRepository.deleteByRecordKeyDateTimeBefore(localDateTime);
+        rankRepository.deleteByAffiliationKeyDateTimeBefore(localDateTime);
    }
 
    public List<UserPageDTO> getUserList(){

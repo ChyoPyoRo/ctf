@@ -2,6 +2,7 @@ package kimdaehan.ctf.repository;
 
 import kimdaehan.ctf.dto.QuizRankDto;
 import kimdaehan.ctf.dto.RankGraphDTO;
+import kimdaehan.ctf.entity.AffiliationKey;
 import kimdaehan.ctf.entity.UserRank;
 import kimdaehan.ctf.entity.RecordKey;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface RankRepository extends JpaRepository<UserRank, RecordKey> {
+public interface RankRepository extends JpaRepository<UserRank, AffiliationKey> {
 
     @Transactional(readOnly = true)
     @Query(value = "SELECT CONVERT(user_id USING utf8) as userId, user_rank as userRank, score as score, registration_date_time as dateTime " +
@@ -41,7 +42,7 @@ public interface RankRepository extends JpaRepository<UserRank, RecordKey> {
 
     @Transactional
     @Modifying
-    @Query("DELETE FROM UserRank e WHERE e.recordKey.dateTime <= :dateTime")
-    void deleteByRecordKeyDateTimeBefore(LocalDateTime dateTime);
+    @Query("DELETE FROM UserRank e WHERE e.affiliationKey.dateTime <= :dateTime")
+    void deleteByAffiliationKeyDateTimeBefore(LocalDateTime dateTime);
 
 }
