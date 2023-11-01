@@ -79,12 +79,12 @@ public class ScoreController extends  BaseController{
         return ResponseEntity.ok(userPageDTOList);
     }
 
-    @GetMapping({"/rank-graph-history/{userId}"})
+    @GetMapping({"/rank-graph-history/{userId}/{affiliation}"})
     @ResponseBody
-    public ResponseEntity<?> rankGraphHistroy(HttpServletRequest request, @PathVariable("userId") String userId){
+    public ResponseEntity<?> rankGraphHistroy(HttpServletRequest request, @PathVariable("userId") String userId,@PathVariable("affiliation") String affiliation){
         User user = getUser();
         logger.info("Try access rank-graph-history -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
-        return ResponseEntity.ok(rankService.getRankListByUser(userId));
+        return ResponseEntity.ok(rankService.getRankListByUser(userId, affiliation));
     }
 
     @GetMapping({"/rank-all/{affiliation}"})
