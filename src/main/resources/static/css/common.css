@@ -104,6 +104,14 @@
         margin-left: 15px;
     }
 }
+@media (max-width: 960px){
+    .navbar{
+        width: 960px;
+    }
+    .content-login {
+        width: 960px;
+    }
+}
 @media (max-width: 1280px){
     .navbar{
         width: 1280px;
@@ -120,6 +128,15 @@
         width: 1680px;
     }
 }
+@media (max-width: 1920px){
+    .navbar{
+        width: 1920px;
+    }
+    .content-login {
+        width: 1920px;
+    }
+}
+
 @media (min-width: 1680px){
     .navbar{
         width: 100%;
