@@ -177,8 +177,8 @@
     justify-content: space-between;
     width: 100%;
     box-sizing: border-box;
-    position: absolute;
-    bottom: 8px;
+    position: relative;
+    margin-bottom: 20px;
 }
 
 
@@ -218,7 +218,8 @@
 }
 
 .rankTableDiv{
-    margin-top: 5%;
+    margin-bottom: 20px;
+    padding-top : 5%;
     text-align: center;
 }
 
@@ -250,7 +251,7 @@
 
 
 .popupBoxContent.description  {
-    height : 55%;
+    height : 250px;
     display: block;
     align-items: stretch;
     margin-bottom: 8px;

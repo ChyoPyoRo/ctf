@@ -102,6 +102,8 @@ async function showPopup(id) {
 
             rankTableDiv.className='rankTableDiv'
             rankTableDiv.id='rankTableDiv'
+
+            // rankTableDiv.style="height : 446.04px;"
             rankTableTitle.className='rankTableTitle'
             rankTableTitleTr.className='rankTableTitleTr'
             rankTableTitleName.className='rankTableTitleName'
@@ -146,7 +148,8 @@ async function showPopup(id) {
 
             challengeRankDiv.className="content-button";
             challengeRankDiv.autocomplete="off";
-            challengeRankDiv.onclick=  async function showRankTable() {
+            challengeRankDiv.onclick=  async function showRankTable(){
+                setHeight();
                 const rank = await getData(rankUrl);
                 document.getElementById('contentDiv').style.display = 'none';
                 document.getElementById('rankTableDiv').style.display='block';
@@ -220,7 +223,6 @@ async function showPopup(id) {
                 attatchmentDiv.href = "/quiz/download/" + id
                 attatchmentDiv.className = 'popupBoxContent attatchmentDiv';
                 titleAttatchmentDiv.className = 'popupBoxTitle';
-                descriptionDiv.style="height:50%;"
                 attatchmentDiv.style="margin-bottom : 10px;"
             }
 
@@ -284,3 +286,11 @@ function getData(url) {
     });
 }
 
+function setHeight(){
+    // "Challenge" 모드에서 팝업창의 높이를 가져옵니다.
+    var challengeHeight = document.getElementById('contentDiv').offsetHeight;
+
+    // "Rank" 모드에서 팝업창의 높이를 "Challenge" 모드의 팝업창 높이로 설정합니다.
+    document.getElementById('rankTableDiv').style.height = challengeHeight + 'px';
+
+}
