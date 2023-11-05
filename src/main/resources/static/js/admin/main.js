@@ -30,8 +30,8 @@ async function getRankCurrent(affiliation){
         console.log(e);
     }
 }
-async function getRankHistory(userId){
-    const url = "/rank-graph-history/"+userId;
+async function getRankHistory(userId, affiliation){
+    const url = "/rank-graph-history/"+userId+"/"+affiliation;
     try {
         return await getAjax(url);
     } catch(e) {
@@ -50,7 +50,7 @@ async function getParseData(affiliation){
 
     const dateNow = new Date();
     for(let i = 0; i< rankData.length; i++){
-        let history = await getRankHistory(rankData[i].userId);
+        let history = await getRankHistory(rankData[i].userId, affiliation);
         userDict[i+1] = {"nickName": rankData[i].nickName, "history":history, "score": [rankData[i].totalScore]};
         if(historyCount < history.length){
             historyCount = history.length;

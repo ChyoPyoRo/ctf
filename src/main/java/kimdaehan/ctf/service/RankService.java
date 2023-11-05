@@ -23,8 +23,8 @@ public class RankService {
         return rankRepository.findRankGraphByAffiliation(affiliation);
     }
 
-    public List<RankGraphDTO> getRankListByUser(String userId){
-        return rankRepository.findRankGraphByUserId(userId);
+    public List<RankGraphDTO> getRankListByUser(String userId, String affiliation){
+        return rankRepository.findRankGraphByUserId(userId, affiliation);
     }
 
     public List<QuizRankDto> getRankListByChallenge(UUID challengeId){return rankRepository.findRankByChallengeId(challengeId);}

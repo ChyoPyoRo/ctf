@@ -28,9 +28,9 @@ public interface RankRepository extends JpaRepository<UserRank, AffiliationKey> 
 
     @Query(value = "SELECT CONVERT(user_id USING utf8) as userId, user_rank as userRank, score as score, registration_date_time as dateTime " +
             "FROM user_rank " +
-            "WHERE user_id = :userId " +
+            "WHERE user_id = :userId and rank_affiliation = :affiliation " +
             "ORDER BY dateTime DESC;",nativeQuery = true)
-    List<RankGraphDTO> findRankGraphByUserId(@Param("userId") String userId);
+    List<RankGraphDTO> findRankGraphByUserId(@Param("userId") String userId, @Param("affiliation") String affiliation);
 
     @Transactional(readOnly = true)
     @Query(value="SELECT s.solved_time as solvedTime, CONVERT(u.nick_name USING utf8) as nickName , u.affiliation as affiliation" +
