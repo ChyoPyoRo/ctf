@@ -58,7 +58,6 @@ async function showPopup(id) {
 
 
 
-
             titleFlexDiv.className="titleFlex"
             flagFlexDiv.className='flagFlex'
             flagFlexDiv.style="height : 44px;"
@@ -150,19 +149,74 @@ async function showPopup(id) {
             challengeRankDiv.autocomplete="off";
             challengeRankDiv.onclick=  async function showRankTable(){
                 setHeight();
-                const rank = await getData(rankUrl);
+                clearRankTable();
+                const firstRankUrl = rankUrl + "/1"
+                const rank = await getData(firstRankUrl);
                 document.getElementById('contentDiv').style.display = 'none';
                 document.getElementById('rankTableDiv').style.display='block';
-                for(let i=0; i < rank.length; i++){
-                    rankTableContentRank.innerText= rank[i].affiliation;
-                    rankTableContentName.innerText = rank[i].nickName;
-                    rankTableContentTime.innerText = rank[i].solvedTime;
+                console.log(rank);
+                console.log(rank.length);
+                const rankList = rank.quizResult;
+                for(let i=0; i < rankList.length; i++){
+
+                    let rankTableContent = document.createElement('tr');
+                    let rankTableContentName = document.createElement('td');
+                    let rankTableContentRank = document.createElement('td');
+                    let rankTableContentTime = document.createElement('td');
+
+                    rankTableContent.className='rankTableContent'
+                    rankTableContentName.className='rankTableContentName'
+                    rankTableContentRank.className='rankTableContentRank'
+                    rankTableContentTime.className='rankTableContentTime'
+
+                    rankTableContentRank.innerText= rankList[i].affiliation;
+                    rankTableContentName.innerText = rankList[i].nickName;
+                    rankTableContentTime.innerText = rankList[i].solvedTime;
                     rankTableContent.appendChild(rankTableContentRank)
                     rankTableContent.appendChild(rankTableContentName)
                     rankTableContent.appendChild(rankTableContentTime)
+                    if(!document.getElementById('buttonLayer')){
+                        rankTableDiv.appendChild(rankTableContent);
+                    }
+                    else{
+                        buttonLayerDiv=document.getElementById('buttonLayer');
+                        rankTableDiv.insertBefore(rankTableContent, buttonLayerDiv);
+                    }
                 }
-                document.getElementById('raB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;margin-top: 20px;padding-top:4px";
+                document.getElementById('raB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;margin-top: 20px;padding-top+63:4px";
                 document.getElementById('chB').style="background : transparent;color:white;margin-top: 20px;padding-top:4px"
+
+                console.log(document.getElementById('pageButton'))
+                //button
+                if(!document.getElementById('buttonLayer'))
+                {
+                    let buttonLayerDiv = document.createElement('div');
+                    buttonLayerDiv.id="buttonLayer"
+                    for (var z = 0; z < rank.page; z++) {
+                        console.log(z)
+                        var pageNumString = (z + 1).toString();
+                        var pageUrl = rankUrl + "/" + pageNumString;
+                        (function (url) {
+                            let pageButton = document.createElement('button');
+                            pageButton.className = "btn-outline-light btn"
+                            pageButton.id="pageButton";
+                            pageButton.addEventListener('click', async function () {
+                                setHeight();
+                                clearRankTable();
+                                await buttonAjax(url, rankUrl);
+                            });
+                            pageButton.innerText = z + 1
+                            if (!(z == (rank.page -1))){
+                                pageButton.style="margin-right : 10px"
+                            }
+                            buttonLayerDiv.appendChild(pageButton);
+                        })(pageUrl)
+
+                    }
+                    buttonLayerDiv.style = "padding-top : 25px;"
+                    rankTableDiv.appendChild(buttonLayerDiv)
+                }
+
             }
             challengeRankDiv.className='btn-check';
             challengeRankDiv.name='ra'
@@ -173,6 +227,8 @@ async function showPopup(id) {
             challengeRankButton.htmlFor='ra'
             challengeRankButton.style="margin-top:20px;padding-top:4px"
             challengeRankButton.innerText='Rank'
+
+
 
 
             // popup
@@ -287,10 +343,70 @@ function getData(url) {
 }
 
 function setHeight(){
-    // "Challenge" 모드에서 팝업창의 높이를 가져옵니다.
-    var challengeHeight = document.getElementById('contentDiv').offsetHeight;
+    if(document.getElementById('contentDiv').style.display == 'none'){
+    }else{
+        var challengeHeight = document.getElementById('contentDiv').offsetHeight;
+        document.getElementById('rankTableDiv').style.height = challengeHeight + 'px';
+    }
 
-    // "Rank" 모드에서 팝업창의 높이를 "Challenge" 모드의 팝업창 높이로 설정합니다.
-    document.getElementById('rankTableDiv').style.height = challengeHeight + 'px';
+}
 
+function clearRankTable() {
+    const rankTableDiv = document.getElementsByClassName('rankTableDiv');
+    const length = rankTableDiv[0].children.length;
+    console.log(rankTableDiv)
+    for(let i = length - 2; i > 0; i--) {
+        rankTableDiv[0].removeChild(rankTableDiv[0].children[i]);
+    }
+}
+
+function buttonAjax(pageUrl, rankUrl){
+    $.ajax({
+            url : pageUrl,
+            type : "GET",
+            dataType: "json",
+            success: function makeRankPopUp(data) {
+                setHeight();
+                clearRankTable();
+                document.getElementById('contentDiv').style.display = 'none';
+                document.getElementById('rankTableDiv').style.display='block'
+                var buttonLayerDiv = document.getElementById('buttonLayer')
+                var rankTableDiv= document.getElementById('rankTableDiv');
+                var rankList = data.quizResult;
+                console.log(data)
+                for(let i=0; i < rankList.length; i++){
+
+                    let rankTableContent = document.createElement('tr');
+                    let rankTableContentName = document.createElement('td');
+                    let rankTableContentRank = document.createElement('td');
+                    let rankTableContentTime = document.createElement('td');
+
+                    rankTableContent.className='rankTableContent'
+                    rankTableContentName.className='rankTableContentName'
+                    rankTableContentRank.className='rankTableContentRank'
+                    rankTableContentTime.className='rankTableContentTime'
+
+                    rankTableContentRank.innerText= rankList[i].affiliation;
+                    rankTableContentName.innerText = rankList[i].nickName;
+                    rankTableContentTime.innerText = rankList[i].solvedTime;
+                    rankTableContent.appendChild(rankTableContentRank)
+                    rankTableContent.appendChild(rankTableContentName)
+                    rankTableContent.appendChild(rankTableContentTime)
+                    rankTableDiv.insertBefore(rankTableContent, buttonLayerDiv);
+                }
+                document.getElementById('raB').style="border-top: 1px solid white;border-right: 1px solid white;border-left: 1px solid white; color:white;margin-top: 20px;padding-top+63:4px";
+                document.getElementById('chB').style="background : transparent;color:white;margin-top: 20px;padding-top:4px"
+            },
+            error : function (jqXHR, textStatus, errorThrown) {
+                if (jqXHR.responseText == "ValidationError") {
+                    alert("Validation Error")
+                }
+                else {
+                    alert("에러가 발생했습니다")
+                }
+            }
+
+        },
+
+    )
 }

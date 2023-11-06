@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,8 +104,8 @@ public class ScoreController extends  BaseController{
         return ResponseEntity.ok(userPageDTOList);
     }
 
-    @GetMapping({"/rank/challenge/{challengId}"})
-    public ResponseEntity<?> rankForSingleChallenge(HttpServletRequest request, @PathVariable String challengId){
+    @GetMapping({"/rank/challenge/{challengId}/{pageNum}"})
+    public ResponseEntity<?> rankForSingleChallenge(HttpServletRequest request, @PathVariable String challengId, @PathVariable Integer pageNum){
         User user = getUser();
         UUID quizId;
         logger.info("Try access single challenge Rank -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
@@ -122,6 +123,27 @@ public class ScoreController extends  BaseController{
             logger.info("Submitted UUID of non-existent challenge   -> user : {}, router : Get(/rank/challenge/)", user.getUserId());
             return ResponseEntity.badRequest().body("ValidationError");
         }
-        return ResponseEntity.ok(returnList);
+
+        List<QuizRankDto> testList = new ArrayList<QuizRankDto>();
+        for(int i =0; i<120;i++){
+            testList.add(returnList.get(0));
+        }
+
+        int start = (pageNum - 1) * 12;
+        int end = pageNum * 12;
+
+        if(start >= returnList.size()){
+            logger.info("pageNumber Over   -> user : {}, router : Get(/rank/challenge/)", user.getUserId());
+            return ResponseEntity.badRequest().body("ValidationError");
+        }
+        if(end > returnList.size()){
+            end = returnList.size();
+        }
+        List<QuizRankDto> pageList = returnList.subList(start, end);
+        int pageCount = (int) Math.ceil((double) returnList.size() / 12);
+        QuizRankPaginationDto result = new QuizRankPaginationDto(pageList, pageCount);
+        return ResponseEntity.ok(result);
     }
+
+
 }

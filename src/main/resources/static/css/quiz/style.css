@@ -259,3 +259,8 @@
 .attatchmentDiv{
     height : 5%
 }
+
+#pageButton{
+    color : white;
+    border-color : white;
+}
