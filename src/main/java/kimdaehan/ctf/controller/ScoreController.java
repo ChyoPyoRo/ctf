@@ -123,16 +123,20 @@ public class ScoreController extends  BaseController{
             logger.info("Submitted UUID of non-existent challenge   -> user : {}, router : Get(/rank/challenge/)", user.getUserId());
             return ResponseEntity.badRequest().body("ValidationError");
         }
-
-        List<QuizRankDto> testList = new ArrayList<QuizRankDto>();
-        for(int i =0; i<120;i++){
-            testList.add(returnList.get(0));
-        }
+//        테스트용 페이지 네이션
+//        List<QuizRankDto> testList = new ArrayList<QuizRankDto>();
+//        for(int i =0; i<120;i++){
+//            testList.add(returnList.get(0));
+//        }
 
         int start = (pageNum - 1) * 12;
         int end = pageNum * 12;
 
-        if(start >= returnList.size()){
+        if(returnList.size() == 0){
+            QuizRankPaginationDto result = new QuizRankPaginationDto(returnList, 0);
+            return ResponseEntity.ok(result);
+        }
+        else if(start >= returnList.size()){
             logger.info("pageNumber Over   -> user : {}, router : Get(/rank/challenge/)", user.getUserId());
             return ResponseEntity.badRequest().body("ValidationError");
         }
