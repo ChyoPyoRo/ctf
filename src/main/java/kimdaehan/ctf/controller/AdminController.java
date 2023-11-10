@@ -239,7 +239,7 @@ public class AdminController extends BaseController{
         // 파일 저장 및 경로 저장
         if(quizDto.getFile() != null){
             String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-            String basePath = rootPath + "/" + "data";
+            String basePath = rootPath + "/../" + "ctf/data";
             String filePath = basePath + "/" + quizDto.getFile().getOriginalFilename();
             File dest = new File(filePath);
             quizDto.getFile().transferTo(dest);
@@ -280,7 +280,7 @@ public class AdminController extends BaseController{
         }
         if(quizDto.getFile() != null){
             String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-            String basePath = rootPath + "/" + "data";
+            String basePath = rootPath + "/../" + "ctf/data";
             String filePath = basePath + "/" + quizDto.getFile().getOriginalFilename();
             File dest = new File(filePath);
             quizDto.getFile().transferTo(dest);

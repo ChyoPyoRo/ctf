@@ -34,3 +34,6 @@ spring:
     hibernate:
       ddl-auto: update
     database: mysql
+logging:
+  file:
+    path: /home/ctf/log
