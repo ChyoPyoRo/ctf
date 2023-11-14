@@ -62,7 +62,7 @@ public class AdminController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            mv.setViewName("/error/404");
+            mv.setViewName("error/404");
             return mv;
         }
         //서버 시간
@@ -74,7 +74,7 @@ public class AdminController extends BaseController{
         //active
         mv.addObject("type","MAIN");
 
-        mv.setViewName("/admin/admin_main");
+        mv.setViewName("admin/admin_main");
         return mv;
     }
 
@@ -93,7 +93,7 @@ public class AdminController extends BaseController{
         mv.addObject("users", users);
         //active
         mv.addObject("type","USER");
-        mv.setViewName("/admin/admin_user");
+        mv.setViewName("admin/admin_user");
         return mv;
     }
     @GetMapping({"/admin_user/detail/{userId}"})
@@ -102,20 +102,20 @@ public class AdminController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            mv.setViewName("/error/404");
+            mv.setViewName("error/404");
             return mv;
         }
         // 검색 유저
         User member = userService.getUserId(userId);
         if(member == null){
             logger.error("No User Data -> user : {}", user.getUserId());
-            mv.setViewName("/error/400");
+            mv.setViewName("error/400");
             return mv;
         }
         mv.addObject("user", member);
         //active
         mv.addObject("type","USER");
-        mv.setViewName("/admin/admin_user_detail");
+        mv.setViewName("admin/admin_user_detail");
         return mv;
     }
     @PostMapping({"/admin_user/detail/{userId}"})
@@ -152,7 +152,7 @@ public class AdminController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            mv.setViewName("/error/404");
+            mv.setViewName("error/404");
             return mv;
         }
         List<Quiz> quizzes = quizService.getAllQuiz();
@@ -163,7 +163,7 @@ public class AdminController extends BaseController{
         //active
         mv.addObject("type","QUIZ");
 
-        mv.setViewName("/admin/admin_quiz");
+        mv.setViewName("admin/admin_quiz");
         return mv;
     }
 
@@ -173,14 +173,14 @@ public class AdminController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            mv.setViewName("/error/404");
+            mv.setViewName("error/404");
             return mv;
         }
         //active
         mv.addObject("type","QUIZ");
         if (crud.equals("create")){
             logger.info("User Access /admin/quiz/create -> user : {}", user.getUserId());
-            mv.setViewName("/admin/admin_quiz_create");
+            mv.setViewName("admin/admin_quiz_create");
             return mv;
         } else if(crud.equals("edit")){
             logger.info("User Access /admin/quiz/edit -> user : {}", user.getUserId());
@@ -196,16 +196,16 @@ public class AdminController extends BaseController{
                     mv.addObject("date", quiz.getStartTime().toLocalDate());
                     mv.addObject("time", quiz.getStartTime().toLocalTime());
                     mv.addObject("quiz", quiz);
-                    mv.setViewName("/admin/admin_quiz_edit");
+                    mv.setViewName("admin/admin_quiz_edit");
                 } else {
-                    mv.setViewName("/error/400");
+                    mv.setViewName("error/400");
                 }
             } else {
-                mv.setViewName("/error/400");
+                mv.setViewName("error/400");
             }
         } else {
             logger.error("User Access /admin/quiz/??? -> user : {}", user.getUserId());
-            mv.setViewName("/error/404");
+            mv.setViewName("error/404");
         }
 
 
@@ -239,7 +239,7 @@ public class AdminController extends BaseController{
         // 파일 저장 및 경로 저장
         if(quizDto.getFile() != null){
             String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-            String basePath = rootPath + "/../" + "ctf/data";
+            String basePath = rootPath + "/../home/" + "ctf/data";
             String filePath = basePath + "/" + quizDto.getFile().getOriginalFilename();
             File dest = new File(filePath);
             quizDto.getFile().transferTo(dest);
@@ -280,7 +280,7 @@ public class AdminController extends BaseController{
         }
         if(quizDto.getFile() != null){
             String rootPath = FileSystemView.getFileSystemView().getHomeDirectory().toString();
-            String basePath = rootPath + "/../" + "ctf/data";
+            String basePath = rootPath + "/../home/" + "ctf/data";
             String filePath = basePath + "/" + quizDto.getFile().getOriginalFilename();
             File dest = new File(filePath);
             quizDto.getFile().transferTo(dest);
@@ -317,17 +317,17 @@ public class AdminController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
             logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
-            mv.setViewName("/error/404");
+            mv.setViewName("error/404");
             return mv;
         }
         if(logType.equals("ACCESS")){
-            mv.setViewName("/admin/log/admin_access_log");
+            mv.setViewName("admin/log/admin_access_log");
         } else if(logType.equals("FLAG")){
-            mv.setViewName("/admin/log/admin_flag_log");
+            mv.setViewName("admin/log/admin_flag_log");
         } else if(logType.equals("DOWNLOAD")){
-            mv.setViewName("/admin/log/admin_download_log");
+            mv.setViewName("admin/log/admin_download_log");
         } else {
-            mv.setViewName("/error/404");
+            mv.setViewName("error/404");
         }
         //active
         mv.addObject("type","LOG");

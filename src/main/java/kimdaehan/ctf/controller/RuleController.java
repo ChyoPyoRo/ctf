@@ -21,7 +21,7 @@ public class RuleController extends BaseController{
     @GetMapping({"/rule"})
     public ModelAndView scoreMain(HttpServletRequest request){
         User user = getUser();
-        ModelAndView mv = new ModelAndView("/rule");
+        ModelAndView mv = new ModelAndView("rule");
         mv.addObject("title", "Rules");
         if(user == null){
             mv.addObject("user", null);

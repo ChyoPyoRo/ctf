@@ -44,7 +44,7 @@ public class ScoreController extends  BaseController{
             mv.setViewName("/error/access_before_start");
             return mv;
         }
-        mv.setViewName(("/score/score"));
+        mv.setViewName(("score/score"));
         mv.addObject("title", "ScoreBoard");
         mv.addObject("user", user.getUserId());
         mv.addObject("type", user.getType());

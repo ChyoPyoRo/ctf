@@ -73,7 +73,7 @@ public class CenterController extends BaseController{
     @GetMapping({"/myPage/profile"})
     public ModelAndView getMyPage() {
         User user = getUser();
-        ModelAndView mv = new ModelAndView("/mypage/profile");
+        ModelAndView mv = new ModelAndView("mypage/profile");
         UserPageDTO userByAffiliationAndUserId = userService.getUserByAffiliationAndUserId(user.getAffiliation().toString(), user.getUserId());
         mv.addObject("user", user.getUserId());
         mv.addObject("type", user.getType());
@@ -84,7 +84,7 @@ public class CenterController extends BaseController{
     @GetMapping({"/myPage/solved"})
     public ModelAndView getSolvedQuiz() {
         User user = getUser();
-        ModelAndView mv = new ModelAndView("/mypage/solved");
+        ModelAndView mv = new ModelAndView("mypage/solved");
         mv.addObject("user", user.getUserId());
         mv.addObject("type", user.getType());
 

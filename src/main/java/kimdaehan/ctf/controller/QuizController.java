@@ -59,11 +59,11 @@ public class QuizController extends BaseController{
         ModelAndView mv = new ModelAndView();
         if(serverSettingService.getServerStart().isAfter(LocalDateTime.now()) && !user.getType().equals(User.Type.ADMIN)){
             logger.info("Try access challenge main before start-> user : {}, router : Get(/challenge)", user.getUserId());
-            mv.setViewName("/error/access_before_start");
+            mv.setViewName("error/access_before_start");
             return mv;
         }
         //메인 페이지
-        mv.setViewName("/quiz/quiz_main");
+        mv.setViewName("quiz/quiz_main");
         ArrayList <String> categoryList = new ArrayList<>(Arrays.asList("REVERSING", "PWN", "WEB", "FORENSICS", "MISC"));
         List<Solved> solvedList = quizService.getSolvedListByUserId(user.getUserId());
         for(String item : categoryList){
