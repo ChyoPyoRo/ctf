@@ -69,6 +69,11 @@
                 document.getElementById("main-time-clock").innerHTML = "대회가 종료되었습니다";
                 return;  // 더 이상 코드를 실행하지 않습니다.
                 }
+        }else{
+            if(text=="종료까지 남은 시간" && last <0){
+                document.getElementById("main-time-clock").innerHTML = "대회가 종료되었습니다";
+                return;
+            }
         }
 
         const day = Math.floor(last / millisecondsInOneDay);
