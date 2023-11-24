@@ -33,7 +33,7 @@ public class Quiz implements Serializable {
     @JoinColumn(referencedColumnName = "user_id", name = "user_id")
     private User quizWriter;
 
-    @Column(name="description", columnDefinition = "VARCHAR(256)")
+    @Column(name="description", columnDefinition = "VARCHAR(1024)")
     private String description;
 
     @EqualsAndHashCode.Include
@@ -63,7 +63,7 @@ public class Quiz implements Serializable {
     @Column(columnDefinition = "VARCHAR(64)")
     private String attachment;
 
-    @Column(columnDefinition = "VARBINARY(64) NOT NULL")
+    @Column(columnDefinition = "VARBINARY(256) NOT NULL")
     private String flag;
 
     @Column(columnDefinition = "INT NOT NULL")
