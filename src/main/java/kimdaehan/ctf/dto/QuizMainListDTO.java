@@ -17,17 +17,17 @@ public class QuizMainListDTO {
     private String test;
     private Boolean isSolved;
 
-    private QuizMainListDTO(QuizListDTO quiz, Boolean isSolved){
+    private QuizMainListDTO(QuizListDTO quiz, Boolean isSolved, String quizName){
         this.quizIdAsUuid = quiz.getQuizIdAsUuid();
         this.test = quiz.getTest();
-        this.quizName = quiz.getQuizName();
+        this.quizName = quizName;
         this.author = quiz.getAuthor();
         this.category = quiz.getCategoryByEnum();
         this.score = quiz.getScore();
         this.isSolved = isSolved;
     }
-    public static QuizMainListDTO from(QuizListDTO quiz, Boolean isSolved){
-        return new QuizMainListDTO(quiz, isSolved );
+    public static QuizMainListDTO from(QuizListDTO quiz, Boolean isSolved, String quizName){
+        return new QuizMainListDTO(quiz, isSolved , quizName);
     }
     public boolean isSolved(){
         return isSolved;

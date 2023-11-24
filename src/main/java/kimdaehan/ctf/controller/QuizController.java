@@ -72,8 +72,12 @@ public class QuizController extends BaseController{
             List<QuizListDTO> quizList = quizService.findQuizAfterStartTime(categoryName);
             List<QuizMainListDTO> quizGetDTOS = new ArrayList<>();
             for(QuizListDTO quiz : quizList){
+                String quizName = quiz.getQuizName();
+                if( quizName.length() > 21){
+                    quizName = quizName.substring(0, 18) + "...";
+                }
                 boolean isSolved = solvedList.stream().anyMatch(solved -> solved.getSolved().getQuizId().equals(quiz.getQuizIdAsUuid()));
-                quizGetDTOS.add(QuizMainListDTO.from(quiz, isSolved));
+                quizGetDTOS.add(QuizMainListDTO.from(quiz, isSolved,quizName));
             }
             mv.addObject(item, quizGetDTOS); // 수정된 부분
         }

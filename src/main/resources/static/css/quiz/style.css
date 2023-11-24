@@ -265,3 +265,7 @@
     color : white;
     border-color : white;
 }
+
+.small-font {
+    font-size: 0.8em; /* 줄바꿈이 생길 때 적용하고 싶은 폰트 크기 */
+}

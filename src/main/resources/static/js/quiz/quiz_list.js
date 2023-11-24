@@ -88,7 +88,7 @@ async function showPopup(id) {
             flagDiv.placeholder="Flag 입력"
             // descriptionDiv.className="description"
             // titleFlag.className="flag-title";
-            nameDiv.style="font-size: 2.4rem;"
+            nameDiv.style="font-size: 2.4rem; word-wrap: break-word;"
             scoreDiv.style="font-size:1.4rem"
 
 
