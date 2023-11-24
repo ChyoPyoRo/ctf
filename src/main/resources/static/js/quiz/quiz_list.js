@@ -273,13 +273,15 @@ async function showPopup(id) {
                     }
                 });
             });
+
             if (quiz.attachment != null){
                 let fileName = quiz.attachment.split('/').pop();
+
                 attatchmentDiv.innerText = fileName;
                 attatchmentDiv.href = "/quiz/download/" + id
                 attatchmentDiv.className = 'popupBoxContent attatchmentDiv';
                 titleAttatchmentDiv.className = 'popupBoxTitle';
-                attatchmentDiv.style="margin-bottom : 10px;"
+                attatchmentDiv.style="margin-bottom : 10px; font-size : 2rem; color : #6c7293;"
             }
 
 
@@ -297,7 +299,7 @@ async function showPopup(id) {
             contentDiv.appendChild(titleDescriptionDiv);
             contentDiv.appendChild(descriptionDiv);
             if (quiz.attachment != null) {
-                // popupElement.appendChild(titleAttatchmentDiv);
+                // testattachment.appendChild(titleAttatchmentDiv);
                 contentDiv.appendChild(attatchmentDiv);
             }
             flagFlexDiv.appendChild(flagDiv);

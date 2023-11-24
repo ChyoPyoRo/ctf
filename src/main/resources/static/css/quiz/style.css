@@ -251,7 +251,8 @@
 
 
 .popupBoxContent.description  {
-    height : 250px;
+    word-wrap: break-word;
+    min-height : 250px;
     display: block;
     align-items: stretch;
     margin-bottom: 8px;
