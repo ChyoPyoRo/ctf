@@ -10,6 +10,7 @@ import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
+import kimdaehan.ctf.util.HttpReqRespUtils;
 import kimdaehan.ctf.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -108,7 +109,7 @@ public class CenterController extends BaseController{
     @ResponseBody
     public Result.Code editUser(@RequestBody User editUser, HttpServletRequest request) {
         User user = getUser();
-        logger.info("try User edit -> user : {}, IP : {}",user.getUserId(),request.getRemoteAddr());
+        logger.info("try User edit -> user : {}, IP : {}",user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         Result.Code code = Result.Code.ERROR;
         if(!editUser.getUserId().equals(user.getUserId())){
             return code;

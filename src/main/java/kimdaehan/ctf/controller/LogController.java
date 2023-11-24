@@ -8,6 +8,7 @@ import kimdaehan.ctf.entity.log.AccessLog;
 import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.UserService;
+import kimdaehan.ctf.util.HttpReqRespUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -42,7 +43,7 @@ public class LogController extends BaseController{
             return ResponseEntity.badRequest().body("Validation error");
         }
         logger.info("User access Challenge -> user : {}, quiz : {}",user.getUserId(),quiz.getQuizName());
-        AccessLog accessLog = logService.buildAccessLogByQuizAndUserAndIP(quiz, user, request.getRemoteAddr());
+        AccessLog accessLog = logService.buildAccessLogByQuizAndUserAndIP(quiz, user, HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         logService.upsertAccess(accessLog);
         return ResponseEntity.ok().body("success");
     }

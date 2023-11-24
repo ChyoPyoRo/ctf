@@ -53,7 +53,7 @@ public interface QuizRepository extends JpaRepository<Quiz, String> {
             "FROM ( " +
             "    SELECT COUNT(*) AS user_count " +
             "    FROM user " +
-            "    WHERE type = 'USER' AND affiliation IN ('YB', 'NB') AND is_ban = 'DISABLE' " +
+            "    WHERE type = 'USER' AND affiliation IN ('YB', 'NB', 'SCH') AND is_ban = 'DISABLE' " +
             ") AS u " +
             "CROSS JOIN ( " +
             "    SELECT COUNT(*) AS solved_count,solved_quiz_id " +

@@ -9,6 +9,7 @@ import kimdaehan.ctf.entity.User;
 import kimdaehan.ctf.service.RankService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
+import kimdaehan.ctf.util.HttpReqRespUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -55,7 +56,7 @@ public class ScoreController extends  BaseController{
     @ResponseBody
     public ResponseEntity<?> rankGraph(HttpServletRequest request, @PathVariable("affiliation") String affiliation){
         User user = getUser();
-        logger.info("Try access rank-graph -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        logger.info("Try access rank-graph -> user : {}, ip : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         List<RankGraphDTO> rankGraphDTOList;
         if(affiliation.equals("YB") || affiliation.equals("NB") || affiliation.equals("SCH") || affiliation.equals("ALL")){
             rankGraphDTOList = rankService.getRankGraphByAffiliation(affiliation);
@@ -68,7 +69,7 @@ public class ScoreController extends  BaseController{
     @ResponseBody
     public ResponseEntity<?> rankGraphCurrent(HttpServletRequest request, @PathVariable("affiliation") String affiliation){
         User user = getUser();
-        logger.info("Try access rank-graph-current-> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        logger.info("Try access rank-graph-current-> user : {}, ip : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         List<RankGraphCurrentDTO> userPageDTOList;
         if(affiliation.equals("YB") || affiliation.equals("NB") || affiliation.equals("SCH") ){
             userPageDTOList = userService.getRankAndScoreUsersByAffiliationTop5(affiliation);
@@ -84,7 +85,7 @@ public class ScoreController extends  BaseController{
     @ResponseBody
     public ResponseEntity<?> rankGraphHistroy(HttpServletRequest request, @PathVariable("userId") String userId,@PathVariable("affiliation") String affiliation){
         User user = getUser();
-        logger.info("Try access rank-graph-history -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        logger.info("Try access rank-graph-history -> user : {}, ip : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         return ResponseEntity.ok(rankService.getRankListByUser(userId, affiliation));
     }
 
@@ -92,7 +93,7 @@ public class ScoreController extends  BaseController{
     @ResponseBody
     public ResponseEntity<?> rankAllData(HttpServletRequest request, @PathVariable String affiliation){
         User user = getUser();
-        logger.info("Try access rank-all-> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        logger.info("Try access rank-all-> user : {}, ip : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         List<RankAllDTO> userPageDTOList;
         if(affiliation.equals("YB") || affiliation.equals("NB") || affiliation.equals("SCH")){
             userPageDTOList = userService.findScoreUsersByAffiliationAndUserIdWithoutIsBan(affiliation);
@@ -108,7 +109,7 @@ public class ScoreController extends  BaseController{
     public ResponseEntity<?> rankForSingleChallenge(HttpServletRequest request, @PathVariable String challengId, @PathVariable Integer pageNum){
         User user = getUser();
         UUID quizId;
-        logger.info("Try access single challenge Rank -> user : {}, ip : {}", user.getUserId(), request.getRemoteAddr());
+        logger.info("Try access single challenge Rank -> user : {}, ip : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         try{
             quizId = UUID.fromString(challengId);
         } catch (IllegalArgumentException e) {

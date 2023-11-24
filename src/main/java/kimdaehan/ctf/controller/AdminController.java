@@ -13,6 +13,7 @@ import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
+import kimdaehan.ctf.util.HttpReqRespUtils;
 import kimdaehan.ctf.util.Utility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -61,7 +62,7 @@ public class AdminController extends BaseController{
         User user = getUser();
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             mv.setViewName("error/404");
             return mv;
         }
@@ -84,7 +85,7 @@ public class AdminController extends BaseController{
         User user = getUser();
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             mv.setViewName("/error/404");
             return mv;
         }
@@ -101,7 +102,7 @@ public class AdminController extends BaseController{
         User user = getUser();
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             mv.setViewName("error/404");
             return mv;
         }
@@ -123,7 +124,7 @@ public class AdminController extends BaseController{
     public ResponseEntity<String> adminUserDetailPost(HttpServletRequest request, @PathVariable String userId, @RequestBody User member){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         // 검색 유저
@@ -151,7 +152,7 @@ public class AdminController extends BaseController{
         User user = getUser();
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             mv.setViewName("error/404");
             return mv;
         }
@@ -172,7 +173,7 @@ public class AdminController extends BaseController{
         User user = getUser();
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             mv.setViewName("error/404");
             return mv;
         }
@@ -218,7 +219,7 @@ public class AdminController extends BaseController{
         User user = getUser();
         logger.info("User access");
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         if(quizDto != null && quizDto.getQuizId() != null){
@@ -255,7 +256,7 @@ public class AdminController extends BaseController{
     public ResponseEntity<String> postAdminQuizEdit(HttpServletRequest request, @ModelAttribute QuizDto quizDto) throws IOException {
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         if(quizDto.getQuizId() == null){
@@ -297,7 +298,7 @@ public class AdminController extends BaseController{
     public ResponseEntity<String> deleteAdminQuiz(HttpServletRequest request, @PathVariable String uuid ){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         Quiz quiz = quizService.getQuiz(UUID.fromString(uuid));
@@ -316,7 +317,7 @@ public class AdminController extends BaseController{
         User user = getUser();
         ModelAndView mv = new ModelAndView();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             mv.setViewName("error/404");
             return mv;
         }

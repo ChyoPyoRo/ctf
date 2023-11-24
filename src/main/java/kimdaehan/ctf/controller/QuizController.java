@@ -15,6 +15,7 @@ import kimdaehan.ctf.entity.log.FlagLog;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
+import kimdaehan.ctf.util.HttpReqRespUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -107,7 +108,7 @@ public class QuizController extends BaseController{
             return ResponseEntity.badRequest().body("ValidationError");
         }
         //로그 기록
-        AccessLog accessLog = logService.buildAccessLogByQuizAndUserAndIP(quizDetail, user, request.getRemoteAddr());
+        AccessLog accessLog = logService.buildAccessLogByQuizAndUserAndIP(quizDetail, user, HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
         logService.upsertAccess(accessLog);
         QuizOneDto quizOne = QuizOneDto.from(quizDetail);
         return ResponseEntity.ok(quizOne);
@@ -176,7 +177,7 @@ public class QuizController extends BaseController{
             }
             //로그 남기기
             FlagLog.SuccessOrNot successOrNot = FlagLog.SuccessOrNot.SUCCESS;
-            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),answer.getFlag(), successOrNot);
+            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, HttpReqRespUtils.getClientIpAddressIfServletRequestExist(),answer.getFlag(), successOrNot);
             logService.upsertFlag(flagLog);
             //user의 currentSolvedDateTime수정
             userService.changeUserCurrentSolvedDateTime(user);
@@ -185,7 +186,7 @@ public class QuizController extends BaseController{
             //일치하지 않으면
             //로그만
             FlagLog.SuccessOrNot successOrNot = FlagLog.SuccessOrNot.FAIL;
-            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, request.getRemoteAddr(),answer.getFlag(), successOrNot);
+            FlagLog flagLog = logService.buildFlagLogByQuizAndUserIPAndSuccessFail(quiz, user, HttpReqRespUtils.getClientIpAddressIfServletRequestExist(),answer.getFlag(), successOrNot);
             logService.upsertFlag(flagLog);
             return ResponseEntity.ok("Wrong");
         }
@@ -237,7 +238,7 @@ public class QuizController extends BaseController{
             while((readCount = fis.read(buffer))!= -1){
                 out.write(buffer,0,readCount);
             }
-            DownloadLog downloadLog = logService.buildDownloadLogByQuizAndUserIP(quiz, user, request.getRemoteAddr());
+            DownloadLog downloadLog = logService.buildDownloadLogByQuizAndUserIP(quiz, user, HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             logService.upsertDownload(downloadLog);
             return ResponseEntity.ok().body("DownloadSuccess");
         }catch(Exception e){

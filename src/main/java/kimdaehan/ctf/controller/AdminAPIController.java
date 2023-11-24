@@ -11,6 +11,7 @@ import kimdaehan.ctf.service.LogService;
 import kimdaehan.ctf.service.QuizService;
 import kimdaehan.ctf.service.ServerSettingService;
 import kimdaehan.ctf.service.UserService;
+import kimdaehan.ctf.util.HttpReqRespUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class AdminAPIController extends BaseController{
     public final ServerSettingService serverSettingService;
     public final QuizService quizService;
     public final LogService logService;
+
     @Autowired
     public AdminAPIController(UserService userService, AuthenticationFacade authenticationFacade, ServerSettingService serverSettingService, QuizService quizService, LogService logService) {
         super(userService, authenticationFacade);
@@ -44,7 +46,7 @@ public class AdminAPIController extends BaseController{
     public ResponseEntity<String> adminMain(HttpServletRequest request, @RequestBody ServerTime time){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         if(time != null){
@@ -75,7 +77,7 @@ public class AdminAPIController extends BaseController{
     public ResponseEntity<?> getAdminQuiz(HttpServletRequest request, @PathVariable String category) {
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         List<Quiz> quizzes;
@@ -102,7 +104,7 @@ public class AdminAPIController extends BaseController{
     public ResponseEntity<?> adminLog(HttpServletRequest request, @PathVariable String logType){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         logger.info("admin_log_list_no_data enter -> user : {}, logType : {}", user.getUserId(), logType);
@@ -128,7 +130,7 @@ public class AdminAPIController extends BaseController{
     public ResponseEntity<?> adminLogByCategory(HttpServletRequest request, @PathVariable String logType, @PathVariable String category, @RequestParam(value = "data") String data){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         logger.info("admin_log_list enter -> user : {}, logType : {}, category : {}, data : {}", user.getUserId(), logType, category, data);
@@ -165,7 +167,7 @@ public class AdminAPIController extends BaseController{
     public ResponseEntity<?> adminLog(HttpServletRequest request, @RequestParam(value = "userId" , required = false) String userId, @RequestParam(value = "userIp" , required = false) String userIp, @RequestParam(value = "challenge" , required = false) String challenge){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         if(userId == null && userIp == null && challenge == null){
@@ -192,7 +194,7 @@ public class AdminAPIController extends BaseController{
     public ResponseEntity<?> adminUserList(HttpServletRequest request, @PathVariable("affiliation") String affiliation, @RequestParam( value = "id", required = false) String userId){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         List<UserPageDTO> userPageDTOArrayList = new ArrayList<>();;
@@ -218,7 +220,7 @@ public class AdminAPIController extends BaseController{
     public ResponseEntity<?> adminUserBan(HttpServletRequest request, @PathVariable("userId") String userId){
         User user = getUser();
         if(user.getType() != User.Type.ADMIN){
-            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), request.getRemoteAddr());
+            logger.error("Not Admin access this page -> user : {}, IP : {}", user.getUserId(), HttpReqRespUtils.getClientIpAddressIfServletRequestExist());
             return ResponseEntity.badRequest().body("404 error");
         }
         User member = userService.getUserId(userId);
