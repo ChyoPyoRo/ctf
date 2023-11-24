@@ -37,7 +37,7 @@ public interface RankRepository extends JpaRepository<UserRank, AffiliationKey> 
             " FROM solved s " +
             " LEFT JOIN user u on (s.solved_user_id = u.user_id) " +
             " WHERE s.solved_quiz_id = :challengeId and u.is_ban='DISABLE' " +
-            " ORDER BY s.solved_time DESC;", nativeQuery = true)
+            " ORDER BY s.solved_time ASC;", nativeQuery = true)
     List<QuizRankDto> findRankByChallengeId(@Param("challengeId") UUID challengeId);
 
     @Transactional
